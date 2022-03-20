@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "baseUrl": "./",
+    "paths": {
+      "pages/*": ["pages/*"],
+      "components/*": ["src/components/*"],
+      "containers/*": ["src/containers/*"],
+      "pageComponents/*": ["src/pageComponents/*"],
+      "hooks/*": ["src/hooks/*"],
+      "lib/*": ["src/lib/*"],
+      "state/*": ["state/*"],
+      "public/*": ["public/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

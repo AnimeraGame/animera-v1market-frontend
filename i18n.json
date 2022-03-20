@@ -1,0 +1,21 @@
+{
+  "locales": ["en"],
+  "defaultLocale": "en",
+  "pages": {
+    "*": ["common"],
+    "/register": ["register", "password"],
+    "/login": ["login"],
+    "/creator/[orgid]": ["creator"],
+    "/nft/[nid]": ["product"],
+    "/profile": ["profile"],
+    "/admin/settings": ["settings"],
+    "/admin/profile": ["profile"],
+    "rgx:^/password": ["password"],
+    "/inventory/[tab]": ["inventory"],
+    "/collections/[tab]": ["collections"],
+    "rgx:^/game": ["game"],
+    "/marketplace": ["marketplace"],
+    "/[orgid]": ["org"],
+    "/": ["org"]
+  }
+}
