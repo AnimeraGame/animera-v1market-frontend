@@ -133,15 +133,15 @@ const SetPriceModal = ({
         toWalletContract: purchaseAddress,
         tokenId: toString(tokenId),
         value: parseFloat(price),
-        valueCurrency: 'BNB',
+        valueCurrency: 'MATIC',
         valueUSD: 0,
         transactionFee: txResult.gasUsed,
-        transactionCurrency: 'BNB',
+        transactionCurrency: 'MATIC',
       }
       const payload = isAlreadyPosted
         ? {
             price: parseFloat(price),
-            currency: 'BNB',
+            currency: 'MATIC',
             status: 0,
             id: toNumber(get(tokenData, 'activeDirectOffer.id', '')),
           }
@@ -150,7 +150,7 @@ const SetPriceModal = ({
             type: 1,
             nftId: parseInt(tokenData.id),
             price: parseFloat(price),
-            currency: 'BNB',
+            currency: 'MATIC',
             tx: txResult.transactionHash,
             transaction: { ...transactionCommon },
           }
@@ -164,7 +164,7 @@ const SetPriceModal = ({
                 event: 'update_offer',
                 type: 'update_offer',
                 id: tokenId,
-                price: price + ' BNB',
+                price: price + ' MATIC',
               },
             })
             const tempData = {
@@ -194,7 +194,7 @@ const SetPriceModal = ({
               dataLayer: {
                 event: 'create_offer',
                 id: tokenId,
-                price: price + ' BNB',
+                price: price + ' MATIC',
                 type: 'create_offer',
               },
             })
@@ -258,7 +258,7 @@ const SetPriceModal = ({
             {t('tokenId')}
           </H6>
           <Body1 fontWeight={FontWeights.semiBold}>
-            {get(tokenData, 'transactions[0].tokenId', '')}
+            {get(tokenData, 'tokenId', '')}
           </Body1>
         </div>
         {activeTab === 0 ? (
@@ -319,19 +319,19 @@ const SetPriceModal = ({
           <Body1 fontWeight={FontWeights.regular} className="label org-fee-label">
             {t('toMarsVerse')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`0 ${t('bnb')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`0 ${t('matic')}`}</Body1>
         </div>
         <div className="fees">
           <Body1 fontWeight={FontWeights.regular} className="label">
             {t('toNFTCreator')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('bnb')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('matic')}`}</Body1>
         </div>
         <div className="fees">
           <Body1 fontWeight={FontWeights.regular} className="label">
             {t('totalFees')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('bnb')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('matic')}`}</Body1>
         </div>
         {!isAlreadyPosted && isUsedInGame ? (
           <div className="set-price-error">

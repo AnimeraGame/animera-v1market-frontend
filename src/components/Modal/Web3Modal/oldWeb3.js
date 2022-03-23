@@ -335,7 +335,7 @@ const Web3ModalComponent = ({ provider, setProvider, setWallet, disconnected, wa
       ) : null}
       <BNBWrapper>
         <Image alt="BNB-logo" src="/images/bnb-logo.svg" width="20px" height="20px" />
-        <span>{t('bscMainnet')}</span>
+        <span>{t('PolygonMainnet')}</span>
       </BNBWrapper>
       {wallet.wrongNetwork ? (
         <ErrorWrapper>

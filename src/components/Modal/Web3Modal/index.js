@@ -412,7 +412,6 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
             setIsNetworkChanging(false)
           }
           if (isValidNetwork && wallet.wrongNetwork) {
-          console.log('here2');
 
             setWallet({ wrongNetwork: false })
             setIsWrongNetworkModalOpen(false)
@@ -448,8 +447,8 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
         />
       ) : null}
       <BNBWrapper className="network">
-        <Image alt="BNB-logo" src="/images/bnb-logo.svg" width={20} height={20} />
-        <span>{includes(supportedNetworkIds, 97) ? t('bscTestnet') : t('bscMainnet')}</span>
+        <Image alt="Polygon-logo" src="/images/polygon-logo.svg" width={20} height={20} />
+        <span>{includes(supportedNetworkIds, 97) ? t('mumbaiTestnet') : t('polygonMainnet')}</span>
       </BNBWrapper>
       {wallet.wrongNetwork ? (
         <ErrorWrapper>

@@ -223,20 +223,13 @@ const AssetCard = ({
           </div>
         ) : (
           <>
-            {get(item, 'rarity', 'rare') === 'epic' ? (
-              // eslint-disable-next-line jsx-a11y/media-has-caption
-              <video muted={true} ref={vid} height="300px">
-                <source src={get(item, 'video', '')} type="video/mp4" />
-              </video>
-            ) : (
-              <Image
-                alt={get(item, 'name', false) ? `${item.name} image` : 'NFT thumbnail'}
-                layout={'fill'}
-                // height={800}
-                loader={imageCDNLoader}
-                src={get(item, 'image', '/images/1.png')}
-              />
-            )}
+            <Image
+              alt={get(item, 'name', false) ? `${item.name} image` : 'NFT thumbnail'}
+              layout={'fill'}
+              // height={800}
+              loader={imageCDNLoader}
+              src={get(item, 'image', '/images/1.png')}
+            />
           </>
         )}
       </div>
@@ -246,7 +239,7 @@ const AssetCard = ({
             {loading ? (
               <ProgressLoading skeleton height={30} width={120} />
             ) : (
-              <>{get(item, 'name', 'Nordic Gods BSC')}</>
+              <>{get(item, 'name', 'NFT name')}</>
             )}
           </H5>
           {tokenId ? <Body2 fontWeight={FontWeights.medium}>#{tokenId}</Body2> : null}

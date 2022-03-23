@@ -17,5 +17,5 @@ export const wrapImagePath = src => {
 }
 
 export const imageCDNLoader = ({ src, width, quality }) => {
-  return wrapImagePath(src)
+  return src
 }

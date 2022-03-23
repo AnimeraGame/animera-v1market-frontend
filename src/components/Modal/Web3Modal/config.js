@@ -3,14 +3,14 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 const POLLING_INTERVAL = 12000
 
-const bscUrl = `https://data-seed-prebsc-1-s1.binance.org:8545/`
-const bscUrlMainnet = `https://bsc-dataseed.binance.org/`
+const polygonUrl = `https://polygon-rpc.com/`
+const mumbaiUrl = `https://rpc-mumbai.matic.today`
 
 const environment = process.env.NEXT_PUBLIC_ENV || 'dev'
 
-export const supportedNetworkIds = environment === 'production' ? [56] : [97]
+export const supportedNetworkIds = environment === 'production' ? [137] : [80001]
 
-export const rpcUrl = environment === 'production' ? { 56: bscUrlMainnet } : { 97: bscUrl }
+export const rpcUrl = environment === 'production' ? { 137: polygonUrl } : { 97: mumbaiUrl }
 
 export const injected = new InjectedConnector({ supportedChainIds: supportedNetworkIds })
 
@@ -31,61 +31,61 @@ export const connectorsByName = {
 //   Injected: injected,
 // }
 
-export const mainnetUrl = 'https://bscscan.com'
-export const testNetUrl = 'https://testnet.bscscan.com'
+export const mainnetUrl = 'https://polygonscan.com'
+export const testNetUrl = 'https://mumbai.polygonscan.com'
 
 export const mainnetInstructions = [
   {
     label: 'networkName',
-    title: 'BNB - Mainnet',
-    textToCopy: 'BNB - Mainnet',
+    title: 'Polygon - Mainnet',
+    textToCopy: 'Polygon - Mainnet',
   },
   {
     label: 'newRpcUrl',
-    title: 'https://bsc-dataseed.binance.org/',
-    textToCopy: 'https://bsc-dataseed.binance.org/',
+    title: 'https://polygon-rpc.com/',
+    textToCopy: 'https://polygon-rpc.com/',
   },
   {
     label: 'chainId',
-    title: '56',
-    textToCopy: '56',
+    title: '137',
+    textToCopy: '137',
   },
   {
     label: 'symbol',
-    title: 'BNB',
-    textToCopy: 'BNB',
+    title: 'MATIC',
+    textToCopy: 'MATIC',
   },
   {
     label: 'blockExplorerUrl',
-    title: 'https://bscscan.com/',
-    textToCopy: 'https://bscscan.com/',
+    title: 'https://polygonscan.com/',
+    textToCopy: 'https://polygonscan.com/',
   },
 ]
 
 export const testnetInstructions = [
   {
     label: 'networkName',
-    title: 'BNB - Testnet',
-    textToCopy: 'BNB - Testnet',
+    title: 'Mumbai - Testnet',
+    textToCopy: 'Mumbai - Testnet',
   },
   {
     label: 'newRpcUrl',
-    title: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-    textToCopy: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+    title: 'https://rpc-mumbai.matic.today',
+    textToCopy: 'https://rpc-mumbai.matic.today',
   },
   {
     label: 'chainId',
-    title: '97',
-    textToCopy: '97',
+    title: '80001',
+    textToCopy: '80001',
   },
   {
     label: 'symbol',
-    title: 'BNB',
-    textToCopy: 'BNB',
+    title: 'MATIC',
+    textToCopy: 'MATIC',
   },
   {
     label: 'blockExplorerUrl',
-    title: 'https://testnet.bscscan.com',
-    textToCopy: 'https://testnet.bscscan.com',
+    title: 'https://mumbai.polygonscan.com',
+    textToCopy: 'https://mumbai.polygonscan.com',
   },
 ]

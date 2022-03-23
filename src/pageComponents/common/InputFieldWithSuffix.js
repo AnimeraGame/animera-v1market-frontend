@@ -62,7 +62,7 @@ const InputFieldWithSuffix = ({
   return (
     <Input className={className} error={error}>
       <input type={inputType} value={value} onChange={onChange} min="0" max="50000" {...rest} />
-      <span className="input-label">{t('bnb')}</span>
+      <span className="input-label">{t('matic')}</span>
     </Input>
   )
 }

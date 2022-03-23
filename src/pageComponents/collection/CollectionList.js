@@ -117,8 +117,8 @@ const CollectionList = ({ t }) => {
 
   const loadNftCollectionList = async () => {
     const res = await refetchList()
-    setData([...data, ...get(res, 'data.myOwnedNfts.nfts', [])])
-    setTotalCount(get(res, 'data.myOwnedNfts.nftsCount', 0))
+    setData([...data, ...get(res, 'data.getNftListByUserId.nfts', [])])
+    setTotalCount(get(res, 'data.getNftListByUserId.nftsCount', 0))
   }
 
   const handleSubmitDataUpdate = temp => {
