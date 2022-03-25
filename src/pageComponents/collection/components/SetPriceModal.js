@@ -28,7 +28,7 @@ import {
 } from 'state/marketplace/queries/createOffer'
 import UPDATE_OFFER_NFT_MUTATION from 'state/marketplace/queries/updateOffer'
 import InputFieldWithSuffix from 'pageComponents/common/InputFieldWithSuffix'
-import { nftAddress, purchaseAddress } from 'lib/util/web3/contractConstants'
+import { nftAddress, purchaseAddress, tokenAddress } from 'lib/util/web3/contractConstants'
 import { getBNBBalance } from 'lib/util/web3/balance'
 import { setBalances } from 'state/settings'
 import { HistoryContainer, ModalContainer, TabContainer, TabPanel, modalStyles } from './modalStyle'
@@ -114,114 +114,42 @@ const SetPriceModal = ({
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
-    let txResult = null
-    if (!isAlreadyPosted) {
-      txResult = await createOffer(library, price, 1, [tokenId], account)
-    } else {
-      txResult = await updateOffer(library, offerId, price, 1, [tokenId], account)
-    }
-    if (txResult) {
-      const event = txResult.events?.OfferCreated?.returnValues
-      const offerId = parseInt(event?.id)
-      const transactionCommon = {
-        transactionType: 'createOffer',
-        datetime: new Date().toISOString(),
-        chain: 'BSC',
-        transactionHash: txResult.transactionHash,
-        contractAddress: nftAddress,
-        fromWalletContract: account,
-        toWalletContract: purchaseAddress,
-        tokenId: toString(tokenId),
-        value: parseFloat(price),
-        valueCurrency: 'MATIC',
-        valueUSD: 0,
-        transactionFee: txResult.gasUsed,
-        transactionCurrency: 'MATIC',
-      }
-      const payload = isAlreadyPosted
-        ? {
-            price: parseFloat(price),
-            currency: 'MATIC',
-            status: 0,
-            id: toNumber(get(tokenData, 'activeDirectOffer.id', '')),
-          }
-        : {
-            offerId,
-            type: 1,
-            nftId: parseInt(tokenData.id),
-            price: parseFloat(price),
-            currency: 'MATIC',
-            tx: txResult.transactionHash,
-            transaction: { ...transactionCommon },
-          }
-      const { bnbBalance } = await getBalanceOfWallet(library, account)
-      dispatch(setBalances(bnbBalance))
-      if (isAlreadyPosted) {
-        updateOfferNftMutation.mutate(payload, {
-          onSuccess: data => {
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'update_offer',
-                type: 'update_offer',
-                id: tokenId,
-                price: price + ' MATIC',
-              },
-            })
-            const tempData = {
-              price: get(data, 'updateOffer.price', price),
-              status: get(data, 'updateOffer.status', 1),
-              id: get(data, 'updateOffer.id', get(tokenData, 'activeDirectOffer.id', '')),
-              offerId: get(
-                data,
-                'updateOffer.offerId',
-                get(tokenData, 'activeDirectOffer.offerId', '')
-              ),
-            }
-            setPriceSuccessMessage(t('priceUpdateSuccess'))
-            onSubmit(tempData)
-          },
-          onError: (err, variables) => {
-            // eslint-disable-next-line no-console
-            console.log({ err })
-            setIsSubmitting(false)
-            setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
-          },
-        })
+    let result = null
+    try {
+      if (!isAlreadyPosted) {
+        result = await createOffer(library, price, 1, tokenId, account)
       } else {
-        createOfferNftMutation.mutate(payload, {
-          onSuccess: data => {
-            TagManager.dataLayer({
-              dataLayer: {
-                event: 'create_offer',
-                id: tokenId,
-                price: price + ' MATIC',
-                type: 'create_offer',
-              },
-            })
-            const tempData = {
-              price: get(data, 'createOffer.price', price),
-              status: get(data, 'createOffer.status', 1),
-              id: get(data, 'createOffer.id', get(tokenData, 'activeDirectOffer.id', '')),
-              offerId: get(
-                data,
-                'createOffer.offerId',
-                get(tokenData, 'activeDirectOffer.offerId', '')
-              ),
-            }
-            setPriceSuccessMessage(t('priceSuccess'))
-            onSubmit(tempData)
-          },
-          onError: (err, variables) => {
-            // eslint-disable-next-line no-console
-            console.log({ err })
-            setIsSubmitting(false)
-            setPriceErrorMessage(t('somethingWentWrongPrice'))
-          },
-        })
+        result = await updateOffer(library, offerId, price, 1, tokenId, account)
       }
-    } else {
+
+      console.log('result.seller deadline', result.sellDeadline);
+      const payload = {
+        data: {
+          chainId: result.chainId,
+          sellerWalletAddress: result.walletAddress,
+          tokenAddress: result.tokenAddress,
+          sellerPrice: parseInt(price),
+          nftId: tokenData.id,
+          tokenId: result.nftId,
+          sellerDeadline: new Date(result.sellDeadline),
+          signature: result.sellerSig,
+          status: 0
+        }
+      }
+      createOfferNftMutation.mutate(payload, {
+        onSuccess: data => {
+          setPriceSuccessMessage(t('offerCreateSuccess'))
+          setIsSubmitting(false)
+        },
+        onError: (err, variables) => {
+          // eslint-disable-next-line no-console
+          console.log({ err })
+          setPriceErrorMessage(t('somethingWentWrongOfferCreation'))
+          setIsSubmitting(false)
+        },
+      })
+    } catch(error) {
       setIsSubmitting(false)
-      setPriceErrorMessage(t('allowTransactionFromMetaMask'))
     }
   }
 

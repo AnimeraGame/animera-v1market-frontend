@@ -269,7 +269,7 @@ const AssetCard = ({
               {lastPrice ? (
                 <>
                   <span className="label">Last: </span>
-                  {lastPrice} BNB
+                  {lastPrice} MATIC
                 </>
               ) : (
                 ''

@@ -4,39 +4,44 @@ import {
   nftAddress,
   purchaseABI,
   purchaseAddress,
+  tokenABI,
+  tokenAddress,
 } from './contractConstants'
+import { getBigNumber, getEIP712Signature, getApprovalDigest } from './signature'
 
-export const createOffer = async (library, price, kind, nfts, walletAddress) => {
+const NFT_GALLERY_NAME = 'MarsversMarket';
+
+export const createOffer = async (library, price, kind, tokenId, walletAddress) => {
   const web3 = new Web3(library.provider)
 
-  const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
-  const nftContract = new web3.eth.Contract(nftABI, nftAddress)
-  // eslint-disable-next-line no-console
-  price = price * Math.pow(10, 18)
-  const priceBN = web3.utils.toBN(price)
-  try {
-    // eslint-disable-next-line no-console
-    console.log('create offer info', nfts, priceBN, kind, walletAddress, library)
-    const isApproved = await nftContract.methods
-      .isApprovedForAll(walletAddress, purchaseAddress)
-      .call()
-    if (!isApproved) {
-      await nftContract.methods.setApprovalForAll(purchaseAddress, true).send({
-        from: walletAddress,
-      })
-    }
-    const tx = await purchaseContract.methods.createOffer(nfts, priceBN, '0', '20', kind).send({
-      from: walletAddress,
-    })
-    if (tx) {
-      // eslint-disable-next-line no-console
-      console.log('create offer success', tx)
-      return tx
-    }
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log('there is error on create offer', e)
-    return false
+  const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001;
+  const sellPrice = getBigNumber(price);
+  const sellDeadline = ~~(new Date().getTime() / 1000 + 1000);
+  const nftId = tokenId;
+
+  const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256'];
+  const dataValues = [
+    walletAddress,
+    tokenAddress,
+    sellPrice,
+    sellDeadline,
+    nftAddress,
+    nftId
+  ];
+
+  const digest = getApprovalDigest(NFT_GALLERY_NAME, purchaseAddress, chainId, dataTypes, dataValues);
+
+  const sellerSig = await web3.eth.sign(digest, walletAddress);
+
+  return {
+    chainId,
+    tokenAddress,
+    sellPrice,
+    sellDeadline,
+    nftAddress,
+    nftId,
+    walletAddress,
+    sellerSig
   }
 }
 

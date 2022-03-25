@@ -50,7 +50,7 @@ const MarketplaceWrapper = ({ t }) => {
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
   const [totalCount, setTotalCount] = useState(4)
   const [afterId, setAfterId] = useState('')
-  const [endCursor, setEndCursor] = useState('')
+  const [endCursor, setEndCursor] = useState(0)
   const [rarityFilterCounts, setRarityFilterCount] = useState({})
   const [selectedOrder, setSelectedOrder] = useState(
     validateUrlInput(headerFilterOptions, sortOrder)
@@ -81,24 +81,11 @@ const MarketplaceWrapper = ({ t }) => {
       }_SEARCH_${searchText}`,
     ],
     {
-      first: 18,
-      after: afterId,
-      orderBy: {
-        direction: selectedOrder !== 'low_high' ? 'desc' : 'asc',
-        field:
-          selectedOrder === 'nft_last_sale'
-            ? 'nftLastSale'
-            : selectedOrder === 'created_at'
-            ? selectedOrder
-            : 'price',
-      },
-      query: {
-        startPrice: filters.price[0],
-        endPrice: filters.price[1] >= 5000 ? 50000 : filters.price[1],
-        rarity: filters.scarcity || null,
-        status: 'active',
-      },
-      searchString: searchText,
+      onePage: 18,
+      page: endCursor,
+      orderBy: selectedOrder !== 'low_high' ? 'desc' : 'asc',
+      status: 0,
+      searchText: searchText,
     },
     FETCH_DIRECT_OFFERS,
     {
@@ -118,7 +105,7 @@ const MarketplaceWrapper = ({ t }) => {
   const handleSelectedOrder = e => {
     setData([])
     setAfterId('')
-    setEndCursor('')
+    setEndCursor(0)
     setTotalCount(4)
     const value = e.target.value
     setSelectedOrder(value)
@@ -131,7 +118,7 @@ const MarketplaceWrapper = ({ t }) => {
     setTotalCount(4)
     setFilters({ ...newFilters })
     setAfterId('')
-    setEndCursor('')
+    setEndCursor(0)
     handleScrollToTop()
     const path = generateUrl(selectedOrder, newFilters, searchText)
     router.push(path)
@@ -140,7 +127,7 @@ const MarketplaceWrapper = ({ t }) => {
   const handleFiltersReset = () => {
     setData([])
     setAfterId('')
-    setEndCursor('')
+    setEndCursor(0)
     setTotalCount(4)
     setFilters({
       price: [0, 5000],
@@ -155,7 +142,7 @@ const MarketplaceWrapper = ({ t }) => {
   const handleSearch = search => {
     setData([])
     setAfterId('')
-    setEndCursor('')
+    setEndCursor(0)
     setTotalCount(4)
     setSearchText(search)
     generateUrlSearch(router, search)
@@ -165,19 +152,13 @@ const MarketplaceWrapper = ({ t }) => {
   useEffect(() => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
-      const updatedCount = get(dataArray, 'directOffers.totalCount', 0)
-      const resData = get(dataArray, 'directOffers.edges', [])
+      const updatedCount = get(dataArray, 'findOffers.offersCount', 0)
+      const resData = get(dataArray, 'findOffers.offers', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
       // setData(updatedData)
       setTotalCount(updatedCount)
-      setEndCursor(get(dataArray, 'directOffers.pageInfo.endCursor', ''))
-      setRarityFilterCount({
-        common: get(dataArray, 'directOffers.commonRarityCount', 0),
-        wild: get(dataArray, 'directOffers.wildRarityCount', 0),
-        legendary: get(dataArray, 'directOffers.legendaryRarityCount', 0),
-        rare: get(dataArray, 'directOffers.rareRarityCount', 0),
-      })
+      setEndCursor(endCursor + 1)
     }
   }, [dataArray])
 

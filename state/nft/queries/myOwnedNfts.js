@@ -6,21 +6,9 @@ const MY_NFT_COLLECTION = gql`
       nftsCount
       nfts {
         id
-        contract {
-          publicKey,
-          chainType
-        }
         tokenId
         nftMetadata {
           metadata
-        }
-        transactions {
-          createdAt
-          txNameFromInput
-          updatedAt
-          from
-          to
-          transactionHash
         }
       }
     }

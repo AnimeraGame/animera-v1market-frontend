@@ -228,7 +228,7 @@ const CardsList = ({
     if (!isPreviewOpen && !isBuyModalOpen && cardIdInUrl && modalType && data.length) {
       let index = null
       const card = find(data, (item, idx) => {
-        const result = get(item, 'node.id', '') === cardIdInUrl
+        const result = get(item, 'id', '') === cardIdInUrl
         if (result) index = idx
         return result
       })
@@ -283,17 +283,17 @@ const CardsList = ({
                 <div className="card-item" key={index}>
                   <AssetCard
                     marketPlace
-                    price={get(item, 'node.price', '') + ' BNB'}
-                    lastPrice={get(item, 'node.nft.directOffers[0].price', '')}
-                    item={get(item, 'node.nft.nftMetadata.metadata')}
+                    price={get(item, 'price', '') + ' MATIC'}
+                    lastPrice={get(item, 'nft.directOffers[0].price', '')}
+                    item={get(item, 'nft.nftMetadata.metadata')}
                     t={t}
-                    tokenId={get(item, 'node.nft.tokenId', '')}
+                    tokenId={get(item, 'nft.tokenId', '')}
                     showLastPrice={showLastPrice}
                     handleCardClick={() => {
                       router.push(
                         `${router.asPath}${router?.asPath.length > 13 ? '&' : '?'}card=${get(
                           item,
-                          'node.nft.tokenId',
+                          'nft.tokenId',
                           ''
                         )}&type=preview`
                       )
@@ -301,7 +301,7 @@ const CardsList = ({
                     }}
                     menu={
                       !isUserLoggedIn ||
-                      account === get(item, 'node.fromUser.walletAddress', '') ? null : (
+                      account === get(item, 'seller', '') ? null : (
                         <ActionMenu
                           iconDirection="horizontal"
                           menuItems={[
@@ -311,7 +311,7 @@ const CardsList = ({
                                     router.push(
                                       `${router.asPath}${
                                         router?.asPath.length > 13 ? '&' : '?'
-                                      }card=${get(item, 'node.nft.tokenId', '')}&type=buy`
+                                      }card=${get(item, 'nft.tokenId', '')}&type=buy`
                                     )
                                     setSelectedCard({
                                       card: item,

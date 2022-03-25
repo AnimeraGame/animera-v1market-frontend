@@ -2,36 +2,24 @@ import gql from 'graphql-tag'
 
 export const CREATE_OFFER_NFT_MUTATION = gql`
   mutation createOffer(
-    $offerId: Int!
-    $type: Int!
-    $nftId: Int
-    $price: Int!
-    $currency: String!
-    $tx: String!
-    $transaction: TransactionInput!
+    $data: CreateOfferInput!
   ) {
     createOffer(
-      offerId: $offerId
-      type: $type
-      nftId: $nftId
-      price: $price
-      currency: $currency
-      tx: $tx
-      transaction: $transaction
+      data: $data
     ) {
       id
-      offerId
       nft {
         id
+        tokenId
+        nftMetadata {
+          metadata
+        }
       }
-      tx
-      fromUser {
-        id
-      }
+      seller
       createdAt
       updatedAt
+      expireAt
       price
-      currency
       status
     }
   }

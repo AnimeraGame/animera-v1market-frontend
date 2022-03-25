@@ -1,12 +1,24 @@
 import gql from 'graphql-tag'
 
 const UPDATE_OFFER_MUTATION = gql`
-  mutation updateOffer($currency: String, $id: Int!, $price: Int, $status: Int) {
-    updateOffer(currency: $currency, id: $id, price: $price, status: $status) {
+  mutation updateOffer(
+    $data: UpdateOfferInput!
+  ) {
+    updateOffer(data: $data) {
       id
+      nft {
+        id
+        tokenId
+        nftMetadata {
+          metadata
+        }
+      }
+      seller
+      createdAt
+      updatedAt
+      expiredAt
       price
       status
-      offerId
     }
   }
 `

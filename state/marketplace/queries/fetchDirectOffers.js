@@ -29,69 +29,32 @@ import gql from 'graphql-tag'
 
 const FETCH_DIRECT_OFFERS = gql`
   query directOffers(
-    $first: Int
-    $orderBy: OffersOrder
-    $query: OffersQuery
-    $after: String
-    $searchString: String
+    $onePage: Int
+    $orderBy: String
+    $page: Int
+    $status: Int
+    $searchText: String
   ) {
-    directOffers(
-      first: $first
-      orderBy: $orderBy
-      query: $query
-      after: $after
-      searchString: $searchString
+    findOffers(
+      onePage: $onePage
+      page: $page
+      sortList: $orderBy
+      status: $status
+      searchText: $searchText
     ) {
-      totalCount
-      commonRarityCount
-      legendaryRarityCount
-      rareRarityCount
-      wildRarityCount
-      pageInfo {
-        endCursor
-      }
-      edges {
-        node {
-          id
-          buyTx
-          createdAt
-          currency
-          price
-          status
-          tx
-          type
-          offerId
-          updatedAt
-          fromUser {
-            avatarUrl
-            walletAddress
-          }
-          nft {
-            tokenId
-            isUsing
-            directOffers {
-              price
-            }
-            nftMetadata {
-              metadata
-            }
-            nftRun {
-              id
-              name
-            }
-            transactions {
-              datetime
-              transactionType
-              contractAddress
-              fromWalletContract
-              toWalletContract
-              tokenId
-              chain
-              userId
-              transactionHash
-              value
-              valueCurrency
-            }
+      offersCount
+      offers {
+        id
+        createdAt
+        price
+        status
+        seller
+        updatedAt
+        nft {
+          tokenId
+          isOnMarketplace
+          nftMetadata {
+            metadata
           }
         }
       }

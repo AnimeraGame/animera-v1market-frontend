@@ -21,6 +21,7 @@
     "canvas-confetti": "^1.4.0",
     "clsx": "^1.1.1",
     "dayjs": "^1.10.7",
+    "ethereumjs-util": "^7.1.4",
     "ethers": "^5.5.2",
     "formik": "2.2.9",
     "framer-motion": "^4.1.17",
