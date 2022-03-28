@@ -28,17 +28,11 @@ import { nftAddress, purchaseAddress } from 'lib/util/web3/contractConstants'
 import { getBalance } from 'state/settings/selectors'
 import { getAuthState, getUserAuthInfo } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
-import { getBNBBalance } from 'lib/util/web3/balance'
 import { setBalances } from 'state/settings'
 import useQueryRequest from 'hooks/UseQueryRequest'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
-
-const getBalanceOfWallet = async (library, address) => {
-  const bnbBalance = await getBNBBalance(library, address)
-  return { bnbBalance }
-}
 
 const CardsList = ({
   t,

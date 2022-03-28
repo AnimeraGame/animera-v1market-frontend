@@ -28,17 +28,9 @@ import {
 } from 'state/marketplace/queries/createOffer'
 import UPDATE_OFFER_NFT_MUTATION from 'state/marketplace/queries/updateOffer'
 import InputFieldWithSuffix from 'pageComponents/common/InputFieldWithSuffix'
-import { nftAddress, purchaseAddress, tokenAddress } from 'lib/util/web3/contractConstants'
-import { getBNBBalance } from 'lib/util/web3/balance'
-import { setBalances } from 'state/settings'
 import { HistoryContainer, ModalContainer, TabContainer, TabPanel, modalStyles } from './modalStyle'
 import ProgressLoading from 'components/Loading'
 import { ConfirmationPopup } from 'components/Modal'
-
-const getBalanceOfWallet = async (library, address) => {
-  const bnbBalance = await getBNBBalance(library, address)
-  return { bnbBalance }
-}
 
 // eslint-disable-next-line no-unused-vars
 const BNB_TYPE = 1
