@@ -196,9 +196,15 @@ const Layout = ({ children }) => {
       {wallet.address ? (
         <>
           <MenuItem>
-            <Body1 title={t('bnbBalance')} fontWeight={FontWeights.regular}>
+            <Body1 title={t('maticBalance')} fontWeight={FontWeights.regular}>
               <AccountBalanceOutlined />
-              {toNumber(balance.bnb).toLocaleString('en-US', { maximumFractionDigits: 4 })} BNB
+              {toNumber(balance.matic).toLocaleString('en-US', { maximumFractionDigits: 4 })} MATIC
+            </Body1>
+          </MenuItem>
+          <MenuItem>
+            <Body1 title={t('marsBalance')} fontWeight={FontWeights.regular}>
+              <AccountBalanceOutlined />
+              {toNumber(balance.mars).toLocaleString('en-US', { maximumFractionDigits: 4 })} MARS
             </Body1>
           </MenuItem>
           <MenuItem onClick={handleWalletDisconnect}>

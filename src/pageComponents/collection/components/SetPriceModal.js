@@ -92,7 +92,7 @@ const SetPriceModal = ({
     setIsDeleteOpen(false)
     setIsDeleting(true)
     const payload = {
-      currency: 'BNB',
+      currency: 'MARS',
       status: 1,
       id: toNumber(get(tokenData, 'activeDirectOffer.id', '')),
     }
@@ -122,7 +122,6 @@ const SetPriceModal = ({
         result = await updateOffer(library, offerId, price, 1, tokenId, account)
       }
 
-      console.log('result.seller deadline', result.sellDeadline);
       const payload = {
         data: {
           chainId: result.chainId,
@@ -131,7 +130,7 @@ const SetPriceModal = ({
           sellerPrice: parseInt(price),
           nftId: tokenData.id,
           tokenId: result.nftId,
-          sellerDeadline: new Date(result.sellDeadline),
+          sellerDeadline: new Date(result.sellDeadline * 1000),
           signature: result.sellerSig,
           status: 0
         }
@@ -140,6 +139,7 @@ const SetPriceModal = ({
         onSuccess: data => {
           setPriceSuccessMessage(t('offerCreateSuccess'))
           setIsSubmitting(false)
+          onClose()
         },
         onError: (err, variables) => {
           // eslint-disable-next-line no-console
@@ -152,9 +152,6 @@ const SetPriceModal = ({
       setIsSubmitting(false)
     }
   }
-
-  // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
-  // useEagerConnect()
 
   const getFee = percentage => {
     if (activeTab === 0) {
@@ -247,19 +244,19 @@ const SetPriceModal = ({
           <Body1 fontWeight={FontWeights.regular} className="label org-fee-label">
             {t('toMarsVerse')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`0 ${t('matic')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.05)} ${t('mars')}`}</Body1>
         </div>
         <div className="fees">
           <Body1 fontWeight={FontWeights.regular} className="label">
             {t('toNFTCreator')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('matic')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`0 ${t('mars')}`}</Body1>
         </div>
         <div className="fees">
           <Body1 fontWeight={FontWeights.regular} className="label">
             {t('totalFees')}
           </Body1>
-          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.02)} ${t('matic')}`}</Body1>
+          <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.05)} ${t('mars')}`}</Body1>
         </div>
         {!isAlreadyPosted && isUsedInGame ? (
           <div className="set-price-error">

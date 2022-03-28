@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-const prefix = 'OPSJET/AUTH'
+const prefix = 'MARS/AUTH'
 
 export const HANDLE_AUTH_SUCCESS = `${prefix}/HANDLE_AUTH_SUCCESS`
 export const HANDLE_WALLET_AUTH_SUCCESS = `${prefix}/HANDLE_WALLET_AUTH_SUCCESS`

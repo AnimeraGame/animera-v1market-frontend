@@ -30,7 +30,8 @@ import gql from 'graphql-tag'
 const FETCH_DIRECT_OFFERS = gql`
   query directOffers(
     $onePage: Int
-    $orderBy: String
+    $orderBy: OrderByInput
+    $price: PriceWhereInput
     $page: Int
     $status: Int
     $searchText: String
@@ -38,7 +39,8 @@ const FETCH_DIRECT_OFFERS = gql`
     findOffers(
       onePage: $onePage
       page: $page
-      sortList: $orderBy
+      orderBy: $orderBy
+      price: $price
       status: $status
       searchText: $searchText
     ) {
@@ -49,6 +51,8 @@ const FETCH_DIRECT_OFFERS = gql`
         price
         status
         seller
+        expireAt
+        sellerSignature
         updatedAt
         nft {
           tokenId

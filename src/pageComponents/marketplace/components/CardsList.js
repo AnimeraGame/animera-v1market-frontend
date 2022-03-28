@@ -119,74 +119,34 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    const txResult = await buyOffer(library, item.offerId, account)
-    if (txResult) {
-      const buyTx = txResult.transactionHash
-      const buyer = account
-      const key = toLower(get(item, 'nft.nftMetadata.metadata.rarity', ''))
-      const payload = {
-        id: parseInt(item.id),
-        buyer,
-        buyTx,
-        transaction: {
-          transactionType: 'buyOffer',
-          datetime: new Date().toISOString(),
-          chain: 'BSC',
-          transactionHash: txResult.transactionHash,
-          contractAddress: nftAddress,
-          fromWalletContract: account,
-          toWalletContract: purchaseAddress,
-          tokenId: item?.nft?.tokenId,
-          value: item.price,
-          valueCurrency: 'BNB',
-          valueUSD: 0,
-          transactionFee: txResult.gasUsed,
-          transactionCurrency: 'BNB',
-        },
-      }
-      const { bnbBalance } = await getBalanceOfWallet(library, account)
-      dispatch(setBalances(bnbBalance))
-      if (selectedCard.index !== null) {
-        setData([
-          ...data.slice(0, selectedCard.index),
-          ...data.slice(selectedCard.index + 1, data.length),
-        ])
-      }
-      const newCount = totalCount - 1 || 0
-      setTotalCount(newCount)
-      setRarityFilterCount(old => {
-        const newCount = old[key] - 1 || 0
-        return {
-          ...old,
-          [key]: newCount,
-        }
-      })
-      acceptOfferMutation.mutate(payload, {
-        onSuccess: data => {
-          TagManager.dataLayer({
-            dataLayer: {
-              event: 'sold_marketplace',
-              id: item?.nft?.tokenId,
-              price: item?.price + ' BNB',
-              type: 'sold_marketplace',
-            },
-          })
-          setPriceSuccessMessage(t('priceSuccess'))
-          setIsBuyModalOpen(false)
-          setSelectedCard({})
-          setIsSubmitting(false)
-        },
-        onError: (err, variables) => {
-          // eslint-disable-next-line no-console
-          console.log({ err })
-          setPriceErrorMessage(t('somethingWentWrongPurchase'))
-          setIsSubmitting(false)
-        },
-      })
-    } else {
-      setPriceErrorMessage(t('confirmWalletTransaction'))
+    const sellerSig = await buyOffer(library, item, account)
       setIsSubmitting(false)
-    }
+    //   acceptOfferMutation.mutate(payload, {
+    //     onSuccess: data => {
+    //       TagManager.dataLayer({
+    //         dataLayer: {
+    //           event: 'sold_marketplace',
+    //           id: item?.nft?.tokenId,
+    //           price: item?.price + ' BNB',
+    //           type: 'sold_marketplace',
+    //         },
+    //       })
+    //       setPriceSuccessMessage(t('priceSuccess'))
+    //       setIsBuyModalOpen(false)
+    //       setSelectedCard({})
+    //       setIsSubmitting(false)
+    //     },
+    //     onError: (err, variables) => {
+    //       // eslint-disable-next-line no-console
+    //       console.log({ err })
+    //       setPriceErrorMessage(t('somethingWentWrongPurchase'))
+    //       setIsSubmitting(false)
+    //     },
+    //   })
+    // } else {
+    //   setPriceErrorMessage(t('confirmWalletTransaction'))
+    //   setIsSubmitting(false)
+    // }
   }
 
   const removeCardKeysFromUrl = () => {
@@ -283,7 +243,7 @@ const CardsList = ({
                 <div className="card-item" key={index}>
                   <AssetCard
                     marketPlace
-                    price={get(item, 'price', '') + ' MATIC'}
+                    price={get(item, 'price', '') + ' MARS'}
                     lastPrice={get(item, 'nft.directOffers[0].price', '')}
                     item={get(item, 'nft.nftMetadata.metadata')}
                     t={t}

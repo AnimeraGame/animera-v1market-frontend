@@ -1,4 +1,4 @@
-export const headerFilterOptions = ['low_high', 'high_low', 'created_at', 'nft_last_sale']
+export const headerFilterOptions = ['low_high', 'high_low', 'created_at']
 
 export const scarcityFilterOptions = ['legendary', 'rare', 'wild', 'common']
 

@@ -76,11 +76,11 @@ const CustomSlider = withStyles(theme => ({
 const marks = [
   {
     value: 0,
-    label: '0 BNB',
+    label: '0 MARS',
   },
   {
     value: 5000,
-    label: '5000+ BNB',
+    label: '5000+ MARS',
   },
 ]
 
@@ -94,7 +94,7 @@ const ValueLabelComponent = ({ children, open, value }) => {
       classes={classes}
       enterTouchDelay={0}
       placement="top"
-      title={value === 5000 ? value + '+ BNB' : value + ' BNB'}>
+      title={value === 5000 ? value + '+ MARS' : value + ' MARS'}>
       {children}
     </Tooltip>
   )

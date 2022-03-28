@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-const prefix = 'OPSJET/SETTINGS'
+const prefix = 'MARS/SETTINGS'
 
 export const HANDLE_WALLET = `${prefix}/HANDLE_WALLET`
 
@@ -14,10 +14,11 @@ export const setWallet = wallet => {
   }
 }
 
-export const setBalances = (bnb) => {
+export const setBalances = (matic, mars) => {
   return {
     type: SET_BALANCE,
-    bnb
+    matic,
+    mars
   }
 }
 
@@ -28,7 +29,8 @@ export const initialState = {
     balance: null,
   },
   balance: {
-    bnb: 0
+    matic: 0,
+    mars: 0
   },
 }
 /*
@@ -49,7 +51,8 @@ const settings = (state = initialState, action) => {
       return {
         ...state,
         balance: {
-          bnb: get(action, 'bnb', 0)
+          matic: get(action, 'matic', 0),
+          mars: get(action, 'mars', 0)
         },
       }
     default:

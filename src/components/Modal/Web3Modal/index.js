@@ -37,7 +37,7 @@ import WrongNetworkModal from './WrongNetworkModal'
 import storage from 'lib/util/storage'
 import { getAuthState } from 'state/auth/selectors'
 import { connectorsByName, supportedNetworkIds } from './config'
-import { getBNBBalance } from 'lib/util/web3/balance'
+import { getMaticBalance, getMarsBalance } from 'lib/util/web3/balance'
 import { setBalances, setWallet as handleWalletAction } from 'state/settings'
 
 const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
@@ -125,8 +125,9 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
   }
 
   const getBalanceOfWallet = async (library, address) => {
-    const bnbBalance = await getBNBBalance(library, address)
-    return { bnbBalance }
+    const maticBalance = await getMaticBalance(library, address)
+    const marsBalance = await getMarsBalance(library, address)
+    return { maticBalance, marsBalance }
   }
 
   const signMessageAsync = async (signer, address, message) => {
@@ -281,8 +282,8 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
         if (testValidNetwork(chainId)) {
           console.log('here');
           setWallet({ address: toLower(account), wrongNetwork: false })
-          const { bnbBalance } = await getBalanceOfWallet(library, account)
-          dispatch(setBalances(bnbBalance))
+          const { maticBalance, marsBalance } = await getBalanceOfWallet(library, account)
+          dispatch(setBalances(maticBalance, marsBalance))
           setIsWrongNetworkModalOpen(false)
         } else {
           setWallet({ address: account, wrongNetwork: true, balance: null })
@@ -416,8 +417,8 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
             setWallet({ wrongNetwork: false })
             setIsWrongNetworkModalOpen(false)
             try {
-              const { bnbBalance } = await getBalanceOfWallet(library, account)
-              dispatch(setBalances(bnbBalance))
+              const { maticBalance, marsBalance } = await getBalanceOfWallet(library, account)
+              dispatch(setBalances(maticBalance, marsBalance))
             } catch (err) {
               // eslint-disable-next-line no-console
               console.log(err)

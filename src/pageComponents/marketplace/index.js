@@ -83,7 +83,15 @@ const MarketplaceWrapper = ({ t }) => {
     {
       onePage: 18,
       page: endCursor,
-      orderBy: selectedOrder !== 'low_high' ? 'desc' : 'asc',
+      price: {
+        gt: filters.price[0],
+        lt: filters.price[1]
+      },
+      orderBy: {
+        price: (selectedOrder === 'low_high' || selectedOrder === 'high_low') ? (selectedOrder !== 'low_high' ? 'desc' : 'asc') : null,
+        created_at: selectedOrder === 'create_at' ? 'desc' : null,
+        // last_sale: selectedOrder === 'nft_last_sale' ? 'desc' : null,
+      },
       status: 0,
       searchText: searchText,
     },
@@ -147,7 +155,7 @@ const MarketplaceWrapper = ({ t }) => {
     setSearchText(search)
     generateUrlSearch(router, search)
   }
-  const isEqual = (first, second) => first?.node?.id === second?.node?.id
+  const isEqual = (first, second) => first?.id === second?.id
 
   useEffect(() => {
     if (!isUndefined(dataArray)) {
@@ -158,7 +166,9 @@ const MarketplaceWrapper = ({ t }) => {
       setData(uniqWith(updatedData, isEqual))
       // setData(updatedData)
       setTotalCount(updatedCount)
-      setEndCursor(endCursor + 1)
+      if (resData && resData.length === 18) {
+        setEndCursor(endCursor + 1)
+      }
     }
   }, [dataArray])
 

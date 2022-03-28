@@ -133,9 +133,9 @@ const BuyNowModal = ({
   const [updateSuccess, setUpdateSuccess] = useState(false)
   const [updateError, setUpdateError] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
-  const price = get(cardInfo, 'node.price', 0)
-  const canBuyNft = toNumber(balance.bnb) >= toNumber(price)
-  const isBeingUsedInGame = get(cardInfo, 'node.nft.isUsing', false)
+  const price = get(cardInfo, 'price', 0)
+  const canBuyNft = toNumber(balance.mars) >= toNumber(price)
+  console.log('card info',  cardInfo)
   return (
     <>
       {updateSuccess ? (
@@ -170,22 +170,22 @@ const BuyNowModal = ({
                   <Body1 fontWeight={FontWeights.medium}>{t('connectWalletWarningSetPrice')}</Body1>
                 </div>
               ) : null}
-              {getRow(t('tokenId'), get(cardInfo, 'node.nft.tokenId', ''))}
+              {getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
               <div className="row">
                 <Body1 fontWeight={FontWeights.bold} className="label">
                   {t('price')}:
                 </Body1>
-                <Body1 fontWeight={FontWeights.semiBold}>{`${price} BNB`}</Body1>
+                <Body1 fontWeight={FontWeights.semiBold}>{`${price} MARS`}</Body1>
               </div>
               {!canBuyNft ? (
                 <div>
                   <Body1 fontWeight={FontWeights.regular} component="div" className="label">
-                    <span className="warning-text">{t('bnbWarning')}</span>
+                    <span className="warning-text">{t('marsWarning')}</span>
                     <Link
                       href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
                       target="_blank"
                       rel="noopener">
-                      {t('bnbLink')}
+                      {t('marsLink')}
                     </Link>
                   </Body1>
                 </div>
@@ -193,23 +193,23 @@ const BuyNowModal = ({
             </>
           ) : (
             <>
-              {getRow(t('tokenId'), get(cardInfo, 'transactions[0].tokenId', ''))}
-              {getRow(t('startingPrice'), '100 BNB')}
-              {getRow(t('highestBid'), '150 BNB')}
+              {getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
+              {getRow(t('startingPrice'), '100 MARS')}
+              {getRow(t('highestBid'), '150 MARS')}
               {getRow(t('highestBidder'), '0x403033fcfbb2ba1c384b1e9cc7008e9402616a95')}
-              {getRow(t('myCurrentBid'), '175 BNB')}
+              {getRow(t('myCurrentBid'), '175 MARS')}
               <div className="row">
                 <div>
                   <Body1 fontWeight={FontWeights.bold} className="label">
                     {t('price')}:
                   </Body1>
                   <Body1 fontWeight={FontWeights.regular} component="div" className="label">
-                    {t('bnbWarning')}
+                    {t('marsWarning')}
                     <Link
                       href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
                       target="_blank"
                       rel="noopener">
-                      {t('bnbLink')}
+                      {t('marsLink')}
                     </Link>
                   </Body1>
                 </div>
@@ -223,21 +223,15 @@ const BuyNowModal = ({
             </>
           )}
           <div className="footer-note">
-            {!isBeingUsedInGame ? (
-              <Body1 fontWeight={FontWeights.regular}>{t('pleaseKeepScreenOpen')}</Body1>
-            ) : (
-              <div className="game-error">
-                <Body1>{t('cardIsAlreadyInGame')}</Body1>
-              </div>
-            )}
+            <Body1 fontWeight={FontWeights.regular}>{t('pleaseKeepScreenOpen')}</Body1>
           </div>
           <div className="footer">
             <OutlinedSecondaryButton disabled={isSubmitting} onClick={onClose}>
               {t('cancel')}
             </OutlinedSecondaryButton>
             <ContainedPrimaryButton
-              disabled={!canBuyNft || !account || isSubmitting || isBeingUsedInGame}
-              onClick={() => onSubmit(get(cardInfo, 'node', {}))}>
+              disabled={!canBuyNft || !account || isSubmitting}
+              onClick={() => onSubmit(cardInfo)}>
               {isSubmitting ? (
                 <>
                   <span>

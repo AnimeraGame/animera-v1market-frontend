@@ -198,7 +198,7 @@ export const purchaseABI = [
 
 const testnetPurchaseAddress = '0x5006C333f065CD523e5897EFB487272d7A872284'
 
-const mainnetPurchaseAddress = '0x3dbf25EcC1c94Bcb17a3e2e82D0bDf394a810330'
+const mainnetPurchaseAddress = '0x5006C333f065CD523e5897EFB487272d7A872284'
 
 export const purchaseAddress =
   environment === 'production' ? mainnetPurchaseAddress : testnetPurchaseAddress
@@ -407,9 +407,9 @@ export const nftABI = [
   },
 ]
 
-const testnetNftAddress = '0x697AaEa4DDC860918B28a55a9D6ef4038018CB62'
+const testnetNftAddress = '0xD6637fD484261bB7C8b5b0b3283F539f98eAaD53'
 
-const mainnetNftAddress = '0x12ee26463C5586d8D9132E3A230EA19a6B7Eb742'
+const mainnetNftAddress = '0xD6637fD484261bB7C8b5b0b3283F539f98eAaD53'
 
 export const nftAddress = environment === 'production' ? mainnetNftAddress : testnetNftAddress
 
