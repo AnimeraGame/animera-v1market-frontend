@@ -2,6 +2,11 @@
   "name": "Next.js",
   "description": "Universal web app built on React.js, server-rendered with Node.js",
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p $PORT",
+    "lint": "eslint ./ --ext js,jsx,ts,tsx",
+    "test": "jest"
   },
   "env": {
   },
@@ -11,7 +16,6 @@
     }
   },
   "addons": [
-
   ],
   "buildpacks": [
     {
