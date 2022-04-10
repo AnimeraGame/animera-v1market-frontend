@@ -185,6 +185,7 @@ const AssetCard = ({
   tokenId,
   lastPrice,
   showLastPrice = false,
+  from = null
 }) => {
   const vid = useRef(null)
 
@@ -278,6 +279,14 @@ const AssetCard = ({
             </Body1>
           </div>
         )}
+        {from && !loading && (
+          <div className="card_price_details">
+            <Body1 className="card_price_label">{t('offerBy')}</Body1>
+            <Body1 fontWeight={FontWeights.bold} className="card_price_value">
+              {from || ''}
+            </Body1>
+          </div>
+        )}
         {showLastPrice && !loading && (
           <div className="last_price_details">
             <Caption fontWeight={FontWeights.semiBold} className="card_price_value">
@@ -309,6 +318,7 @@ AssetCard.propTypes = {
   price: PropTypes.string,
   tokenId: PropTypes.string,
   lastPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  from: PropTypes.object,
 }
 
 export default AssetCard

@@ -10,6 +10,13 @@ const MY_NFT_COLLECTION = gql`
         nftMetadata {
           metadata
         }
+        isOnMarketplace
+        directOffer {
+          id
+          price
+          seller
+          status
+        }
       }
     }
   }

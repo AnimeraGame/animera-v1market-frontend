@@ -1,0 +1,22 @@
+{
+  "offers": "Offers",
+  "title": "Offers",
+  "price": "Price",
+  "accept": "Accept Offer",
+  "decline": "Decline Offer",
+  "cancelOffer": "Cancel Offer",
+  "updateOffer": "Update Offer",
+  "update": "Update",
+  "cancel": "Cancel",
+  "tokenId": "Token ID",
+  "pleaseKeepScreenOpen": "Please keep this modal open until transaction completes to ensure successful transfer of your NFT.",
+  "nftDetails": "NFT Details",
+  "onTestNet": " on mumbai.polygonscan.com)",
+  "view": "View",
+  "contract": "Contract",
+  "ownerAddress": "Owner Address",
+  "blockchain": "Blockchain",
+  "description": "Description",
+  "offerBy": "Offer By",
+  "declineDescription": "Are you sure to decline this offer?"
+}

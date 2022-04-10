@@ -16,7 +16,7 @@ const UPDATE_OFFER_MUTATION = gql`
       seller
       createdAt
       updatedAt
-      expiredAt
+      expireAt
       price
       status
     }

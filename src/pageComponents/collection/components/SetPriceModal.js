@@ -52,14 +52,13 @@ const SetPriceModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   // const [date, setDate] = useState(null)
-  const [price, setPrice] = useState(get(tokenData, 'activeDirectOffer.price', ''))
+  const [price, setPrice] = useState(get(tokenData, 'directOffer.price', ''))
   const [isPriceValid, setIsPriceValid] = useState(true)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
-  const isAlreadyPosted = !isEmpty(get(tokenData, 'activeDirectOffer', {}))
-  const offerId = get(tokenData, 'activeDirectOffer.offerId', -1)
+  const isAlreadyPosted = !isEmpty(get(tokenData, 'directOffer', {}))
+  const offerId = get(tokenData, 'directOffer.id', -1)
   const activeTab = 0
-  const isUsedInGame = get(tokenData, 'isUsing', false)
   // const wallet = useSelector(state => getWallet(state))
   const { library, account } = useWeb3React()
   // const handleTabChange = value => {
@@ -106,13 +105,8 @@ const SetPriceModal = ({
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
-    let result = null
     try {
-      if (!isAlreadyPosted) {
-        result = await createOffer(library, price, 1, tokenId, account)
-      } else {
-        result = await updateOffer(library, offerId, price, 1, tokenId, account)
-      }
+      let result = await createOffer(library, price, 1, tokenId, account)
 
       const payload = {
         data: {
@@ -127,19 +121,37 @@ const SetPriceModal = ({
           status: 0
         }
       }
-      createOfferNftMutation.mutate(payload, {
-        onSuccess: data => {
-          setPriceSuccessMessage(t('offerCreateSuccess'))
-          setIsSubmitting(false)
-          onClose()
-        },
-        onError: (err, variables) => {
-          // eslint-disable-next-line no-console
-          console.log({ err })
-          setPriceErrorMessage(t('somethingWentWrongOfferCreation'))
-          setIsSubmitting(false)
-        },
-      })
+
+      if (offerId) {
+        payload.data.id = offerId
+        updateOfferNftMutation.mutate(payload, {
+          onSuccess: data => {
+            setPriceSuccessMessage(t('priceUpdateSuccess'))
+            setIsSubmitting(false)
+            onClose()
+          },
+          onError: (err, variables) => {
+            // eslint-disable-next-line no-console
+            console.log({ err })
+            setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
+            setIsSubmitting(false)
+          },
+        })
+      } else {
+        createOfferNftMutation.mutate(payload, {
+          onSuccess: data => {
+            setPriceSuccessMessage(t('offerCreateSuccess'))
+            setIsSubmitting(false)
+            onClose()
+          },
+          onError: (err, variables) => {
+            // eslint-disable-next-line no-console
+            console.log({ err })
+            setPriceErrorMessage(t('somethingWentWrongOfferCreation'))
+            setIsSubmitting(false)
+          },
+        })
+      }
     } catch(error) {
       setIsSubmitting(false)
     }
@@ -250,11 +262,6 @@ const SetPriceModal = ({
           </Body1>
           <Body1 fontWeight={FontWeights.regular}>{`${getFee(0.05)} ${t('mars')}`}</Body1>
         </div>
-        {!isAlreadyPosted && isUsedInGame ? (
-          <div className="set-price-error">
-            <Body1>{t('cardIsAlreadyInGame')}</Body1>
-          </div>
-        ) : null}
       </div>
       <div className="footer">
         {isAlreadyPosted ? (
@@ -278,7 +285,6 @@ const SetPriceModal = ({
             !isPriceValid ||
             toNumber(get(tokenData, 'activeDirectOffer.price', -1)) === toNumber(price) ||
             !account ||
-            (!isAlreadyPosted && isUsedInGame) ||
             isDeleting
           }
           onClick={handleSubmit}>

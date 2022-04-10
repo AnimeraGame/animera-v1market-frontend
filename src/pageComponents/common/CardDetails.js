@@ -14,6 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { H4, Body1 } from 'components/Typography'
 import theme from 'components/Theme'
 import { extractFirstLastChars } from 'lib/util/stringUtil'
+import { nftAddress } from 'lib/util/web3/contractConstants'
 
 const Container = styled.div`
   display: flex;
@@ -88,10 +89,10 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
   }
 
   const transactionRecord = get(nftData, 'info.transactions[0]', {})
-  const metadata = get(nftData, 'info.nftMetadata.metadata', {})
-  const contractAddress = get(transactionRecord, 'contractAddress', '')
+  const metadata = get(nftData, 'info.nft.nftMetadata.metadata', {})
+  const contractAddress = get(transactionRecord, 'contractAddress', nftAddress)
   const transactionAddress = get(transactionRecord, 'transactionHash', '')
-  const chain = toUpper(get(transactionRecord, 'chain', ''))
+  const chain = toUpper(get(transactionRecord, 'chain', 'testnet'))
 
   return (
     <Container>
@@ -108,7 +109,7 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
           <Row>
             <Body1>{t('tokenId')}</Body1>
             <Body1>
-              <span>{get(transactionRecord, 'tokenId', '')}</span>
+              <span>{get(nftData, 'info.nft.tokenId', '')}</span>
             </Body1>
           </Row>
           <Row>
@@ -128,19 +129,15 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
                         <Link
                           href={
                             includes(toLower(chain), 'testnet')
-                              ? `https://testnet.bscscan.com/address/${contractAddress}`
-                              : `https://bscscan.com/address/${contractAddress}`
+                              ? `https://mumbai.polygonscan.com/address/${contractAddress}`
+                              : `https://polygonscan.com/address/${contractAddress}`
                           }
                           target="_blank"
                           rel="noopener">
                           {t('view')}
                         </Link>
                         <span>
-                          {`${
-                            includes(toLower(chain), 'testnet')
-                              ? ` ${t('onTestNet')}`
-                              : ` ${t('onBscScan')}`
-                          }`}
+                          {t('onTestNet')}
                         </span>
                       </span>
                     </>
@@ -159,11 +156,11 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
               ) : nftDataLoading ? (
                 <CircularProgress size={16} />
               ) : (
-                get(transactionRecord, 'toWalletContract', 'n/a')
+                get(nftData, 'info.seller', 'n/a')
               )}
             </Body1>
           </Row>
-          <Row>
+          {/* <Row>
             <Body1>{t('transaction')}</Body1>
             <Body1 component="div" className="link-wrapper">
               {nftError ? (
@@ -180,8 +177,8 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
                         <Link
                           href={
                             includes(toLower(chain), 'testnet')
-                              ? `https://testnet.bscscan.com/tx/${transactionAddress}`
-                              : `https://bscscan.com/tx/${transactionAddress}`
+                              ? `https://mumbai.polygonscan.com/tx/${transactionAddress}`
+                              : `https://polygonscan.com/tx/${transactionAddress}`
                           }
                           target="_blank"
                           rel="noopener">
@@ -200,102 +197,17 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
                 </>
               )}
             </Body1>
-          </Row>
+          </Row> */}
           <Row>
             <Body1>{t('blockchain')}</Body1>
-            <Body1>{`Binance Smart Chain (${
-              includes(toLower(chain), 'testnet') ? 'BSC Testnet)' : 'BSC)'
+            <Body1>{`Polygon (${
+              includes(toLower(chain), 'testnet') ? 'Mumbai Testnet)' : 'Polygon)'
             }`}</Body1>
-          </Row>
-          <Row>
-            <Body1>{t('series')}</Body1>
-            <Body1>{get(metadata, 'series', 'Norse Gods Genesis 01')}</Body1>
-          </Row>
-          <Row>
-            <Body1>{t('rarity')}</Body1>
-            <Body1>{get(metadata, 'rarity', 'N/A')}</Body1>
           </Row>
           <Row>
             <Body1>{t('description')}</Body1>
             <Body1>{get(metadata, 'description', '')}</Body1>
           </Row>
-          {isNumeric(get(metadata, 'attributes.card_type', '')) ? (
-            <>
-              {/* {get(details, 'attributes.Eyes', false) ? (
-                <Row>
-                  <Body1>Eyes</Body1>
-                  <Body1>{get(details, 'attributes.Eyes', 'none')}</Body1>
-                </Row>
-              ) : null} */}
-              {get(metadata, 'attributes.card_type', false) ? (
-                <Row>
-                  <Body1>{t('face')}</Body1>
-                  <Body1>{get(metadata, 'attributes.card_type', 'none')}</Body1>
-                </Row>
-              ) : null}
-              {/* {get(details, 'attributes.Hat', false) ? (
-                <Row>
-                  <Body1>Hat</Body1>
-                  <Body1>{get(details, 'attributes.Hat', 'none')}</Body1>
-                </Row>
-              ) : null} */}
-              {get(metadata, 'attributes.Suit', false) ? (
-                <Row>
-                  <Body1>{t('suit')}</Body1>
-                  <Body1>{get(metadata, 'attributes.Suit', 'none')}</Body1>
-                </Row>
-              ) : null}
-              {/* {get(details, 'attributes.Skin', false) ? (
-                <Row>
-                  <Body1>Skin</Body1>
-                  <Body1>{get(details, 'attributes.Skin', 'none')}</Body1>
-                </Row>
-              ) : null} */}
-              {/* {get(details, 'attributes.Weapon', false) ? (
-                <Row>
-                  <Body1>Weapon</Body1>
-                  <Body1>{get(details, 'attributes.Weapon', 'none')}</Body1>
-                </Row>
-              ) : null}
-              {get(details, 'attributes.Bonus', false) ? (
-                <Row>
-                  <Body1>Bonus</Body1>
-                  <Body1>{get(details, 'attributes.Bonus', '') || 'none'}</Body1>
-                </Row>
-              ) : null} */}
-            </>
-          ) : (
-            <>
-              {/* <Row>
-                <Body1>Eyes</Body1>
-                <Body1>{get(details, 'attributes.Eyes', 'none')}</Body1>
-              </Row> */}
-              <Row>
-                <Body1>{t('face')}</Body1>
-                <Body1>{get(metadata, 'attributes.card_type', 'none')}</Body1>
-              </Row>
-              {/* <Row>
-                <Body1>Hat</Body1>
-                <Body1>{get(details, 'attributes.Hat', 'none')}</Body1>
-              </Row> */}
-              <Row>
-                <Body1>{t('suit')}</Body1>
-                <Body1>{get(metadata, 'attributes.Suit', 'none')}</Body1>
-              </Row>
-              {/* <Row>
-                <Body1>Skin</Body1>
-                <Body1>{get(details, 'attributes.Skin', 'none')}</Body1>
-              </Row>
-              <Row>
-                <Body1>Weapon</Body1>
-                <Body1>{get(details, 'attributes.Weapon', 'none')}</Body1>
-              </Row>
-              <Row>
-                <Body1>Bonus</Body1>
-                <Body1>{get(details, 'attributes.Bonus', '') || 'none'}</Body1>
-              </Row> */}
-            </>
-          )}
         </Wrapper>
       )}
     </Container>

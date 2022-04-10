@@ -141,6 +141,7 @@ const CollectionList = ({ t }) => {
   const { isTablet } = useDevice()
   const spacing = isTablet ? 2 : 4
 
+  console.log('nft list', data);
   useEffect(() => {
     if (isBrowser()) {
       const node = document.getElementById('main-container')
@@ -219,7 +220,7 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: !isEmpty(get(item, 'activeDirectOffer', {}))
+                            title: get(item, 'isOnMarketplace', false)
                               ? t('update')
                               : t('sell'),
                             onClick: () => {

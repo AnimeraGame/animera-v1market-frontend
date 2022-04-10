@@ -24,31 +24,10 @@ export const purchaseABI = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: 'address', name: 'user', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'nftAddress', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'quoteToken', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'nftId', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'offerPrice', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'quantity', type: 'uint256' },
-    ],
-    name: 'OfferApproved',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'user', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'nftAddress', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'nftId', type: 'uint256' },
-    ],
-    name: 'OfferCanceled',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'nftAddress', type: 'address' },
+      { indexed: true, internalType: 'uint256', name: 'offerId', type: 'uint256' },
+      { indexed: true, internalType: 'address', name: 'seller', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'buyer', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'nftAddress', type: 'address' },
       { indexed: false, internalType: 'address', name: 'quoteToken', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'nftId', type: 'uint256' },
       { indexed: false, internalType: 'uint256', name: 'offerPrice', type: 'uint256' },
@@ -78,9 +57,10 @@ export const purchaseABI = [
   {
     anonymous: false,
     inputs: [
+      { indexed: true, internalType: 'uint256', name: 'saleId', type: 'uint256' },
       { indexed: true, internalType: 'address', name: 'seller', type: 'address' },
       { indexed: true, internalType: 'address', name: 'buyer', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'nftAddress', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'nftAddress', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'nftId', type: 'uint256' },
       { indexed: false, internalType: 'uint256', name: 'quantity', type: 'uint256' },
     ],
@@ -123,13 +103,8 @@ export const purchaseABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: 'offerProvider', type: 'address' },
-      { internalType: 'address', name: 'quoteToken', type: 'address' },
-      { internalType: 'uint256', name: 'offerPrice', type: 'uint256' },
-      { internalType: 'uint256', name: 'saleDeadline', type: 'uint256' },
-      { internalType: 'uint256', name: 'offerDeadline', type: 'uint256' },
-      { internalType: 'address', name: 'nftAddress', type: 'address' },
-      { internalType: 'uint256', name: 'nftId', type: 'uint256' },
+      { internalType: 'uint256[5]', name: 'uints', type: 'uint256[5]' },
+      { internalType: 'address[]', name: 'addrs', type: 'address[]' },
       { internalType: 'bytes[2]', name: 'sigs', type: 'bytes[2]' },
     ],
     name: 'executeOffer',
@@ -139,12 +114,8 @@ export const purchaseABI = [
   },
   {
     inputs: [
-      { internalType: 'address', name: 'seller', type: 'address' },
-      { internalType: 'address', name: 'quoteToken', type: 'address' },
-      { internalType: 'uint256', name: 'price', type: 'uint256' },
-      { internalType: 'uint256', name: 'deadline', type: 'uint256' },
-      { internalType: 'address', name: 'nftAddress', type: 'address' },
-      { internalType: 'uint256', name: 'nftId', type: 'uint256' },
+      { internalType: 'uint256[4]', name: 'uints', type: 'uint256[4]' },
+      { internalType: 'address[3]', name: 'addrs', type: 'address[3]' },
       { internalType: 'bytes[2]', name: 'sigs', type: 'bytes[2]' },
     ],
     name: 'executeSell',
@@ -196,9 +167,9 @@ export const purchaseABI = [
   },
 ]
 
-const testnetPurchaseAddress = '0x5006C333f065CD523e5897EFB487272d7A872284'
+const testnetPurchaseAddress = '0xbB4f1309F3ed7dEC28Ade42BA66c208211D5C56B'
 
-const mainnetPurchaseAddress = '0x5006C333f065CD523e5897EFB487272d7A872284'
+const mainnetPurchaseAddress = '0xbB4f1309F3ed7dEC28Ade42BA66c208211D5C56B'
 
 export const purchaseAddress =
   environment === 'production' ? mainnetPurchaseAddress : testnetPurchaseAddress
@@ -407,9 +378,9 @@ export const nftABI = [
   },
 ]
 
-const testnetNftAddress = '0xD6637fD484261bB7C8b5b0b3283F539f98eAaD53'
+const testnetNftAddress = '0xcCBF1868c7182020E518E6847b6C839623754E9a'
 
-const mainnetNftAddress = '0xD6637fD484261bB7C8b5b0b3283F539f98eAaD53'
+const mainnetNftAddress = '0xcCBF1868c7182020E518E6847b6C839623754E9a'
 
 export const nftAddress = environment === 'production' ? mainnetNftAddress : testnetNftAddress
 
@@ -584,7 +555,7 @@ export const tokenABI = [
   },
 ]
 
-const testnetTokenAddress = '0x947D8B7Ff4d587a05cAc26F73E253858119b5324'
-const mainnetTokenAddress = '0x947D8B7Ff4d587a05cAc26F73E253858119b5324'
+const testnetTokenAddress = '0x4D0cb74Fac3F3BbA25386354920C1A5412aA8684'
+const mainnetTokenAddress = '0x4D0cb74Fac3F3BbA25386354920C1A5412aA8684'
 
 export const tokenAddress = environment === 'production' ? mainnetTokenAddress : testnetTokenAddress

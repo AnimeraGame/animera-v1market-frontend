@@ -170,33 +170,6 @@ const CardModal = ({
                   />
                 </div>
               </>
-            ) : includes(get(currentMedia, 'mimeType', ''), 'video') ||
-              includes(get(currentMedia, 'mimeType', ''), 'audio') ? (
-              <div className={classes.videoWrapper}>
-                {videoLoading ? (
-                  <div className={classes.loading}>
-                    <Loading />
-                  </div>
-                ) : null}
-                <div className="player-container">
-                  <ReactPlayer
-                    onReady={() => setVideoLoading(false)}
-                    url={get(currentMedia, 'url', '')}
-                    className="react-player"
-                    width="100%"
-                    height="100%"
-                    controls={playerControls}
-                    playing={autoPlay}
-                    light={lightMode}
-                    stopOnUnmount={false}
-                    onEnablePIP={handlePipToggle}
-                    onDisablePIP={handlePipToggle}
-                    loop
-                    pip={false} // picture in picture mode
-                    // config={{ file: { attributes: { disablepictureinpicture: 'true' } } }} to disable the picture in picture mode
-                  />
-                </div>
-              </div>
             ) : null}
           </div>
           <CardDetails nftData={cardInfo} t={t} />

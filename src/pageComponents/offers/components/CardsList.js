@@ -17,7 +17,7 @@ import clsx from 'clsx'
 // local imports
 import AssetCard from 'pageComponents/common/MarketplaceAssetCard'
 import Placeholder from 'components/Placeholder'
-import BuyNowModal from './BuyNowModal'
+import AcceptOfferModal from './AcceptOfferModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
 import { wrapImagePath } from 'lib/util/imageLoader'
@@ -33,6 +33,7 @@ import useQueryRequest from 'hooks/UseQueryRequest'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
+import ConfirmationPopup from 'components/Modal/ConfirmationModal'
 
 const CardsList = ({
   t,
@@ -57,6 +58,7 @@ const CardsList = ({
   const dispatch = useDispatch()
   // local state
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false)
+  const [isDeclineModalOpen, setDeclineModalOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [priceSuccessMessage, setPriceSuccessMessage] = useState('')
@@ -142,9 +144,9 @@ const CardsList = ({
     const { query: urlParameters } = router
     if (has(urlParameters, 'card')) {
       const filterParameters = omit(urlParameters, ['card', 'type'])
-      if (isEmpty(filterParameters)) router.push('/marketplace/')
+      if (isEmpty(filterParameters)) router.push('/offers/')
       else {
-        let url = '/marketplace?'
+        let url = '/offers?'
         keys(filterParameters).map(
           (item, idx) =>
             (url +=
@@ -155,6 +157,10 @@ const CardsList = ({
         router.push(url)
       }
     }
+  }
+
+  const declineOffer = async () => {
+    setDeclineModalOpen(false)
   }
 
   const fetchCardDetails = async (index, card) => {
@@ -255,7 +261,7 @@ const CardsList = ({
                           iconDirection="horizontal"
                           menuItems={[
                             {
-                              title: t('buyNow'),
+                              title: t('accept'),
                               onClick: () => {
                                     router.push(
                                       `${router.asPath}${
@@ -268,6 +274,15 @@ const CardsList = ({
                                     })
                                     setIsBuyModalOpen(true)
                                   }
+                            },{
+                              title: t('decline'),
+                              onClick: () => {
+                                setSelectedCard({
+                                  card: item,
+                                  index,
+                                })
+                                setDeclineModalOpen(true)
+                              }
                             },
                           ]}
                           portal={false}
@@ -295,7 +310,7 @@ const CardsList = ({
         />
       ) : null}
       {isBuyModalOpen ? (
-        <BuyNowModal
+        <AcceptOfferModal
           cardInfo={selectedCard.card}
           t={t}
           cardType={'SIMPLE'}
@@ -311,6 +326,17 @@ const CardsList = ({
           account={account}
         />
       ) : null}
+      {isDeclineModalOpen ? (
+        <ConfirmationPopup
+          open={isDeclineModalOpen}
+          title={t('decline')}
+          message={t('declineDescription')}
+          handleConfirm={declineOffer}
+          handleCancel={() => setDeclineModalOpen(false)}
+          cancelButtonText={t('cancel')}
+          saveButtonText={t('decline')}
+        />
+      ): null}
       {cardLoading && !isLoading ? (
         <div
           style={{
