@@ -7,7 +7,7 @@ import {
   tokenABI,
   tokenAddress,
 } from './contractConstants'
-import { getBigNumber, getEIP712Signature, getApprovalDigest } from './signature'
+import { getApprovalDigest } from './signature'
 
 const NFT_GALLERY_NAME = 'MarsversMarket';
 

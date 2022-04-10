@@ -17,8 +17,6 @@ import {
 import {
   validateUrlInput,
   getPriceFromUrl,
-  generateUrl,
-  generateUrlSearch,
 } from 'lib/util/stringUtil'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
@@ -68,12 +66,12 @@ const OffersWrapper = ({ t }) => {
   const [totalCount, setTotalCount] = useState(4)
   const [afterId, setAfterId] = useState('')
   const [endCursor, setEndCursor] = useState(0)
-  const [rarityFilterCounts, setRarityFilterCount] = useState({})
-  const [selectedOrder, setSelectedOrder] = useState(
+  const [, setRarityFilterCount] = useState({})
+  const [selectedOrder, ] = useState(
     validateUrlInput(headerFilterOptions, sortOrder)
   )
-  const [searchText, setSearchText] = useState(searchString)
-  const [filters, setFilters] = useState({
+  const [searchText, ] = useState(searchString)
+  const [filters, ] = useState({
     price: [...getPriceFromUrl(priceMin, priceMax)],
     sale: sale
       ? validateUrlInput(

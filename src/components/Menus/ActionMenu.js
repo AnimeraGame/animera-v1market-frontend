@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   ClickAwayListener,

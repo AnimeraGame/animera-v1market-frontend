@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'

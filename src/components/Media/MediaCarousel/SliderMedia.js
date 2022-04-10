@@ -1,6 +1,6 @@
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import MediaComponent from './MediaComponent'

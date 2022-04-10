@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import SearchIcon from '@material-ui/icons/Search'

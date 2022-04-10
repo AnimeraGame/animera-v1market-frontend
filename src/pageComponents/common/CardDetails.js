@@ -1,7 +1,5 @@
-import React from 'react'
 import get from 'lodash/get'
 import PropTypes from 'prop-types'
-import isString from 'lodash/isString'
 import isEmpty from 'lodash/isEmpty'
 import toUpper from 'lodash/toUpper'
 import toLower from 'lodash/toLower'
@@ -80,18 +78,10 @@ const Row = styled.div`
 
 const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
   // const router = useRouter()
-  const isNumeric = str => {
-    if (!isString(str)) return false // we only process strings!
-    return (
-      !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-    )
-  }
-
+  
   const transactionRecord = get(nftData, 'info.transactions[0]', {})
   const metadata = get(nftData, 'info.nft.nftMetadata.metadata', {})
   const contractAddress = get(transactionRecord, 'contractAddress', nftAddress)
-  const transactionAddress = get(transactionRecord, 'transactionHash', '')
   const chain = toUpper(get(transactionRecord, 'chain', 'testnet'))
 
   return (

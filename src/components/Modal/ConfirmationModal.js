@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, TextField, FormControl, IconButton } from '@material-ui/core'
 import { CloseOutlined } from '@material-ui/icons'

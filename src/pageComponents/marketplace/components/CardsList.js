@@ -7,11 +7,9 @@ import keys from 'lodash/keys'
 import has from 'lodash/has'
 import times from 'lodash/times'
 import isEmpty from 'lodash/isEmpty'
-import toLower from 'lodash/toLower'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useWeb3React } from '@web3-react/core'
-import { useSelector, useDispatch } from 'react-redux'
-import TagManager from 'react-gtm-module'
+import { useSelector } from 'react-redux'
 import clsx from 'clsx'
 
 // local imports
@@ -20,15 +18,12 @@ import Placeholder from 'components/Placeholder'
 import BuyNowModal from './BuyNowModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
-import { wrapImagePath } from 'lib/util/imageLoader'
-import usePostRequest from 'hooks/UsePostRequest'
-import { ACCEPT_OFFER_MUTATION } from 'state/marketplace/queries/acceptOffer'
-import { buyOffer } from 'lib/util/web3/purchase'
-import { nftAddress, purchaseAddress } from 'lib/util/web3/contractConstants'
+// import usePostRequest from 'hooks/UsePostRequest'
+// import { ACCEPT_OFFER_MUTATION } from 'state/marketplace/queries/acceptOffer'
+// import { buyOffer } from 'lib/util/web3/purchase'
 import { getBalance } from 'state/settings/selectors'
-import { getAuthState, getUserAuthInfo } from 'state/auth/selectors'
+import { getAuthState } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
-import { setBalances } from 'state/settings'
 import useQueryRequest from 'hooks/UseQueryRequest'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
 import ProgressLoading from 'components/Loading'
@@ -52,10 +47,7 @@ const CardsList = ({
   const modalType = get(router, 'query.type', null)
   const balance = useSelector(state => getBalance(state))
   const isUserLoggedIn = useSelector(state => getAuthState(state))
-  const user = useSelector(state => getUserAuthInfo(state))
 
-  const dispatch = useDispatch()
-  // local state
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
@@ -63,11 +55,11 @@ const CardsList = ({
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { library, account } = useWeb3React()
-  const { mutationRes: acceptOfferMutation } = usePostRequest(
-    'ACCEPT_OFFER_MUTATION',
-    ACCEPT_OFFER_MUTATION
-  )
+  const { account } = useWeb3React()
+  // const { mutationRes: acceptOfferMutation } = usePostRequest(
+  //   'ACCEPT_OFFER_MUTATION',
+  //   ACCEPT_OFFER_MUTATION
+  // )
 
   const { isFetching: cardLoading, refetch: fetchCardDetail } = useQueryRequest(
     ['FETCH_DIRECT_OFFERS_URL_SUPPORT'],
@@ -108,7 +100,7 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    const sellerSig = await buyOffer(library, item, account)
+    // const sellerSig = await buyOffer(library, item, account)
       setIsSubmitting(false)
     //   acceptOfferMutation.mutate(payload, {
     //     onSuccess: data => {

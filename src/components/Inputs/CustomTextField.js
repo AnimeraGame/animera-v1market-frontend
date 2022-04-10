@@ -1,7 +1,6 @@
 import { TextField } from '@material-ui/core'
 import { Field, getIn } from 'formik'
 import PropTypes from 'prop-types'
-import React from 'react'
 import has from 'lodash/has'
 import ExpandIcon from '@material-ui/icons/ExpandMore'
 import { StyledErrorMessage, SFormHelperText, SFormControl } from './styles'

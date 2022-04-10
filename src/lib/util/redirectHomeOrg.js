@@ -33,9 +33,8 @@ const Redirect =
         }
       }
       if (!isEmpty(token)) {
-        let userType = ''
         try {
-          userType = JSON.parse(token).userType
+          JSON.parse(token)
         } catch (err) {
           // eslint-disable-next-line no-console
           console.log(err)

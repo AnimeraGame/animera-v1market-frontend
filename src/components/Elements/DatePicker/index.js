@@ -1,6 +1,6 @@
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { SingleDatePicker } from 'react-dates'
 import PropTypes from 'prop-types'
 import moment from 'moment'

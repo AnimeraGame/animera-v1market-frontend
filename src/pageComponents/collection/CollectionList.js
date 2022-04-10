@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Grid from '@material-ui/core/Grid'
 import get from 'lodash/get'
@@ -60,7 +60,6 @@ const Container = styled.div`
     }
   }
 `
-const TAKE = 12 // items to fetch
 
 const CollectionList = ({ t }) => {
   const user = useSelector(state => getUserAuthInfo(state))

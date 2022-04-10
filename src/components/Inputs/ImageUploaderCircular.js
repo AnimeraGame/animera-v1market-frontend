@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Edit, PhotoCamera } from '@material-ui/icons'
 import includes from 'lodash/includes'

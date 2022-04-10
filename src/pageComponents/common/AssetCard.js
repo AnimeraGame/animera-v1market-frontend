@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import get from 'lodash/get'

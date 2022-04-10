@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { IconButton, Dialog, DialogTitle, DialogActions, DialogContent } from '@material-ui/core'

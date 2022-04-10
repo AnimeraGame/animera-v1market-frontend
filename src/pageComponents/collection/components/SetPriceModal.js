@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import toString from 'lodash/toString'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import toNumber from 'lodash/toNumber'
 import isNumber from 'lodash/isNumber'
-import TagManager from 'react-gtm-module'
 
 import { FontWeights, Body1, Body2, H6, Caption } from 'components/Typography'
 import ModalHoc from 'components/Modal/ModalHoc'
@@ -19,7 +17,7 @@ import {
 } from 'components/Inputs'
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
-import { createOffer, updateOffer } from 'lib/util/web3/purchase'
+import { createOffer } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
 // import { useEagerConnect } from 'hooks/web3Hook'
 import {
@@ -47,7 +45,7 @@ const SetPriceModal = ({
 }) => {
   // hooks
   const classes = modalStyles()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   // const [activeTab, setActiveTab] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -106,7 +104,7 @@ const SetPriceModal = ({
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
     try {
-      let result = await createOffer(library, price, 1, tokenId, account)
+      const result = await createOffer(library, price, 1, tokenId, account)
 
       const payload = {
         data: {

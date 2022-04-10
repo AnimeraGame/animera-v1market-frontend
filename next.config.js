@@ -6,7 +6,7 @@ const nextTranslate = require('next-translate')
   next.config.js will not be parsed by Webpack, Babel or TypeScript.
  */
 
-const environment = process.env.APP_ENV || ''
+// const environment = process.env.APP_ENV || ''
 const CDN_URL = process.env.CDN_URL || ''
 // eslint-disable-next-line no-console
 // console.log('LOGS CDN ', { CDN_URL }, ' ENV variables: ', process.env)

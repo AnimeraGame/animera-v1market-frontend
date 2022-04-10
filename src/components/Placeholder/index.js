@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import React from 'react'
 import styled from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
 import InboxIcon from '@material-ui/icons/Inbox'

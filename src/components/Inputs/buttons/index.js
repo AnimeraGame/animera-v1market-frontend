@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Button as MaterialButton, IconButton } from '@material-ui/core'
 import { ArrowBack } from '@material-ui/icons'

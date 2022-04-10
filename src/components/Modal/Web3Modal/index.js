@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'

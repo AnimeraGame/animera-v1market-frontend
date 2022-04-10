@@ -1,7 +1,6 @@
 // Card container
 // https://projects.invisionapp.com/d/main/#/console/17431458/367992893/preview
 
-import React from 'react'
 import PropTypes from 'prop-types'
 import MaterialUICard from '@material-ui/core/Card'
 import { withStyles } from '@material-ui/core/styles'

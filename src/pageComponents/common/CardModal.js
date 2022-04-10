@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Dialog, DialogContent, Slide, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import ReactPlayer from 'react-player/lazy'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -44,7 +43,6 @@ const CardModal = ({
   const [imageHeight, setImageHeight] = useState(isTablet ? 50 : 70) // vh unit is used
   const [imageWidth, setImageWidth] = useState(90) // vw unit is used
   const [loading, setLoading] = useState(true)
-  const [videoLoading, setVideoLoading] = useState(true)
   const transactions = get(cardInfo, 'info.transactions', [])
 
   const handleNavigation = index => {

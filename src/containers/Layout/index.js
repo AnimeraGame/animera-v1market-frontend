@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Avatar } from '@material-ui/core'
 import { useRouter } from 'next/router'
@@ -34,7 +34,6 @@ import {
   ProfilePopover,
   MenuItem,
   ProfileContainer,
-  AddressContainer,
   AvatarContainer,
   HeaderMenuItems,
   MobileLogo,
@@ -45,7 +44,7 @@ import ErcAddress from 'components/Elements/ErcAddress'
 import { getWallet, getBalance } from 'state/settings/selectors'
 import { setWallet, setBalances } from 'state/settings'
 import { handleLogoff, handleTokenRefresh } from 'state/auth'
-import { getUserAuthInfo, getAccessToken, getIsOrgUser } from 'state/auth/selectors'
+import { getUserAuthInfo, getAccessToken } from 'state/auth/selectors'
 import { isBrowser } from 'lib/util/window'
 import usePostRequest from 'hooks/UsePostRequest'
 import REFRESH_ACCESS_TOKEN_MUT from 'state/auth/queries/refreshAccessToken'

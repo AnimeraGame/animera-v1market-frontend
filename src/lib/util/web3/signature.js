@@ -4,7 +4,6 @@ import { ecsign } from 'ethereumjs-util';
 const {
   utils: { keccak256, defaultAbiCoder, toUtf8Bytes, solidityPack, hexlify }
 } = ethers;
-const ZERO_ADDRESS = ethers.constants.AddressZero;
 
 // Defaults to e18 using amount * 10^18
 export function getBigNumber(amount, decimals = 18) {

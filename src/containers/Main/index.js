@@ -1,13 +1,9 @@
-import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
-import get from 'lodash/get'
 import { constants } from 'components/Theme/constants'
 
 // Local imports
 import Layout from '../Layout'
-import AuthContainer from '../Auth'
 import theme from 'components/Theme'
 
 const Container = styled.div`
@@ -44,7 +40,6 @@ const MainContainer = ({
   fullWidth = false,
   hideDrawer = false,
 }) => {
-  const router = useRouter()
   return (
     <Layout hideDrawer={hideDrawer}>
       <Container

@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import { memo } from 'react'
 
 // local imports
-import { H6, FontWeights, Body1 } from 'components/Typography'
+import { H6, FontWeights } from 'components/Typography'
 import CustomizedSlider from 'components/Inputs/CustomRangeSlider'
 import { TextPrimaryButton } from 'components/Inputs'
 import theme from 'components/Theme'
@@ -43,18 +43,6 @@ const Container = styled.div`
   }
 `
 
-const ScarcityContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-flow: column nowrap;
-  width: 100%;
-  margin: 20px 0px 28px;
-
-  h6 {
-    margin-bottom: 12px;
-  }
-`
-
 // const SaleTypeContainer = styled.div`
 //   display: flex;
 //   align-items: flex-start;
@@ -78,11 +66,6 @@ const FiltersComponent = ({
 }) => {
   const handlePriceSlider = value => {
     setFilters({ ...filters, price: value })
-  }
-
-  const handleScarcityChange = e => {
-    const value = e.target.value
-    setFilters({ ...filters, scarcity: value })
   }
 
   // const handleSaleTypeChange = e => {
