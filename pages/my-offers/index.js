@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 
 // local imports
-import OffersWrapper from 'pageComponents/offers'
+import MyOffersWrapper from 'pageComponents/myOffers'
 import PageContent from 'containers/PageContent'
 import { getAuthState } from 'state/auth/selectors'
 import { getWallet } from 'state/settings/selectors'
@@ -40,13 +40,13 @@ const GuestContainer = styled.div`
 `
 
 const Offers = () => {
-  const { t } = useTranslation('offers')
+  const { t } = useTranslation('my-offers')
   const wallet = useSelector(state => getWallet(state))
   const isLoggedIn = useSelector(state => getAuthState(state))
   return (
     <>
       <Head>
-        <title>Offers</title>
+        <title>My Offers</title>
         <meta name="description" content="NFT marketplace to buy/sell amazing NFTs" />
         <meta property="og:title" content="NFT Marketplace" />
         <meta property="og:description" content="NFT marketplace to buy/sell amazing NFTs" />
@@ -56,11 +56,11 @@ const Offers = () => {
       {isLoggedIn && !wallet.wrongNetwork && wallet.address ? (
         <PageContent>
           <Container>
-            <OffersWrapper t={t} />
+            <MyOffersWrapper t={t} />
           </Container>
         </PageContent>
       ) : (
-        <PageContent title={t('title')}>
+        <PageContent title={t('myOffers')}>
           <GuestContainer>
             <Body1>
               <ErrorOutlineIcon color="error" />

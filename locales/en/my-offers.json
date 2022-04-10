@@ -2,9 +2,6 @@
   "offers": "Offers",
   "title": "Offers",
   "price": "Price",
-  "confirm": "Confirm",
-  "accept": "Accept Offer",
-  "decline": "Decline Offer",
   "cancelOffer": "Cancel Offer",
   "updateOffer": "Update Offer",
   "update": "Update",
@@ -20,7 +17,6 @@
   "description": "Description",
   "offerBy": "Offer By",
   "declineDescription": "Are you sure to decline this offer?",
-  "cancelDescription": "Are you sure to cancel this offer?",
   "wrongNetworkWarning": "Please make sure to use the correct RPC Settings on Metamask.",
   "connectWalletMarketplace": "Please Connect Wallet to view and collect amazing NFTs.",
   "myOffers": "My Offers"
