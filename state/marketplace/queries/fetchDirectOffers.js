@@ -1,34 +1,34 @@
 import gql from 'graphql-tag'
 
 /* Input format 
-  type OffersQuery {
-    endPrice: Float
-    startPrice: Float
-    status: Int
-  }
+	type OffersQuery {
+		endPrice: Float
+		startPrice: Float
+		status: Int
+	}
 
-  type OffersOrder {
-    direction: OrderDirection!
-    field: OffersOrderField!
-  }
+	type OffersOrder {
+		direction: OrderDirection!
+		field: OffersOrderField!
+	}
 
-  enum OrderDirection {
-    asc
-    desc
-  }
+	enum OrderDirection {
+		asc
+		desc
+	}
 
-  enum OffersOrderField {
-    created_at
-    id
-    price
-    status
-    types
-  }
+	enum OffersOrderField {
+		created_at
+		id
+		price
+		status
+		types
+	}
 
 */
 
 const FETCH_DIRECT_OFFERS = gql`
-  query directOffers(
+  query findSalesBy(
     $onePage: Int
     $orderBy: OrderByInput
     $price: PriceWhereInput
@@ -36,7 +36,7 @@ const FETCH_DIRECT_OFFERS = gql`
     $status: Int
     $searchText: String
   ) {
-    findOffers(
+    findSalesBy(
       onePage: $onePage
       page: $page
       orderBy: $orderBy
@@ -44,8 +44,8 @@ const FETCH_DIRECT_OFFERS = gql`
       status: $status
       searchText: $searchText
     ) {
-      offersCount
-      offers {
+			estatesCount
+      estates {
         id
         createdAt
         price
