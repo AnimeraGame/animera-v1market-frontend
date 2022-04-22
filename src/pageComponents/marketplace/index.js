@@ -24,7 +24,7 @@ import {
   generateUrlSearch,
 } from 'lib/util/stringUtil'
 import FiltersModalHoc from './components/FiltersModalHoc'
-import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import {FETCH_DIRECT_SALES} from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
 import { isBrowser } from 'lib/util/window'
 import ProgressLoading from 'components/Loading/index'
@@ -95,7 +95,7 @@ const MarketplaceWrapper = ({ t }) => {
       status: 0,
       searchText: searchText,
     },
-    FETCH_DIRECT_OFFERS,
+    FETCH_DIRECT_SALES,
     {
       enabled: true,
       refetchOnWindowFocus: false,
@@ -160,12 +160,12 @@ const MarketplaceWrapper = ({ t }) => {
   useEffect(() => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
-      const updatedCount = get(dataArray, 'findOffers.offersCount', 0)
-      const resData = get(dataArray, 'findOffers.offers', [])
+      const updatedCount = get(dataArray, 'findSalesBy._count', 0)
+      const resData = get(dataArray, 'findSalesBy.estates', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
       // setData(updatedData)
-      setTotalCount(updatedCount)
+      setTotalCount(updatedCount + totalCount)
       if (resData && resData.length === 18) {
         setEndCursor(endCursor + 1)
       }

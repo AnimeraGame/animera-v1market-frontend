@@ -8,6 +8,7 @@ import times from 'lodash/times'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dynamic from 'next/dynamic'
 import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 // local imports
 import AssetCard from 'pageComponents/common/AssetCard'
@@ -15,7 +16,7 @@ import LightBox from 'pageComponents/common/CardModal'
 import useDevice from 'hooks/useDevice'
 import { constants } from 'components/Theme/constants'
 import useQueryRequest from 'hooks/UseQueryRequest'
-import MY_NFT_COLLECTION from 'state/nft/queries/myOwnedNfts'
+import WALLET_NFT_COLLECTION from 'state/nft/queries/walletNfts'
 import Placeholder from 'components/Placeholder'
 import { ActionMenu } from 'components/Menus'
 import { wrapImagePath } from 'lib/util/imageLoader'
@@ -98,26 +99,29 @@ const CollectionList = ({ t }) => {
     setIsPreviewOpen(true)
   }
 
-  const {
-    isLoading,
-    isError,
-    refetch: refetchList,
-    isFetching,
-  } = useQueryRequest(
-    ['MY_NFT_COLLECTION'],
-    { userId: user.id },
-    MY_NFT_COLLECTION,
-    {
-      enabled: false,
-      refetchOnWindowFocus: false,
-      retry: 2,
-    }
-  )
+	const router = useRouter()
+	const { wallet } = router.query
+
+	const {
+		isLoading,
+		isError,
+		refetch: refetchList,
+		isFetching,
+	} = useQueryRequest(
+		['WALLET_NFT_COLLECTION'],
+		{ wallet: wallet },
+		WALLET_NFT_COLLECTION,
+		{
+			enabled: false,
+			refetchOnWindowFocus: false,
+			retry: 2,
+		}
+	)
 
   const loadNftCollectionList = async () => {
     const res = await refetchList()
-    setData([...data, ...get(res, 'data.getNftListByUserId.nfts', [])])
-    setTotalCount(get(res, 'data.getNftListByUserId.nftsCount', 0))
+		setData([...data, ...get(res, 'data.getNftListByWallet.nfts', [])])
+		setTotalCount(get(res, 'data.getNftListByWallet.nftsCount', 0))
   }
 
   const handleSubmitDataUpdate = temp => {
@@ -221,7 +225,7 @@ const CollectionList = ({ t }) => {
                           {
                             title: get(item, 'isOnMarketplace', false)
                               ? t('update')
-                              : t('sell'),
+                              : 'Create offer',
                             onClick: () => {
                                   setSelectedCard({ card: item, index: index })
                                   setIsPriceModalOpen(true)

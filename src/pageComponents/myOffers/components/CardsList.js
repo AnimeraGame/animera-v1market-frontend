@@ -15,7 +15,7 @@ import clsx from 'clsx'
 // local imports
 import AssetCard from 'pageComponents/common/MarketplaceAssetCard'
 import Placeholder from 'components/Placeholder'
-import UpdateOfferModal from './UpdateOfferModal'
+import AcceptOfferModal from './AcceptOfferModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
 import { buyOffer } from 'lib/util/web3/purchase'
@@ -57,10 +57,10 @@ const CardsList = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { library, account } = useWeb3React()
-  // const { mutationRes: acceptOfferMutation } = usePostRequest(
-  //   'ACCEPT_OFFER_MUTATION',
-  //   ACCEPT_OFFER_MUTATION
-  // )
+  const { mutationRes: acceptOfferMutation } = usePostRequest(
+    'ACCEPT_OFFER_MUTATION',
+    ACCEPT_OFFER_MUTATION
+  )
 
   const { isFetching: cardLoading, refetch: fetchCardDetail } = useQueryRequest(
     ['FETCH_DIRECT_OFFERS_URL_SUPPORT'],
@@ -82,7 +82,7 @@ const CardsList = ({
   )
 
   const handleCardClick = item => {
-    console.log('item info', item);
+    console.log('item info', item)
     const mediaList = [
       {
         type: 'image',
@@ -90,7 +90,7 @@ const CardsList = ({
         thumbnailUrl: get(item, 'nft.nftMetadata.metadata.image', ''),
         title: get(item, 'nft.nftMetadata.metadata.name', 'Untitled'),
         mimeType: 'image',
-      }
+      },
     ]
     setSelectedCard({
       mediaList: mediaList,
@@ -103,32 +103,29 @@ const CardsList = ({
     setIsSubmitting(true)
     await buyOffer(library, item, account)
       setIsSubmitting(false)
-    //   acceptOfferMutation.mutate(payload, {
-    //     onSuccess: data => {
-    //       TagManager.dataLayer({
-    //         dataLayer: {
-    //           event: 'sold_marketplace',
-    //           id: item?.nft?.tokenId,
-    //           price: item?.price + ' BNB',
-    //           type: 'sold_marketplace',
-    //         },
-    //       })
-    //       setPriceSuccessMessage(t('priceSuccess'))
-    //       setIsBuyModalOpen(false)
-    //       setSelectedCard({})
-    //       setIsSubmitting(false)
-    //     },
-    //     onError: (err, variables) => {
-    //       // eslint-disable-next-line no-console
-    //       console.log({ err })
-    //       setPriceErrorMessage(t('somethingWentWrongPurchase'))
-    //       setIsSubmitting(false)
-    //     },
-    //   })
-    // } else {
-    //   setPriceErrorMessage(t('confirmWalletTransaction'))
-    //   setIsSubmitting(false)
-    // }
+      acceptOfferMutation.mutate(payload, {
+        onSuccess: data => {
+          TagManager.dataLayer({
+            dataLayer: {
+              event: 'sold_marketplace',
+              id: item?.nft?.tokenId,
+              price: item?.price + ' BNB',
+              type: 'sold_marketplace',
+            },
+          })
+          setPriceSuccessMessage(t('priceSuccess'))
+          setIsBuyModalOpen(false)
+          setSelectedCard({})
+          setIsSubmitting(false)
+        },
+        onError: (err, variables) => {
+          // eslint-disable-next-line no-console
+          console.log({ err })
+          setPriceErrorMessage(t('somethingWentWrongPurchase'))
+          setIsSubmitting(false)
+        },
+      })
+    }
   }
 
   const removeCardKeysFromUrl = () => {
@@ -246,39 +243,37 @@ const CardsList = ({
                       handleCardClick(item)
                     }}
                     menu={
-                      !isUserLoggedIn ||
-                      account === get(item, 'seller', '') ? null : (
-                        <ActionMenu
-                          iconDirection="horizontal"
-                          menuItems={[
-                            {
-                              title: t('update'),
-                              onClick: () => {
-                                    router.push(
-                                      `${router.asPath}${
-                                        router?.asPath.length > 13 ? '&' : '?'
-                                      }card=${get(item, 'nft.tokenId', '')}&type=buy`
-                                    )
-                                    setSelectedCard({
-                                      card: item,
-                                      index,
-                                    })
-                                    setIsBuyModalOpen(true)
-                                  }
-                            },{
-                              title: t('cancelOffer'),
-                              onClick: () => {
-                                setSelectedCard({
-                                  card: item,
-                                  index,
-                                })
-                                setCancelModalOpen(true)
-                              }
+                      <ActionMenu
+                        iconDirection="horizontal"
+                        menuItems={[
+                          {
+                            title: t('accept'),
+                            onClick: () => {
+                              router.push(
+                                `${router.asPath}${
+                                  router?.asPath.length > 13 ? '&' : '?'
+                                }card=${get(item, 'nft.tokenId', '')}&type=buy`
+                              )
+                              setSelectedCard({
+                                card: item,
+                                index,
+                              })
+                              setIsBuyModalOpen(true)
                             },
-                          ]}
-                          portal={false}
-                        />
-                      )
+                          },
+                          {
+                            title: t('cancelOffer'),
+                            onClick: () => {
+                              setSelectedCard({
+                                card: item,
+                                index,
+                              })
+                              setCancelModalOpen(true)
+                            },
+                          },
+                        ]}
+                        portal={false}
+                      />
                     }
                   />
                 </div>
@@ -301,7 +296,7 @@ const CardsList = ({
         />
       ) : null}
       {isBuyModalOpen ? (
-        <UpdateOfferModal
+        <AcceptOfferModal
           cardInfo={selectedCard.card}
           t={t}
           cardType={'SIMPLE'}
@@ -327,7 +322,7 @@ const CardsList = ({
           cancelButtonText={t('cancel')}
           saveButtonText={t('confirm')}
         />
-      ): null}
+      ) : null}
       {cardLoading && !isLoading ? (
         <div
           style={{

@@ -117,7 +117,7 @@ const getRow = (label = '', value = '') => (
   </div>
 )
 
-const UpdateOfferModal = ({
+const AcceptOfferModal = ({
   t,
   isOpen,
   onClose,
@@ -135,7 +135,7 @@ const UpdateOfferModal = ({
   const [minimumBid, setMinimumBid] = useState('')
   const price = get(cardInfo, 'price', 0)
   const canBuyNft = toNumber(balance.mars) >= toNumber(price)
-  console.log('card info',  cardInfo)
+  console.log('card info', cardInfo)
   return (
     <>
       {updateSuccess ? (
@@ -252,7 +252,7 @@ const UpdateOfferModal = ({
   )
 }
 
-UpdateOfferModal.propTypes = {
+AcceptOfferModal.propTypes = {
   t: PropTypes.func,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
@@ -264,4 +264,4 @@ UpdateOfferModal.propTypes = {
   isSubmitting: PropTypes.bool,
 }
 
-export default UpdateOfferModal
+export default AcceptOfferModal

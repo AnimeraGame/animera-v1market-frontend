@@ -116,11 +116,12 @@ const SetPriceModal = ({
           tokenId: result.nftId,
           sellerDeadline: new Date(result.sellDeadline * 1000),
           signature: result.sellerSig,
-          status: 0
-        }
+          status: 0,
+          type: 0,
+        },
       }
 
-      if (offerId) {
+      if (offerId > 0) {
         payload.data.id = offerId
         updateOfferNftMutation.mutate(payload, {
           onSuccess: data => {
@@ -150,7 +151,7 @@ const SetPriceModal = ({
           },
         })
       }
-    } catch(error) {
+    } catch (error) {
       setIsSubmitting(false)
     }
   }
@@ -184,9 +185,7 @@ const SetPriceModal = ({
           <H6 fontWeight={FontWeights.bold} className="label">
             {t('tokenId')}
           </H6>
-          <Body1 fontWeight={FontWeights.semiBold}>
-            {get(tokenData, 'tokenId', '')}
-          </Body1>
+          <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
         {activeTab === 0 ? (
           <>

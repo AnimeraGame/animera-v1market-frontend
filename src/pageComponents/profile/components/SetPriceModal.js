@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 // import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import toNumber from 'lodash/toNumber'
 import isNumber from 'lodash/isNumber'
 
 import { FontWeights, Body1, Body2, H6, Caption } from 'components/Typography'
 import ModalHoc from 'components/Modal/ModalHoc'
 import theme from 'components/Theme'
+import { getWallet, getBalance } from 'state/settings/selectors'
 // import Tabs from 'components/Tabs'
 import {
   ContainedPrimaryButton,
@@ -44,7 +46,9 @@ const SetPriceModal = ({
   user,
 }) => {
   // hooks
-  const classes = modalStyles()
+	const classes = modalStyles()
+	const wallet = useSelector(state => getWallet(state))
+
   // const dispatch = useDispatch()
   // const [activeTab, setActiveTab] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -99,7 +103,7 @@ const SetPriceModal = ({
       },
     })
   }
-  const handleSubmit = async () => {
+	const handleSubmit = async () => {
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
@@ -110,17 +114,19 @@ const SetPriceModal = ({
         data: {
           chainId: result.chainId,
           sellerWalletAddress: result.walletAddress,
+          buyerWalletAddress: wallet.address,
           tokenAddress: result.tokenAddress,
           sellerPrice: parseInt(price),
           nftId: tokenData.id,
           tokenId: result.nftId,
           sellerDeadline: new Date(result.sellDeadline * 1000),
           signature: result.sellerSig,
-          status: 0
-        }
+          status: 0,
+          type: 1,
+        },
       }
 
-      if (offerId) {
+      if (offerId > 0) {
         payload.data.id = offerId
         updateOfferNftMutation.mutate(payload, {
           onSuccess: data => {

@@ -1,12 +1,8 @@
 import gql from 'graphql-tag'
 
 export const CREATE_OFFER_NFT_MUTATION = gql`
-  mutation createOffer(
-    $data: CreateOfferInput!
-  ) {
-    createOffer(
-      data: $data
-    ) {
+  mutation createOffer($data: CreateEstateInput!) {
+    createEstate(data: $data) {
       id
       nft {
         id

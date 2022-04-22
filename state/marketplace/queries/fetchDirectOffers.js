@@ -27,7 +27,7 @@ import gql from 'graphql-tag'
 
 */
 
-const FETCH_DIRECT_OFFERS = gql`
+export const FETCH_DIRECT_SALES = gql`
   query findSalesBy(
     $onePage: Int
     $orderBy: OrderByInput
@@ -66,4 +66,84 @@ const FETCH_DIRECT_OFFERS = gql`
   }
 `
 
-export default FETCH_DIRECT_OFFERS
+export const FETCH_DIRECT_OFFERS = gql`
+  query findOffersBy(
+    $onePage: Int
+    $orderBy: OrderByInput
+    $price: PriceWhereInput
+    $page: Int
+    $status: Int
+    $searchText: String
+    $wallet: String
+  ) {
+    findOffersBy(
+      onePage: $onePage
+      page: $page
+      orderBy: $orderBy
+      price: $price
+      status: $status
+      searchText: $searchText
+      wallet: $wallet
+    ) {
+      estatesCount
+      estates {
+        id
+        createdAt
+        price
+        status
+        seller
+        expireAt
+        sellerSignature
+        updatedAt
+        nft {
+          tokenId
+          isOnMarketplace
+          nftMetadata {
+            metadata
+          }
+        }
+      }
+    }
+  }
+`
+
+export const FETCH_DIRECT_MY_OFFERS = gql`
+  query findMyOffersBy(
+    $onePage: Int
+    $orderBy: OrderByInput
+    $price: PriceWhereInput
+    $page: Int
+    $status: Int
+    $searchText: String
+    $wallet: String
+  ) {
+    findMyOffersBy(
+      onePage: $onePage
+      page: $page
+      orderBy: $orderBy
+      price: $price
+      status: $status
+      searchText: $searchText
+      wallet: $wallet
+    ) {
+      estatesCount
+      estates {
+        id
+        createdAt
+        price
+        status
+        seller
+        expireAt
+        sellerSignature
+        updatedAt
+        nft {
+          tokenId
+          isOnMarketplace
+          nftMetadata {
+            metadata
+          }
+        }
+      }
+    }
+  }
+`

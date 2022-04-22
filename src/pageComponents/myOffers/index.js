@@ -18,7 +18,7 @@ import {
   validateUrlInput,
   getPriceFromUrl,
 } from 'lib/util/stringUtil'
-import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import { FETCH_DIRECT_MY_OFFERS } from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
 import { isBrowser } from 'lib/util/window'
 
@@ -110,7 +110,7 @@ const MyOffersWrapper = ({ t }) => {
       status: 0,
       searchText: searchText,
     },
-    FETCH_DIRECT_OFFERS,
+    FETCH_DIRECT_MY_OFFERS,
     {
       enabled: true,
       refetchOnWindowFocus: false,
@@ -130,12 +130,12 @@ const MyOffersWrapper = ({ t }) => {
   useEffect(() => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
-      const updatedCount = get(dataArray, 'findOffers.offersCount', 0)
-      const resData = get(dataArray, 'findOffers.offers', [])
+      const updatedCount = get(dataArray, 'findMyOffersBy._count', 0)
+      const resData = get(dataArray, 'findMyOffersBy.estates', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
       // setData(updatedData)
-      setTotalCount(updatedCount)
+      setTotalCount(updatedCount + totalCount)
       if (resData && resData.length === 18) {
         setEndCursor(endCursor + 1)
       }

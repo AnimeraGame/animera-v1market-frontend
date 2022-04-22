@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import get from 'lodash/get'
 import isUndefined from 'lodash/isUndefined'
@@ -9,6 +10,7 @@ import { H3 } from 'components/Typography'
 import { Container, CardContainer, BodyContainer } from './styles'
 import ProgressLoading from 'components/Loading/index'
 import useQueryRequest from 'hooks/UseQueryRequest'
+import { getUserAuthInfo } from 'state/auth/selectors'
 import {
   saleTypeFilterOptions,
   scarcityFilterOptions,
@@ -18,7 +20,7 @@ import {
   validateUrlInput,
   getPriceFromUrl,
 } from 'lib/util/stringUtil'
-import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import {FETCH_DIRECT_OFFERS} from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
 import { isBrowser } from 'lib/util/window'
 
@@ -50,7 +52,8 @@ const Heading = styled.div`
 `
 
 const OffersWrapper = ({ t }) => {
-  const router = useRouter()
+	const router = useRouter()
+	const user = useSelector(state => getUserAuthInfo(state))
 
   const {
     pn: priceMin,
@@ -108,7 +111,8 @@ const OffersWrapper = ({ t }) => {
         // last_sale: selectedOrder === 'nft_last_sale' ? 'desc' : null,
       },
       status: 0,
-      searchText: searchText,
+			searchText: searchText,
+			wallet: user.walletAddress
     },
     FETCH_DIRECT_OFFERS,
     {
@@ -130,12 +134,12 @@ const OffersWrapper = ({ t }) => {
   useEffect(() => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
-      const updatedCount = get(dataArray, 'findOffers.offersCount', 0)
-      const resData = get(dataArray, 'findOffers.offers', [])
+      const updatedCount = get(dataArray, 'findOffersBy._count', 0)
+      const resData = get(dataArray, 'findOffersBy.estates', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
       // setData(updatedData)
-      setTotalCount(updatedCount)
+      setTotalCount(updatedCount + totalCount)
       if (resData && resData.length === 18) {
         setEndCursor(endCursor + 1)
       }
