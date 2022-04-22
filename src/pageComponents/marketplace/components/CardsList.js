@@ -20,7 +20,7 @@ import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
 // import usePostRequest from 'hooks/UsePostRequest'
 // import { ACCEPT_OFFER_MUTATION } from 'state/marketplace/queries/acceptOffer'
-// import { buyOffer } from 'lib/util/web3/purchase'
+import { buyOffer, buySale } from 'lib/util/web3/purchase'
 import { getBalance } from 'state/settings/selectors'
 import { getAuthState } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
@@ -55,7 +55,7 @@ const CardsList = ({
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { account } = useWeb3React()
+  const { account, library } = useWeb3React()
   // const { mutationRes: acceptOfferMutation } = usePostRequest(
   //   'ACCEPT_OFFER_MUTATION',
   //   ACCEPT_OFFER_MUTATION
@@ -100,7 +100,7 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    // const sellerSig = await buyOffer(library, item, account)
+    await buySale(library, item, account)
       setIsSubmitting(false)
     //   acceptOfferMutation.mutate(payload, {
     //     onSuccess: data => {
@@ -242,7 +242,7 @@ const CardsList = ({
                     }}
                     menu={
                       !isUserLoggedIn ||
-                      account === get(item, 'seller', '') ? null : (
+                      account === get(item, 'buyer', '') ? null : (
                         <ActionMenu
                           iconDirection="horizontal"
                           menuItems={[

@@ -24,7 +24,7 @@ export const purchaseABI = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: 'uint256', name: 'offerId', type: 'uint256' },
+      { indexed: true, internalType: 'bytes32', name: 'offerId', type: 'bytes32' },
       { indexed: true, internalType: 'address', name: 'seller', type: 'address' },
       { indexed: true, internalType: 'address', name: 'buyer', type: 'address' },
       { indexed: false, internalType: 'address', name: 'nftAddress', type: 'address' },
@@ -57,7 +57,7 @@ export const purchaseABI = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: 'uint256', name: 'saleId', type: 'uint256' },
+      { indexed: true, internalType: 'bytes32', name: 'saleId', type: 'bytes32' },
       { indexed: true, internalType: 'address', name: 'seller', type: 'address' },
       { indexed: true, internalType: 'address', name: 'buyer', type: 'address' },
       { indexed: false, internalType: 'address', name: 'nftAddress', type: 'address' },
@@ -103,9 +103,10 @@ export const purchaseABI = [
   },
   {
     inputs: [
-      { internalType: 'uint256[5]', name: 'uints', type: 'uint256[5]' },
+      { internalType: 'uint256[4]', name: 'uints', type: 'uint256[4]' },
       { internalType: 'address[]', name: 'addrs', type: 'address[]' },
       { internalType: 'bytes[2]', name: 'sigs', type: 'bytes[2]' },
+      { internalType: 'bytes32', name: 'offerId', type: 'bytes32' },
     ],
     name: 'executeOffer',
     outputs: [],
@@ -114,9 +115,10 @@ export const purchaseABI = [
   },
   {
     inputs: [
-      { internalType: 'uint256[4]', name: 'uints', type: 'uint256[4]' },
+      { internalType: 'uint256[3]', name: 'uints', type: 'uint256[3]' },
       { internalType: 'address[3]', name: 'addrs', type: 'address[3]' },
       { internalType: 'bytes[2]', name: 'sigs', type: 'bytes[2]' },
+      { internalType: 'bytes32', name: 'sellId', type: 'bytes32' },
     ],
     name: 'executeSell',
     outputs: [],
@@ -167,9 +169,9 @@ export const purchaseABI = [
   },
 ]
 
-const testnetPurchaseAddress = '0xbB4f1309F3ed7dEC28Ade42BA66c208211D5C56B'
+const testnetPurchaseAddress = '0x74c77F20B2c8C5E4f0E8a7491b8d49c8aa43c644'
 
-const mainnetPurchaseAddress = '0xbB4f1309F3ed7dEC28Ade42BA66c208211D5C56B'
+const mainnetPurchaseAddress = '0x74c77F20B2c8C5E4f0E8a7491b8d49c8aa43c644'
 
 export const purchaseAddress =
   environment === 'production' ? mainnetPurchaseAddress : testnetPurchaseAddress

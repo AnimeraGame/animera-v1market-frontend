@@ -17,7 +17,7 @@ import {
 } from 'components/Inputs'
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
-import { createOffer } from 'lib/util/web3/purchase'
+import { createOffer, createSale } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
 // import { useEagerConnect } from 'hooks/web3Hook'
 import {
@@ -104,7 +104,7 @@ const SetPriceModal = ({
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
     try {
-      const result = await createOffer(library, price, 1, tokenId, account)
+      const result = await createSale(library, price, 1, tokenId, account)
 
       const payload = {
         data: {
