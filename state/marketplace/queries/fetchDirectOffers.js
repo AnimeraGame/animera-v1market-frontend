@@ -44,7 +44,7 @@ export const FETCH_DIRECT_SALES = gql`
       status: $status
       searchText: $searchText
     ) {
-			estatesCount
+      estatesCount
       estates {
         id
         createdAt

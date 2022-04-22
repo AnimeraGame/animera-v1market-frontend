@@ -16,11 +16,8 @@ import {
   scarcityFilterOptions,
   headerFilterOptions,
 } from './components/config'
-import {
-  validateUrlInput,
-  getPriceFromUrl,
-} from 'lib/util/stringUtil'
-import {FETCH_DIRECT_OFFERS} from 'state/marketplace/queries/fetchDirectOffers'
+import { validateUrlInput, getPriceFromUrl } from 'lib/util/stringUtil'
+import { FETCH_DIRECT_OFFERS } from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
 import { isBrowser } from 'lib/util/window'
 
@@ -52,8 +49,8 @@ const Heading = styled.div`
 `
 
 const OffersWrapper = ({ t }) => {
-	const router = useRouter()
-	const user = useSelector(state => getUserAuthInfo(state))
+  const router = useRouter()
+  const user = useSelector(state => getUserAuthInfo(state))
 
   const {
     pn: priceMin,
@@ -70,11 +67,9 @@ const OffersWrapper = ({ t }) => {
   const [afterId, setAfterId] = useState('')
   const [endCursor, setEndCursor] = useState(0)
   const [, setRarityFilterCount] = useState({})
-  const [selectedOrder, ] = useState(
-    validateUrlInput(headerFilterOptions, sortOrder)
-  )
-  const [searchText, ] = useState(searchString)
-  const [filters, ] = useState({
+  const [selectedOrder] = useState(validateUrlInput(headerFilterOptions, sortOrder))
+  const [searchText] = useState(searchString)
+  const [filters] = useState({
     price: [...getPriceFromUrl(priceMin, priceMax)],
     sale: sale
       ? validateUrlInput(
@@ -103,16 +98,21 @@ const OffersWrapper = ({ t }) => {
       page: endCursor,
       price: {
         gt: filters.price[0],
-        lt: filters.price[1]
+        lt: filters.price[1],
       },
       orderBy: {
-        price: (selectedOrder === 'low_high' || selectedOrder === 'high_low') ? (selectedOrder !== 'low_high' ? 'desc' : 'asc') : null,
+        price:
+          selectedOrder === 'low_high' || selectedOrder === 'high_low'
+            ? selectedOrder !== 'low_high'
+              ? 'desc'
+              : 'asc'
+            : null,
         created_at: selectedOrder === 'create_at' ? 'desc' : null,
         // last_sale: selectedOrder === 'nft_last_sale' ? 'desc' : null,
       },
       status: 0,
-			searchText: searchText,
-			wallet: user.walletAddress
+      searchText: searchText,
+      wallet: user.walletAddress,
     },
     FETCH_DIRECT_OFFERS,
     {

@@ -18,7 +18,7 @@ export const setBalances = (matic, mars) => {
   return {
     type: SET_BALANCE,
     matic,
-    mars
+    mars,
   }
 }
 
@@ -30,7 +30,7 @@ export const initialState = {
   },
   balance: {
     matic: 0,
-    mars: 0
+    mars: 0,
   },
 }
 /*
@@ -52,7 +52,7 @@ const settings = (state = initialState, action) => {
         ...state,
         balance: {
           matic: get(action, 'matic', 0),
-          mars: get(action, 'mars', 0)
+          mars: get(action, 'mars', 0),
         },
       }
     default:

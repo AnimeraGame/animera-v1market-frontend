@@ -75,7 +75,7 @@ const reducer = (state = initialState, action) => {
         refreshToken: get(action, 'payload.refreshToken', null),
       }
     case HANDLE_WALLET_AUTH_SUCCESS:
-      console.log('wallet auth success here', action);
+      console.log('wallet auth success here', action)
       return {
         ...state,
         isLoggedIn: true,

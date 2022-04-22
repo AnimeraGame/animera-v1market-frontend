@@ -78,7 +78,7 @@ const Row = styled.div`
 
 const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
   // const router = useRouter()
-  
+
   const transactionRecord = get(nftData, 'info.transactions[0]', {})
   const metadata = get(nftData, 'info.nft.nftMetadata.metadata', {})
   const contractAddress = get(transactionRecord, 'contractAddress', nftAddress)
@@ -126,9 +126,7 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
                           rel="noopener">
                           {t('view')}
                         </Link>
-                        <span>
-                          {t('onTestNet')}
-                        </span>
+                        <span>{t('onTestNet')}</span>
                       </span>
                     </>
                   ) : (

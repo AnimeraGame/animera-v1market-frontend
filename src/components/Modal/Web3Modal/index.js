@@ -218,7 +218,7 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
   }, [account, active, wallet])
 
   useEffect(() => {
-    console.log('web3 error', error);
+    console.log('web3 error', error)
     if (error) {
       if (error instanceof NoEthereumProviderError) {
         handleReset()
@@ -280,7 +280,7 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
     try {
       if (library && active) {
         if (testValidNetwork(chainId)) {
-          console.log('here');
+          console.log('here')
           setWallet({ address: toLower(account), wrongNetwork: false })
           const { maticBalance, marsBalance } = await getBalanceOfWallet(library, account)
           dispatch(setBalances(maticBalance, marsBalance))
@@ -367,7 +367,7 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
         const response = get(data, 'authByWallet', {})
         const cookieData = {
           accessToken: get(response, 'accessToken', ''),
-          refreshToken: get(response, 'refreshToken', '')
+          refreshToken: get(response, 'refreshToken', ''),
         }
         setCookie(null, 'at', JSON.stringify(cookieData), {
           // at = accessToken
@@ -413,7 +413,6 @@ const Web3ModalComponent = ({ setWallet, disconnected, wallet }) => {
             setIsNetworkChanging(false)
           }
           if (isValidNetwork && wallet.wrongNetwork) {
-
             setWallet({ wrongNetwork: false })
             setIsWrongNetworkModalOpen(false)
             try {

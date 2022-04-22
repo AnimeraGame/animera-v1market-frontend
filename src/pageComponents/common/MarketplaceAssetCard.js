@@ -185,7 +185,7 @@ const AssetCard = ({
   tokenId,
   lastPrice,
   showLastPrice = false,
-  from = null
+  from = null,
 }) => {
   const vid = useRef(null)
 

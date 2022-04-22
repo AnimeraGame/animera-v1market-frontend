@@ -103,16 +103,11 @@ const CollectionList = ({ t }) => {
     isError,
     refetch: refetchList,
     isFetching,
-  } = useQueryRequest(
-    ['MY_NFT_COLLECTION'],
-    { userId: user.id },
-    MY_NFT_COLLECTION,
-    {
-      enabled: false,
-      refetchOnWindowFocus: false,
-      retry: 2,
-    }
-  )
+  } = useQueryRequest(['MY_NFT_COLLECTION'], { userId: user.id }, MY_NFT_COLLECTION, {
+    enabled: false,
+    refetchOnWindowFocus: false,
+    retry: 2,
+  })
 
   const loadNftCollectionList = async () => {
     const res = await refetchList()
@@ -140,7 +135,7 @@ const CollectionList = ({ t }) => {
   const { isTablet } = useDevice()
   const spacing = isTablet ? 2 : 4
 
-  console.log('nft list', data);
+  console.log('nft list', data)
   useEffect(() => {
     if (isBrowser()) {
       const node = document.getElementById('main-container')
@@ -219,13 +214,11 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: get(item, 'isOnMarketplace', false)
-                              ? t('update')
-                              : t('sell'),
+                            title: get(item, 'isOnMarketplace', false) ? t('update') : t('sell'),
                             onClick: () => {
-                                  setSelectedCard({ card: item, index: index })
-                                  setIsPriceModalOpen(true)
-                                }
+                              setSelectedCard({ card: item, index: index })
+                              setIsPriceModalOpen(true)
+                            },
                           },
                         ]}
                         portal={false}

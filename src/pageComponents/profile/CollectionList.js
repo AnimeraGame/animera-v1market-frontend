@@ -99,29 +99,24 @@ const CollectionList = ({ t }) => {
     setIsPreviewOpen(true)
   }
 
-	const router = useRouter()
-	const { wallet } = router.query
+  const router = useRouter()
+  const { wallet } = router.query
 
-	const {
-		isLoading,
-		isError,
-		refetch: refetchList,
-		isFetching,
-	} = useQueryRequest(
-		['WALLET_NFT_COLLECTION'],
-		{ wallet: wallet },
-		WALLET_NFT_COLLECTION,
-		{
-			enabled: false,
-			refetchOnWindowFocus: false,
-			retry: 2,
-		}
-	)
+  const {
+    isLoading,
+    isError,
+    refetch: refetchList,
+    isFetching,
+  } = useQueryRequest(['WALLET_NFT_COLLECTION'], { wallet: wallet }, WALLET_NFT_COLLECTION, {
+    enabled: false,
+    refetchOnWindowFocus: false,
+    retry: 2,
+  })
 
   const loadNftCollectionList = async () => {
     const res = await refetchList()
-		setData([...data, ...get(res, 'data.getNftListByWallet.nfts', [])])
-		setTotalCount(get(res, 'data.getNftListByWallet.nftsCount', 0))
+    setData([...data, ...get(res, 'data.getNftListByWallet.nfts', [])])
+    setTotalCount(get(res, 'data.getNftListByWallet.nftsCount', 0))
   }
 
   const handleSubmitDataUpdate = temp => {
@@ -144,7 +139,7 @@ const CollectionList = ({ t }) => {
   const { isTablet } = useDevice()
   const spacing = isTablet ? 2 : 4
 
-  console.log('nft list', data);
+  console.log('nft list', data)
   useEffect(() => {
     if (isBrowser()) {
       const node = document.getElementById('main-container')
@@ -227,9 +222,9 @@ const CollectionList = ({ t }) => {
                               ? t('update')
                               : 'Create offer',
                             onClick: () => {
-                                  setSelectedCard({ card: item, index: index })
-                                  setIsPriceModalOpen(true)
-                                }
+                              setSelectedCard({ card: item, index: index })
+                              setIsPriceModalOpen(true)
+                            },
                           },
                         ]}
                         portal={false}

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-/* 
+/*
   query input
   data: {
     wallet: String!

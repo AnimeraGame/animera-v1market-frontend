@@ -89,12 +89,12 @@ const Layout = ({ children }) => {
     if (disconnected) setDisconnected(false) //
     const result = address
       ? {
-        address: address,
-        wrongNetwork: wrongNetwork,
-      }
+          address: address,
+          wrongNetwork: wrongNetwork,
+        }
       : {
-        wrongNetwork: wrongNetwork,
-      }
+          wrongNetwork: wrongNetwork,
+        }
 
     dispatch(setWallet(result))
   }
@@ -260,11 +260,7 @@ const Layout = ({ children }) => {
             {/* Links */}
             {!isEmpty(accessToken) ? (
               <HeaderMenuItems>
-                <NavMenuLinks
-                  t={t}
-                  headerLink
-                  handleDrawerClose={handleDrawerClose}
-                />
+                <NavMenuLinks t={t} headerLink handleDrawerClose={handleDrawerClose} />
               </HeaderMenuItems>
             ) : null}
             {isBrowser() ? (

@@ -34,17 +34,10 @@ const MainWrapper = styled.div`
   padding: 0px;
 `
 
-const MainContainer = ({
-  children,
-  hideHeader = false,
-  fullWidth = false,
-  hideDrawer = false,
-}) => {
+const MainContainer = ({ children, hideHeader = false, fullWidth = false, hideDrawer = false }) => {
   return (
     <Layout hideDrawer={hideDrawer}>
-      <Container
-        hideHeader={hideHeader}
-        id="main-container">
+      <Container hideHeader={hideHeader} id="main-container">
         <MainWrapper fullWidth={fullWidth} hideHeader={hideHeader}>
           {children}
         </MainWrapper>

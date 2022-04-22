@@ -64,15 +64,9 @@ const MyApp = ({ Component, pageProps }) => {
         />
         <title>Marseverse Marketplace</title>
         <meta name="viewport" content="initial-scale=1.0,user-scalable=yes; width=device-width" />
-        <meta
-          name="description"
-          content="NFT marketplace"
-        />
+        <meta name="description" content="NFT marketplace" />
         <meta property="og:title" content="Marsverse NFT marketplace" />
-        <meta
-          property="og:description"
-          content="NFT marketplace"
-        />
+        <meta property="og:description" content="NFT marketplace" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:site_name" content="MarsVerse" />
@@ -80,10 +74,7 @@ const MyApp = ({ Component, pageProps }) => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="612" />
         <meta name="twitter:title" content="Marsverse NFT marketplace" />
-        <meta
-          name="twitter:description"
-          content="NFT marketplace"
-        />
+        <meta name="twitter:description" content="NFT marketplace" />
         <meta name="twitter:image" content={`/images/site-preview.png`} />
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>

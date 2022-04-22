@@ -46,8 +46,8 @@ const SetPriceModal = ({
   user,
 }) => {
   // hooks
-	const classes = modalStyles()
-	const wallet = useSelector(state => getWallet(state))
+  const classes = modalStyles()
+  const wallet = useSelector(state => getWallet(state))
 
   // const dispatch = useDispatch()
   // const [activeTab, setActiveTab] = useState(0)
@@ -103,7 +103,7 @@ const SetPriceModal = ({
       },
     })
   }
-	const handleSubmit = async () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
@@ -156,7 +156,7 @@ const SetPriceModal = ({
           },
         })
       }
-    } catch(error) {
+    } catch (error) {
       setIsSubmitting(false)
     }
   }
@@ -190,9 +190,7 @@ const SetPriceModal = ({
           <H6 fontWeight={FontWeights.bold} className="label">
             {t('tokenId')}
           </H6>
-          <Body1 fontWeight={FontWeights.semiBold}>
-            {get(tokenData, 'tokenId', '')}
-          </Body1>
+          <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
         {activeTab === 0 ? (
           <>

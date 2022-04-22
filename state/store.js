@@ -10,7 +10,7 @@ import settings from './settings'
 
 const appReducer = combineReducers({
   auth,
-  settings
+  settings,
 })
 
 /*

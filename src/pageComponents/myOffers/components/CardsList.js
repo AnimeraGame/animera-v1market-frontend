@@ -57,10 +57,10 @@ const CardsList = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { library, account } = useWeb3React()
-  const { mutationRes: acceptOfferMutation } = usePostRequest(
-    'ACCEPT_OFFER_MUTATION',
-    ACCEPT_OFFER_MUTATION
-  )
+  // const { mutationRes: acceptOfferMutation } = usePostRequest(
+  //   'ACCEPT_OFFER_MUTATION',
+  //   ACCEPT_OFFER_MUTATION
+  // )
 
   const { isFetching: cardLoading, refetch: fetchCardDetail } = useQueryRequest(
     ['FETCH_DIRECT_OFFERS_URL_SUPPORT'],
@@ -102,30 +102,29 @@ const CardsList = ({
   const handleBuy = async item => {
     setIsSubmitting(true)
     await buyOffer(library, item, account)
-      setIsSubmitting(false)
-      acceptOfferMutation.mutate(payload, {
-        onSuccess: data => {
-          TagManager.dataLayer({
-            dataLayer: {
-              event: 'sold_marketplace',
-              id: item?.nft?.tokenId,
-              price: item?.price + ' BNB',
-              type: 'sold_marketplace',
-            },
-          })
+    setIsSubmitting(false)
+    acceptOfferMutation.mutate(payload, {
+      onSuccess: data => {
+        TagManager.dataLayer({
+          dataLayer: {
+            event: 'sold_marketplace',
+            id: item?.nft?.tokenId,
+            price: item?.price + ' BNB',
+            type: 'sold_marketplace',
+          },
+        }),
           setPriceSuccessMessage(t('priceSuccess'))
-          setIsBuyModalOpen(false)
-          setSelectedCard({})
-          setIsSubmitting(false)
-        },
-        onError: (err, variables) => {
-          // eslint-disable-next-line no-console
-          console.log({ err })
-          setPriceErrorMessage(t('somethingWentWrongPurchase'))
-          setIsSubmitting(false)
-        },
-      })
-    }
+        setIsBuyModalOpen(false)
+        setSelectedCard({})
+        setIsSubmitting(false)
+      },
+      onError: (err, variables) => {
+        // eslint-disable-next-line no-console
+        console.log({ err })
+        setPriceErrorMessage(t('somethingWentWrongPurchase'))
+        setIsSubmitting(false)
+      },
+    })
   }
 
   const removeCardKeysFromUrl = () => {
@@ -211,7 +210,7 @@ const CardsList = ({
             scrollableTarget="main-container"
             dataLength={data.length}
             next={() => !isLoading && loadNftList()}
-            hasMore={data.length < totalCount}
+            hasMore={false}
             loader={
               <OffersCardsLoader>
                 {times(3).map((d, index) => (

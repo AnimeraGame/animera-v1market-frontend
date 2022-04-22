@@ -1,9 +1,7 @@
 import gql from 'graphql-tag'
 
 const UPDATE_OFFER_MUTATION = gql`
-  mutation updateEstate(
-    $data: UpdateEstateInput!
-  ) {
+  mutation updateEstate($data: UpdateEstateInput!) {
     updateEstate(data: $data) {
       id
       nft {

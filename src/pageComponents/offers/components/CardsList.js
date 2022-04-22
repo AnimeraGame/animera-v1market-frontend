@@ -82,7 +82,7 @@ const CardsList = ({
   )
 
   const handleCardClick = item => {
-    console.log('item info', item);
+    console.log('item info', item)
     const mediaList = [
       {
         type: 'image',
@@ -90,7 +90,7 @@ const CardsList = ({
         thumbnailUrl: get(item, 'nft.nftMetadata.metadata.image', ''),
         title: get(item, 'nft.nftMetadata.metadata.name', 'Untitled'),
         mimeType: 'image',
-      }
+      },
     ]
     setSelectedCard({
       mediaList: mediaList,
@@ -102,7 +102,7 @@ const CardsList = ({
   const handleBuy = async item => {
     setIsSubmitting(true)
     await buyOffer(library, item, account)
-      setIsSubmitting(false)
+    setIsSubmitting(false)
     //   acceptOfferMutation.mutate(payload, {
     //     onSuccess: data => {
     //       TagManager.dataLayer({
@@ -125,10 +125,6 @@ const CardsList = ({
     //       setIsSubmitting(false)
     //     },
     //   })
-    // } else {
-    //   setPriceErrorMessage(t('confirmWalletTransaction'))
-    //   setIsSubmitting(false)
-    // }
   }
 
   const removeCardKeysFromUrl = () => {
@@ -214,7 +210,7 @@ const CardsList = ({
             scrollableTarget="main-container"
             dataLength={data.length}
             next={() => !isLoading && loadNftList()}
-            hasMore={data.length < totalCount}
+            hasMore={false}
             loader={
               <OffersCardsLoader>
                 {times(3).map((d, index) => (
@@ -246,26 +242,26 @@ const CardsList = ({
                       handleCardClick(item)
                     }}
                     menu={
-                      !isUserLoggedIn ||
-                      account === get(item, 'seller', '') ? null : (
+                      !isUserLoggedIn || account === get(item, 'seller', '') ? null : (
                         <ActionMenu
                           iconDirection="horizontal"
                           menuItems={[
                             {
                               title: t('accept'),
                               onClick: () => {
-                                    router.push(
-                                      `${router.asPath}${
-                                        router?.asPath.length > 13 ? '&' : '?'
-                                      }card=${get(item, 'nft.tokenId', '')}&type=buy`
-                                    )
-                                    setSelectedCard({
-                                      card: item,
-                                      index,
-                                    })
-                                    setIsBuyModalOpen(true)
-                                  }
-                            },{
+                                router.push(
+                                  `${router.asPath}${
+                                    router?.asPath.length > 13 ? '&' : '?'
+                                  }card=${get(item, 'nft.tokenId', '')}&type=buy`
+                                )
+                                setSelectedCard({
+                                  card: item,
+                                  index,
+                                })
+                                setIsBuyModalOpen(true)
+                              },
+                            },
+                            {
                               title: t('decline'),
                               onClick: () => {
                                 setSelectedCard({
@@ -273,7 +269,7 @@ const CardsList = ({
                                   index,
                                 })
                                 setDeclineModalOpen(true)
-                              }
+                              },
                             },
                           ]}
                           portal={false}
@@ -327,7 +323,7 @@ const CardsList = ({
           cancelButtonText={t('cancel')}
           saveButtonText={t('decline')}
         />
-      ): null}
+      ) : null}
       {cardLoading && !isLoading ? (
         <div
           style={{

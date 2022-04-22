@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-/* Input format 
+/* Input format
   id: 1
 */
 

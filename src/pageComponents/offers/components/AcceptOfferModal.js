@@ -135,7 +135,7 @@ const BuyNowModal = ({
   const [minimumBid, setMinimumBid] = useState('')
   const price = get(cardInfo, 'price', 0)
   const canBuyNft = toNumber(balance.mars) >= toNumber(price)
-  console.log('card info',  cardInfo)
+  console.log('card info', cardInfo)
   return (
     <>
       {updateSuccess ? (

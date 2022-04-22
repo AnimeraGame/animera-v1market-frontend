@@ -24,7 +24,7 @@ import {
   generateUrlSearch,
 } from 'lib/util/stringUtil'
 import FiltersModalHoc from './components/FiltersModalHoc'
-import {FETCH_DIRECT_SALES} from 'state/marketplace/queries/fetchDirectOffers'
+import { FETCH_DIRECT_SALES } from 'state/marketplace/queries/fetchDirectOffers'
 // import CardsList from './components/CardsList'
 import { isBrowser } from 'lib/util/window'
 import ProgressLoading from 'components/Loading/index'
@@ -85,10 +85,15 @@ const MarketplaceWrapper = ({ t }) => {
       page: endCursor,
       price: {
         gt: filters.price[0],
-        lt: filters.price[1]
+        lt: filters.price[1],
       },
       orderBy: {
-        price: (selectedOrder === 'low_high' || selectedOrder === 'high_low') ? (selectedOrder !== 'low_high' ? 'desc' : 'asc') : null,
+        price:
+          selectedOrder === 'low_high' || selectedOrder === 'high_low'
+            ? selectedOrder !== 'low_high'
+              ? 'desc'
+              : 'asc'
+            : null,
         created_at: selectedOrder === 'create_at' ? 'desc' : null,
         // last_sale: selectedOrder === 'nft_last_sale' ? 'desc' : null,
       },

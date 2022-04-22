@@ -24,10 +24,7 @@ const NavMenu = ({ t, headerLink = false, handleDrawerClose }) => {
             <SLink onClick={handleDrawerClose}>{t('collection')}</SLink>
           </Link>
         </CustomLink>
-        <CustomLink
-          active={isLinkActive('/offers', true)}
-          horizontal={headerLink}
-          data-tc="offers">
+        <CustomLink active={isLinkActive('/offers', true)} horizontal={headerLink} data-tc="offers">
           {isLinkActive('/offers', true) ? <div className="bottom-bar"></div> : null}
           <Link href="/offers">
             <SLink onClick={handleDrawerClose}>{t('offers')}</SLink>

@@ -81,7 +81,7 @@ const CardsList = ({
   )
 
   const handleCardClick = item => {
-    console.log('item info', item);
+    console.log('item info', item)
     const mediaList = [
       {
         type: 'image',
@@ -89,7 +89,7 @@ const CardsList = ({
         thumbnailUrl: get(item, 'nft.nftMetadata.metadata.image', ''),
         title: get(item, 'nft.nftMetadata.metadata.name', 'Untitled'),
         mimeType: 'image',
-      }
+      },
     ]
     setSelectedCard({
       mediaList: mediaList,
@@ -101,7 +101,7 @@ const CardsList = ({
   const handleBuy = async item => {
     setIsSubmitting(true)
     await buySale(library, item, account)
-      setIsSubmitting(false)
+    setIsSubmitting(false)
     //   acceptOfferMutation.mutate(payload, {
     //     onSuccess: data => {
     //       TagManager.dataLayer({
@@ -241,25 +241,24 @@ const CardsList = ({
                       handleCardClick(item)
                     }}
                     menu={
-                      !isUserLoggedIn ||
-                      account === get(item, 'buyer', '') ? null : (
+                      !isUserLoggedIn || account === get(item, 'buyer', '') ? null : (
                         <ActionMenu
                           iconDirection="horizontal"
                           menuItems={[
                             {
                               title: t('buyNow'),
                               onClick: () => {
-                                    router.push(
-                                      `${router.asPath}${
-                                        router?.asPath.length > 13 ? '&' : '?'
-                                      }card=${get(item, 'nft.tokenId', '')}&type=buy`
-                                    )
-                                    setSelectedCard({
-                                      card: item,
-                                      index,
-                                    })
-                                    setIsBuyModalOpen(true)
-                                  }
+                                router.push(
+                                  `${router.asPath}${
+                                    router?.asPath.length > 13 ? '&' : '?'
+                                  }card=${get(item, 'nft.tokenId', '')}&type=buy`
+                                )
+                                setSelectedCard({
+                                  card: item,
+                                  index,
+                                })
+                                setIsBuyModalOpen(true)
+                              },
                             },
                           ]}
                           portal={false}

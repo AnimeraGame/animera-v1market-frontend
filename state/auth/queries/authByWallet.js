@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-/* 
+/*
   input
   type AuthByWalletInput {
     signature: String!
