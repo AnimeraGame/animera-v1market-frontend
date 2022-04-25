@@ -11,7 +11,7 @@ const WALLET_NFT_COLLECTION = gql`
           metadata
         }
         isOnMarketplace
-        directOffer {
+        estates {
           id
           price
           seller

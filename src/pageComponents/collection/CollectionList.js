@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Grid from '@material-ui/core/Grid'
+import { useWeb3React } from '@web3-react/core'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import times from 'lodash/times'
@@ -15,7 +16,7 @@ import LightBox from 'pageComponents/common/CardModal'
 import useDevice from 'hooks/useDevice'
 import { constants } from 'components/Theme/constants'
 import useQueryRequest from 'hooks/UseQueryRequest'
-import MY_NFT_COLLECTION from 'state/nft/queries/myOwnedNfts'
+import WALLET_NFT_COLLECTION from 'state/nft/queries/walletNfts'
 import Placeholder from 'components/Placeholder'
 import { ActionMenu } from 'components/Menus'
 import { wrapImagePath } from 'lib/util/imageLoader'
@@ -63,6 +64,7 @@ const Container = styled.div`
 
 const CollectionList = ({ t }) => {
   const user = useSelector(state => getUserAuthInfo(state))
+  const { account } = useWeb3React()
 
   const [data, setData] = useState([])
   const [skipItems, setSkipItems] = useState(0)
@@ -103,7 +105,7 @@ const CollectionList = ({ t }) => {
     isError,
     refetch: refetchList,
     isFetching,
-  } = useQueryRequest(['MY_NFT_COLLECTION'], { userId: user.id }, MY_NFT_COLLECTION, {
+  } = useQueryRequest(['MY_NFT_COLLECTION'], { wallet: account }, WALLET_NFT_COLLECTION, {
     enabled: false,
     refetchOnWindowFocus: false,
     retry: 2,
@@ -111,8 +113,8 @@ const CollectionList = ({ t }) => {
 
   const loadNftCollectionList = async () => {
     const res = await refetchList()
-    setData([...data, ...get(res, 'data.getNftListByUserId.nfts', [])])
-    setTotalCount(get(res, 'data.getNftListByUserId.nftsCount', 0))
+    setData([...data, ...get(res, 'data.getNftListByWallet.nfts', [])])
+    setTotalCount(get(res, 'data.getNftListByWallet.nftsCount', 0))
   }
 
   const handleSubmitDataUpdate = temp => {

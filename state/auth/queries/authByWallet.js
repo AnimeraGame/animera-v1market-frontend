@@ -13,9 +13,6 @@ const AUTH_BY_WALLET = gql`
     authByWallet(data: $data) {
       accessToken
       refreshToken
-      user {
-        id
-      }
     }
   }
 `

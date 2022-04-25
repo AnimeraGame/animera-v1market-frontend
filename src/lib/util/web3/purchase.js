@@ -15,7 +15,7 @@ const {
 
 const NFT_GALLERY_NAME = 'MarsversMarket'
 
-export const createSale = async (library, price, kind, tokenId, sellId, walletAddress) => {
+export const createSale = async (library, price, kind, tokenId, walletAddress) => {
   const web3 = new Web3(library.provider)
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
@@ -97,7 +97,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
     const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
     const tx = await purchaseContract.methods
       .executeOffer(
-        [offerPrice, 0, offerDeadline, cardInfo.nft.tokenId],
+        [sellPrice, 0, sellDeadline, cardInfo.nft.tokenId],
         [cardInfo.seller, tokenAddress, nftAddress],
         [cardInfo.sellerSignature, buyerSig],
         web3.utils.asciiToHex(cardInfo.id.replace('-', ''))

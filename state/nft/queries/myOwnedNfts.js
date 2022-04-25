@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const MY_NFT_COLLECTION = gql`
-  query getNftsByUserId($userId: String!) {
-    getNftListByUserId(userId: $userId) {
+  query getNftsByUserId() {
+    getNftListByUserId() {
       nftsCount
       nfts {
         id

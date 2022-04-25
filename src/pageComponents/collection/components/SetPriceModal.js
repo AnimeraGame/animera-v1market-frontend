@@ -112,7 +112,7 @@ const SetPriceModal = ({
           sellerWalletAddress: result.walletAddress,
           tokenAddress: result.tokenAddress,
           sellerPrice: parseInt(price),
-          nftId: tokenData.id,
+          nftId: tokenId,
           tokenId: result.nftId,
           sellerDeadline: new Date(result.sellDeadline * 1000),
           signature: result.sellerSig,
