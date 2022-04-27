@@ -121,7 +121,7 @@ const CollectionList = ({ t }) => {
     const prevItem = data[selectedCard.index]
     const updatedItem = {
       ...prevItem,
-      activeDirectOffer: {
+      estates: {
         ...temp,
       },
     }
@@ -137,7 +137,6 @@ const CollectionList = ({ t }) => {
   const { isTablet } = useDevice()
   const spacing = isTablet ? 2 : 4
 
-  console.log('nft list', data)
   useEffect(() => {
     if (isBrowser()) {
       const node = document.getElementById('main-container')
@@ -216,7 +215,7 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: get(item, 'isOnMarketplace', false) ? t('update') : t('sell'),
+                            title: (get(item, 'estates', []).length > 0) ? t('update') : t('sell'),
                             onClick: () => {
                               setSelectedCard({ card: item, index: index })
                               setIsPriceModalOpen(true)

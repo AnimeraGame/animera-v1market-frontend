@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
@@ -54,7 +54,8 @@ const SetPriceModal = ({
   const [isPriceValid, setIsPriceValid] = useState(true)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
-  const isAlreadyPosted = !isEmpty(get(tokenData, 'directOffer', {}))
+  const [saleInfo, setSaleInfo] = useState(null)
+  const [isAlreadyPosted, setIsAlreadyPosted] = useState(false)
   const offerId = get(tokenData, 'directOffer.id', -1)
   const activeTab = 0
   // const wallet = useSelector(state => getWallet(state))
@@ -72,6 +73,17 @@ const SetPriceModal = ({
     UPDATE_OFFER_NFT_MUTATION
   )
 
+  useEffect(() => {
+    const estates = get(tokenData, 'estates', []);
+    if (estates.length > 0) {
+      const lastActiveSale = estates.find(e => e.status === 'active' && e.type === 'sale')
+      if (lastActiveSale) {
+        setSaleInfo(lastActiveSale)
+        setIsAlreadyPosted(true)
+      }
+    }
+  }, [tokenData])
+
   // const { mutationRes: createOfferBundleMutation } = usePostRequest(
   //   'CREATE_OFFER_BUNDLE_MUTATION',
   //   CREATE_OFFER_BUNDLE_MUTATION
@@ -81,9 +93,10 @@ const SetPriceModal = ({
     setIsDeleteOpen(false)
     setIsDeleting(true)
     const payload = {
-      currency: 'MARS',
-      status: 1,
-      id: toNumber(get(tokenData, 'activeDirectOffer.id', '')),
+      data: {
+        status: 1,
+        id: toNumber(saleInfo.id),
+      }
     }
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
@@ -108,24 +121,22 @@ const SetPriceModal = ({
 
       const payload = {
         data: {
-          chainId: result.chainId,
-          sellerWalletAddress: result.walletAddress,
-          tokenAddress: result.tokenAddress,
-          sellerPrice: parseInt(price),
-          nftId: tokenId,
-          tokenId: result.nftId,
-          sellerDeadline: new Date(result.sellDeadline * 1000),
-          signature: result.sellerSig,
+          seller: result.walletAddress,
+          token_address: result.tokenAddress,
+          price: parseFloat(price),
+          nft_id: parseInt(tokenData.id),
+          expire_at: new Date(result.sellDeadline * 1000),
+          seller_signature: result.sellerSig,
           status: 0,
-          type: 0,
         },
       }
 
-      if (offerId > 0) {
-        payload.data.id = offerId
+      if (saleInfo && saleInfo.id) {
+        payload.data.id = parseInt(saleInfo.id)
         updateOfferNftMutation.mutate(payload, {
           onSuccess: data => {
             setPriceSuccessMessage(t('priceUpdateSuccess'))
+            onSubmit(get(data, 'updateEstate', null))
             setIsSubmitting(false)
             onClose()
           },
@@ -137,9 +148,11 @@ const SetPriceModal = ({
           },
         })
       } else {
+        payload.data.type = 0
         createOfferNftMutation.mutate(payload, {
           onSuccess: data => {
             setPriceSuccessMessage(t('offerCreateSuccess'))
+            onSubmit(get(data, 'createEstate', null))
             setIsSubmitting(false)
             onClose()
           },
@@ -187,6 +200,12 @@ const SetPriceModal = ({
           </H6>
           <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
+        { isAlreadyPosted &&
+          <div className="row">
+            <H6 fontWeight={FontWeights.bold} className="label">Current Price</H6>
+            <Body1 fontWeight={FontWeights.semiBold}>{saleInfo.price} MARS</Body1>
+          </div>
+        }
         {activeTab === 0 ? (
           <>
             <div className="row">

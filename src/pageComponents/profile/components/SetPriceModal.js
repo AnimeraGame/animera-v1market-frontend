@@ -118,7 +118,6 @@ const SetPriceModal = ({
           tokenAddress: result.tokenAddress,
           sellerPrice: parseInt(price),
           nftId: tokenData.id,
-          tokenId: result.nftId,
           sellerDeadline: new Date(result.sellDeadline * 1000),
           signature: result.sellerSig,
           status: 0,

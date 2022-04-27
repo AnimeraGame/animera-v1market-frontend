@@ -14,6 +14,7 @@ const WALLET_NFT_COLLECTION = gql`
         estates {
           id
           price
+          type
           seller
           status
         }

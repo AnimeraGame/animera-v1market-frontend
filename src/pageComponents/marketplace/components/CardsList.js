@@ -100,7 +100,7 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    await buySale(library, item, account)
+    await buqySale(library, item, account)
     setIsSubmitting(false)
     //   acceptOfferMutation.mutate(payload, {
     //     onSuccess: data => {
@@ -225,6 +225,7 @@ const CardsList = ({
                   <AssetCard
                     marketPlace
                     price={get(item, 'price', '') + ' MARS'}
+                    seller={get(item, 'seller', '')}
                     lastPrice={get(item, 'nft.directOffers[0].price', '')}
                     item={get(item, 'nft.nftMetadata.metadata')}
                     t={t}

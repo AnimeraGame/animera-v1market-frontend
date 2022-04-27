@@ -9,6 +9,7 @@ import {
   tokenAddress,
 } from './contractConstants'
 import { getApprovalDigest } from './signature'
+import { zeroAddress } from 'node_modules/ethereumjs-util/dist/account'
 const {
   utils: { toUtf8Bytes },
 } = ethers
@@ -20,16 +21,16 @@ export const createSale = async (library, price, kind, tokenId, walletAddress) =
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
   const sellPrice = web3.utils.toWei(price)
-  const sellDeadline = ~~(new Date().getTime() / 1000 + 100000)
+  const sellDeadline = ~~(new Date().getTime() / 1000 + 1000000)
   const nftId = tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [walletAddress, tokenAddress, sellPrice, sellDeadline, nftAddress, nftId]
+  const dataValues = [walletAddress.toLowerCase(), '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress.toLowerCase(), nftId]
 
   try {
     const digest = getApprovalDigest(
       NFT_GALLERY_NAME,
-      purchaseAddress,
+      purchaseAddress.toLowerCase(),
       chainId,
       dataTypes,
       dataValues
@@ -71,7 +72,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
   const nftId = cardInfo.nft.tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [cardInfo.seller, tokenAddress, sellPrice, sellDeadline, nftAddress, nftId]
+  const dataValues = [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress.toLowerCase(), nftId]
 
   try {
     const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress)
@@ -94,15 +95,28 @@ export const buySale = async (library, cardInfo, walletAddress) => {
 
     const buyerSig = await web3.eth.sign(digest, walletAddress)
 
+    const id = web3.utils.padLeft('0x' + parseInt(cardInfo.id).toString(16), 32)
+    
     const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
+
+    const estimatedGas = await purchaseContract.methods.executeSell(
+      [sellPrice, sellDeadline, cardInfo.nft.tokenId],
+      [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
+      [cardInfo.sellerSignature, buyerSig],
+      id
+    ).estimateGas({
+      from: walletAddress,
+      value: sellPrice
+    });
+
     const tx = await purchaseContract.methods
-      .executeOffer(
-        [sellPrice, 0, sellDeadline, cardInfo.nft.tokenId],
-        [cardInfo.seller, tokenAddress, nftAddress],
+      .executeSell(
+        [sellPrice, sellDeadline, cardInfo.nft.tokenId],
+        [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
         [cardInfo.sellerSignature, buyerSig],
-        web3.utils.asciiToHex(cardInfo.id.replace('-', ''))
+        id
       )
-      .send({ from: walletAddress })
+      .send({ from: walletAddress, gasLimit: estimatedGas, value: sellPrice })
 
     return tx
   } catch (e) {

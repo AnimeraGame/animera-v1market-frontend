@@ -168,7 +168,6 @@ export const purchaseABI = [
     type: 'function',
   },
 ]
-
 const testnetPurchaseAddress = '0x74c77F20B2c8C5E4f0E8a7491b8d49c8aa43c644'
 
 const mainnetPurchaseAddress = '0x74c77F20B2c8C5E4f0E8a7491b8d49c8aa43c644'

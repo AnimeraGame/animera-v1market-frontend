@@ -10,6 +10,8 @@ import theme from 'components/Theme/index'
 import ProgressLoading from 'components/Loading/index'
 import { constants } from 'components/Theme/constants'
 import { imageCDNLoader } from 'lib/util/imageLoader'
+import Link from 'node_modules/next/link'
+import { extractFirstLastChars } from 'lib/util/stringUtil'
 
 const ContentCard = styled.div`
   min-width: 200px;
@@ -182,6 +184,7 @@ const AssetCard = ({
   label = {},
   menu = {},
   price,
+  seller,
   tokenId,
   lastPrice,
   showLastPrice = false,
@@ -271,6 +274,14 @@ const AssetCard = ({
             </>
           )}
         </Body2>
+        {seller && !loading && (
+          <div className="card_price_details">
+            <Body1 className="card_price_label">Seller</Body1>
+            <Link href={`/profile/${seller}`} fontWeight={FontWeights.bold} className="card_price_value">
+              {extractFirstLastChars(seller, 4, 4)}
+            </Link>
+          </div>
+        )}
         {price && !loading && (
           <div className="card_price_details">
             <Body1 className="card_price_label">{t('price')}</Body1>
@@ -316,6 +327,7 @@ AssetCard.propTypes = {
   menu: PropTypes.object,
   showLastPrice: PropTypes.bool,
   price: PropTypes.string,
+  seller: PropTypes.string,
   tokenId: PropTypes.string,
   lastPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   from: PropTypes.object,

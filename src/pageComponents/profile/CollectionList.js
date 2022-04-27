@@ -178,9 +178,6 @@ const CollectionList = ({ t }) => {
           open={Boolean(priceSuccessMessage)}
         />
       ) : null}
-      {/* {!isEmailVerified && !isEmpty(user) ? (
-        <Placeholder showShadow={false} message={t('verifyEmail')} type="error" />
-      ) : ( */}
       <>
         {isError && (
           <Placeholder showShadow={false} message={t('technicalErrorOccurred')} type="error" />
@@ -219,7 +216,7 @@ const CollectionList = ({ t }) => {
                         menuItems={[
                           {
                             title: get(item, 'isOnMarketplace', false)
-                              ? t('update')
+                              ? 'Update Offer'
                               : 'Create offer',
                             onClick: () => {
                               setSelectedCard({ card: item, index: index })
