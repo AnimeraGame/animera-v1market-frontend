@@ -15,6 +15,7 @@ const WALLET_NFT_COLLECTION = gql`
           id
           price
           type
+          buyer
           seller
           status
         }

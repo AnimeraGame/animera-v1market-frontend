@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 import toNumber from 'lodash/toNumber'
 import isNumber from 'lodash/isNumber'
+import { useRouter } from 'next/router'
 
 import { FontWeights, Body1, Body2, H6, Caption } from 'components/Typography'
 import ModalHoc from 'components/Modal/ModalHoc'
@@ -47,8 +48,6 @@ const SetPriceModal = ({
 }) => {
   // hooks
   const classes = modalStyles()
-  const wallet = useSelector(state => getWallet(state))
-
   // const dispatch = useDispatch()
   // const [activeTab, setActiveTab] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -58,11 +57,14 @@ const SetPriceModal = ({
   const [isPriceValid, setIsPriceValid] = useState(true)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
-  const isAlreadyPosted = !isEmpty(get(tokenData, 'directOffer', {}))
-  const offerId = get(tokenData, 'directOffer.id', -1)
+  const [offerInfo, setOfferInfo] = useState(null)
+  const [isAlreadyPosted, setIsAlreadyPosted] = useState(false)
   const activeTab = 0
   // const wallet = useSelector(state => getWallet(state))
   const { library, account } = useWeb3React()
+
+  const router = useRouter()
+  const { wallet } = router.query
   // const handleTabChange = value => {
   //   setActiveTab(value)
   // }
@@ -81,13 +83,24 @@ const SetPriceModal = ({
   //   CREATE_OFFER_BUNDLE_MUTATION
   // )
 
+
+  useEffect(() => {
+    const estates = get(tokenData, 'estates', []);
+    if (estates.length > 0) {
+      const myActiveOffer = estates.find(e => e.buyer.toLowerCase() === account.toLowerCase() && e.status === 'active' && e.type === 'offer')
+      if (myActiveOffer) {
+        setOfferInfo(myActiveOffer)
+        setIsAlreadyPosted(true)
+      }
+    }
+  }, [tokenData])
+
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
     const payload = {
-      currency: 'MARS',
       status: 1,
-      id: toNumber(get(tokenData, 'activeDirectOffer.id', '')),
+      id: toNumber(offerInfo.id),
     }
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
@@ -112,20 +125,18 @@ const SetPriceModal = ({
 
       const payload = {
         data: {
-          chainId: result.chainId,
-          sellerWalletAddress: result.walletAddress,
-          buyerWalletAddress: wallet.address,
-          tokenAddress: result.tokenAddress,
-          sellerPrice: parseInt(price),
-          nftId: tokenData.id,
-          sellerDeadline: new Date(result.sellDeadline * 1000),
-          signature: result.sellerSig,
+          seller: wallet,
+          buyer: account,
+          token_address: result.tokenAddress,
+          price: result.sellPrice,
+          nft_id: parseInt(tokenData.id),
+          expire_at: new Date(result.sellDeadline * 1000),
+          buyer_signature: result.sellerSig,
           status: 0,
-          type: 1,
         },
       }
 
-      if (offerId > 0) {
+      if (offerInfo && offerInfo.id) {
         payload.data.id = offerId
         updateOfferNftMutation.mutate(payload, {
           onSuccess: data => {
@@ -141,6 +152,7 @@ const SetPriceModal = ({
           },
         })
       } else {
+        payload.data.type = 1
         createOfferNftMutation.mutate(payload, {
           onSuccess: data => {
             setPriceSuccessMessage(t('offerCreateSuccess'))
@@ -191,6 +203,15 @@ const SetPriceModal = ({
           </H6>
           <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
+
+        { isAlreadyPosted &&
+          <div className="row">
+            <H6 fontWeight={FontWeights.bold} className="label">
+              Last Offer Price
+            </H6>
+            <Body1 fontWeight={FontWeights.semiBold}>{get(offerInfo, 'price', 0)} MARS</Body1>
+          </div>
+        }
         {activeTab === 0 ? (
           <>
             <div className="row">

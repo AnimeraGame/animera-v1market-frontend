@@ -67,7 +67,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
   const web3 = new Web3(library.provider)
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
-  const sellPrice = web3.utils.toWei(cardInfo.price.toString())
+  const sellPrice = cardInfo.price.toString()
   const sellDeadline = Math.floor(new Date(cardInfo.expireAt).valueOf() / 1000)
   const nftId = cardInfo.nft.tokenId
 
@@ -102,7 +102,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
     const estimatedGas = await purchaseContract.methods.executeSell(
       [sellPrice, sellDeadline, cardInfo.nft.tokenId],
       [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
-      [cardInfo.sellerSignature, buyerSig],
+      [cardInfo.seller_signature, buyerSig],
       id
     ).estimateGas({
       from: walletAddress,
@@ -113,7 +113,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
       .executeSell(
         [sellPrice, sellDeadline, cardInfo.nft.tokenId],
         [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
-        [cardInfo.sellerSignature, buyerSig],
+        [cardInfo.seller_signature, buyerSig],
         id
       )
       .send({ from: walletAddress, gasLimit: estimatedGas, value: sellPrice })
@@ -125,7 +125,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
   }
 }
 
-export const createOffer = async (library, price, kind, tokenId, sellId, walletAddress) => {
+export const createOffer = async (library, price, kind, tokenId, walletAddress) => {
   const web3 = new Web3(library.provider)
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
@@ -176,7 +176,7 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
   const web3 = new Web3(library.provider)
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
-  const offerPrice = web3.utils.toWei(cardInfo.price.toString())
+  const offerPrice = cardInfo.price.toString()
   const offerDeadline = Math.floor(new Date(cardInfo.expireAt).valueOf() / 1000)
   const nftId = cardInfo.nft.tokenId
 

@@ -9,6 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import dynamic from 'next/dynamic'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
+import { useWeb3React } from '@web3-react/core'
 
 // local imports
 import AssetCard from 'pageComponents/common/AssetCard'
@@ -75,6 +76,7 @@ const CollectionList = ({ t }) => {
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false)
   const [priceSuccessMessage, setPriceSuccessMessage] = useState('')
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
+  const { account } = useWeb3React()
 
   const handleCardClick = item => {
     const mediaList = [
@@ -139,7 +141,6 @@ const CollectionList = ({ t }) => {
   const { isTablet } = useDevice()
   const spacing = isTablet ? 2 : 4
 
-  console.log('nft list', data)
   useEffect(() => {
     if (isBrowser()) {
       const node = document.getElementById('main-container')
@@ -215,7 +216,7 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: get(item, 'isOnMarketplace', false)
+                            title: (get(item, 'estates', []).length > 0)
                               ? 'Update Offer'
                               : 'Create offer',
                             onClick: () => {

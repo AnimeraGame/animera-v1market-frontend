@@ -52,7 +52,7 @@ export const FETCH_DIRECT_SALES = gql`
         status
         seller
         expireAt
-        sellerSignature
+        seller_signature
         updatedAt
         nft {
           tokenId
@@ -93,7 +93,8 @@ export const FETCH_DIRECT_OFFERS = gql`
         status
         seller
         expireAt
-        sellerSignature
+        seller_signature
+        buyer_signature
         updatedAt
         nft {
           tokenId
@@ -134,7 +135,8 @@ export const FETCH_DIRECT_MY_OFFERS = gql`
         status
         seller
         expireAt
-        sellerSignature
+        seller_signature
+        buyer_signature
         updatedAt
         nft {
           tokenId

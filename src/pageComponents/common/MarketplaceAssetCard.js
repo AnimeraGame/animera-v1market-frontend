@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+import web3 from 'web3'
 
 import { Body1, Body2, Caption, FontWeights, H5 } from 'components/Typography/index'
 import theme from 'components/Theme/index'
@@ -286,7 +287,7 @@ const AssetCard = ({
           <div className="card_price_details">
             <Body1 className="card_price_label">{t('price')}</Body1>
             <Body1 fontWeight={FontWeights.bold} className="card_price_value">
-              {price || ''}
+              {web3.utils.fromWei(price) || ''} MARS
             </Body1>
           </div>
         )}
@@ -328,6 +329,7 @@ AssetCard.propTypes = {
   showLastPrice: PropTypes.bool,
   price: PropTypes.string,
   seller: PropTypes.string,
+  buyer: PropTypes.string,
   tokenId: PropTypes.string,
   lastPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   from: PropTypes.object,

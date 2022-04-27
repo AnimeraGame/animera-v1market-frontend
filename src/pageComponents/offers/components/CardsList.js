@@ -225,7 +225,7 @@ const CardsList = ({
                 <div className="card-item" key={index}>
                   <AssetCard
                     marketPlace
-                    price={get(item, 'price', '') + ' MARS'}
+                    price={get(item, 'price', '')}
                     lastPrice={get(item, 'nft.directOffers[0].price', '')}
                     item={get(item, 'nft.nftMetadata.metadata')}
                     t={t}

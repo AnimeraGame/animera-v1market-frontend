@@ -15,18 +15,22 @@ import clsx from 'clsx'
 // local imports
 import AssetCard from 'pageComponents/common/MarketplaceAssetCard'
 import Placeholder from 'components/Placeholder'
-import AcceptOfferModal from './AcceptOfferModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
 import { buyOffer } from 'lib/util/web3/purchase'
 import { getBalance } from 'state/settings/selectors'
 import { getAuthState } from 'state/auth/selectors'
+import { getUserAuthInfo } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
 import useQueryRequest from 'hooks/UseQueryRequest'
+import usePostRequest from 'hooks/UsePostRequest'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import UPDATE_OFFER_NFT_MUTATION from 'state/marketplace/queries/updateOffer'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
 import ConfirmationPopup from 'components/Modal/ConfirmationModal'
+import SetPriceModal from './SetPriceModal'
+import { toNumber } from 'lodash'
 
 const CardsList = ({
   t,
@@ -42,13 +46,14 @@ const CardsList = ({
   showLastPrice,
 }) => {
   // global state
+  const user = useSelector(state => getUserAuthInfo(state))
   const cardIdInUrl = get(router, 'query.card', null)
   const modalType = get(router, 'query.type', null)
   const balance = useSelector(state => getBalance(state))
   const isUserLoggedIn = useSelector(state => getAuthState(state))
 
   // local state
-  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false)
+  const [isPriceModalOpen, setIsPriceModalOpen] = useState(false)
   const [isCancelModalOpen, setCancelModalOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
@@ -57,10 +62,6 @@ const CardsList = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { library, account } = useWeb3React()
-  // const { mutationRes: acceptOfferMutation } = usePostRequest(
-  //   'ACCEPT_OFFER_MUTATION',
-  //   ACCEPT_OFFER_MUTATION
-  // )
 
   const { isFetching: cardLoading, refetch: fetchCardDetail } = useQueryRequest(
     ['FETCH_DIRECT_OFFERS_URL_SUPPORT'],
@@ -81,6 +82,11 @@ const CardsList = ({
     }
   )
 
+  const { mutationRes: updateOfferNftMutation } = usePostRequest(
+    'UPDATE_OFFER_NFT_MUTATION',
+    UPDATE_OFFER_NFT_MUTATION
+  )
+
   const handleCardClick = item => {
     console.log('item info', item)
     const mediaList = [
@@ -99,32 +105,13 @@ const CardsList = ({
     setIsPreviewOpen(true)
   }
 
-  const handleBuy = async item => {
-    setIsSubmitting(true)
-    await buyOffer(library, item, account)
-    setIsSubmitting(false)
-    acceptOfferMutation.mutate(payload, {
-      onSuccess: data => {
-        TagManager.dataLayer({
-          dataLayer: {
-            event: 'sold_marketplace',
-            id: item?.nft?.tokenId,
-            price: item?.price + ' BNB',
-            type: 'sold_marketplace',
-          },
-        }),
-          setPriceSuccessMessage(t('priceSuccess'))
-        setIsBuyModalOpen(false)
-        setSelectedCard({})
-        setIsSubmitting(false)
-      },
-      onError: (err, variables) => {
-        // eslint-disable-next-line no-console
-        console.log({ err })
-        setPriceErrorMessage(t('somethingWentWrongPurchase'))
-        setIsSubmitting(false)
-      },
-    })
+  const handleSubmitDataUpdate = temp => {
+    setData([
+      ...data.slice(0, selectedCard.index),
+      temp,
+      ...data.slice(selectedCard.index + 1, data.length),
+    ])
+    setSelectedCard({})
   }
 
   const removeCardKeysFromUrl = () => {
@@ -146,8 +133,30 @@ const CardsList = ({
     }
   }
 
-  const declineOffer = async () => {
-    setDeclineModalOpen(false)
+  const cancelOffer = async () => {
+    setCancelModalOpen(false)
+    console.log('selected card', selectedCard)
+    const payload = {
+      data: {
+        status: 1,
+        price: selectedCard.card.price,
+        id: toNumber(selectedCard.card.id),
+      }
+    }
+    updateOfferNftMutation.mutate(payload, {
+      onSuccess: data => {
+        setData([
+          ...data.slice(0, selectedCard.index),
+          ...data.slice(selectedCard.index + 1, data.length),
+        ])
+        setSelectedCard({})
+        setPriceSuccessMessage(t('offerRemoveSuccess'))
+      },
+      onError: (err, variables) => {
+        // eslint-disable-next-line no-console
+        setPriceErrorMessage(t('somethingWentWrongOfferRemoval'))
+      },
+    })
   }
 
   const fetchCardDetails = async (index, card) => {
@@ -161,13 +170,13 @@ const CardsList = ({
           card: { ...cardDetails },
           index,
         })
-        setIsBuyModalOpen(true)
+        setIsPriceModalOpen(true)
       }
     } else removeCardKeysFromUrl()
   }
 
   useEffect(() => {
-    if (!isPreviewOpen && !isBuyModalOpen && cardIdInUrl && modalType && data.length) {
+    if (!isPreviewOpen && !isPriceModalOpen && cardIdInUrl && modalType && data.length) {
       let index = null
       const card = find(data, (item, idx) => {
         const result = get(item, 'id', '') === cardIdInUrl
@@ -225,7 +234,9 @@ const CardsList = ({
                 <div className="card-item" key={index}>
                   <AssetCard
                     marketPlace
-                    price={get(item, 'price', '') + ' MARS'}
+                    seller={get(item, 'seller', '')}
+                    buyer={get(item, 'buyer', '')}
+                    price={get(item, 'price', '')}
                     lastPrice={get(item, 'nft.directOffers[0].price', '')}
                     item={get(item, 'nft.nftMetadata.metadata')}
                     t={t}
@@ -246,7 +257,7 @@ const CardsList = ({
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: t('accept'),
+                            title: 'Update Offer',
                             onClick: () => {
                               router.push(
                                 `${router.asPath}${
@@ -257,11 +268,11 @@ const CardsList = ({
                                 card: item,
                                 index,
                               })
-                              setIsBuyModalOpen(true)
+                              setIsPriceModalOpen(true)
                             },
                           },
                           {
-                            title: t('cancelOffer'),
+                            title: 'Cancel Offer',
                             onClick: () => {
                               setSelectedCard({
                                 card: item,
@@ -294,32 +305,33 @@ const CardsList = ({
           showHistory
         />
       ) : null}
-      {isBuyModalOpen ? (
-        <AcceptOfferModal
-          cardInfo={selectedCard.card}
+      {isPriceModalOpen ? (
+        <SetPriceModal
           t={t}
-          cardType={'SIMPLE'}
+          isOpen={isPriceModalOpen}
           onClose={() => {
-            setIsBuyModalOpen(false)
+            setIsPriceModalOpen(false)
             setSelectedCard({})
-            removeCardKeysFromUrl()
           }}
-          isOpen={isBuyModalOpen}
-          onSubmit={item => handleBuy(item)}
-          balance={balance}
-          isSubmitting={isSubmitting}
-          account={account}
+          user={user}
+          onSubmit={temp => {
+            setIsPriceModalOpen(false)
+            handleSubmitDataUpdate(temp)
+          }}
+          tokenData={selectedCard.card}
+          setPriceSuccessMessage={setPriceSuccessMessage}
+          setPriceErrorMessage={setPriceErrorMessage}
         />
       ) : null}
       {isCancelModalOpen ? (
         <ConfirmationPopup
           open={isCancelModalOpen}
-          title={t('cancelOffer')}
-          message={t('cancelDescription')}
-          handleConfirm={declineOffer}
+          title={'Cancel Offer'}
+          message={'Are you sure to cancel this offer?'}
+          handleConfirm={cancelOffer}
           handleCancel={() => setCancelModalOpen(false)}
-          cancelButtonText={t('cancel')}
-          saveButtonText={t('confirm')}
+          cancelButtonText={'No'}
+          saveButtonText={'Yes'}
         />
       ) : null}
       {cardLoading && !isLoading ? (

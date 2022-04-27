@@ -56,10 +56,6 @@ const CardsList = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { account, library } = useWeb3React()
-  // const { mutationRes: acceptOfferMutation } = usePostRequest(
-  //   'ACCEPT_OFFER_MUTATION',
-  //   ACCEPT_OFFER_MUTATION
-  // )
 
   const { isFetching: cardLoading, refetch: fetchCardDetail } = useQueryRequest(
     ['FETCH_DIRECT_OFFERS_URL_SUPPORT'],
@@ -100,34 +96,8 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    await buqySale(library, item, account)
+    await buySale(library, item, account)
     setIsSubmitting(false)
-    //   acceptOfferMutation.mutate(payload, {
-    //     onSuccess: data => {
-    //       TagManager.dataLayer({
-    //         dataLayer: {
-    //           event: 'sold_marketplace',
-    //           id: item?.nft?.tokenId,
-    //           price: item?.price + ' BNB',
-    //           type: 'sold_marketplace',
-    //         },
-    //       })
-    //       setPriceSuccessMessage(t('priceSuccess'))
-    //       setIsBuyModalOpen(false)
-    //       setSelectedCard({})
-    //       setIsSubmitting(false)
-    //     },
-    //     onError: (err, variables) => {
-    //       // eslint-disable-next-line no-console
-    //       console.log({ err })
-    //       setPriceErrorMessage(t('somethingWentWrongPurchase'))
-    //       setIsSubmitting(false)
-    //     },
-    //   })
-    // } else {
-    //   setPriceErrorMessage(t('confirmWalletTransaction'))
-    //   setIsSubmitting(false)
-    // }
   }
 
   const removeCardKeysFromUrl = () => {
@@ -224,7 +194,7 @@ const CardsList = ({
                 <div className="card-item" key={index}>
                   <AssetCard
                     marketPlace
-                    price={get(item, 'price', '') + ' MARS'}
+                    price={get(item, 'price', '')}
                     seller={get(item, 'seller', '')}
                     lastPrice={get(item, 'nft.directOffers[0].price', '')}
                     item={get(item, 'nft.nftMetadata.metadata')}

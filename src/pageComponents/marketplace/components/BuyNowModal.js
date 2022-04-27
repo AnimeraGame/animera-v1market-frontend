@@ -14,6 +14,7 @@ import theme from 'components/Theme'
 import { modalStyles } from './modalStyles'
 import ProgressLoading from 'components/Loading'
 import InputFieldWithSuffix from 'pageComponents/common/InputFieldWithSuffix'
+import Web3 from 'web3'
 
 const ModalContainer = styled.div`
   width: 100%;
@@ -134,7 +135,7 @@ const BuyNowModal = ({
   const [updateError, setUpdateError] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
   const price = get(cardInfo, 'price', 0)
-  const canBuyNft = toNumber(balance.mars) >= toNumber(price)
+  const canBuyNft = toNumber(balance.mars) >= toNumber(Web3.utils.fromWei(price))
   return (
     <>
       {updateSuccess ? (
@@ -174,7 +175,7 @@ const BuyNowModal = ({
                 <Body1 fontWeight={FontWeights.bold} className="label">
                   {t('price')}:
                 </Body1>
-                <Body1 fontWeight={FontWeights.semiBold}>{`${price} MARS`}</Body1>
+                <Body1 fontWeight={FontWeights.semiBold}>{`${Web3.utils.fromWei(price)} MARS`}</Body1>
               </div>
               {!canBuyNft ? (
                 <div>
@@ -229,7 +230,7 @@ const BuyNowModal = ({
               {t('cancel')}
             </OutlinedSecondaryButton>
             <ContainedPrimaryButton
-              disabled={!canBuyNft || !account || isSubmitting}
+              disabled={(!canBuyNft || !account || isSubmitting) || (cardInfo.seller.toLowerCase() === account.toLowerCase())}
               onClick={() => onSubmit(cardInfo)}>
               {isSubmitting ? (
                 <>

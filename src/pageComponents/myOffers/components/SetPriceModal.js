@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
-// import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import toNumber from 'lodash/toNumber'
 import isNumber from 'lodash/isNumber'
+import web3 from 'web3'
 
 import { FontWeights, Body1, Body2, H6, Caption } from 'components/Typography'
 import ModalHoc from 'components/Modal/ModalHoc'
 import theme from 'components/Theme'
-// import Tabs from 'components/Tabs'
+import { getWallet, getBalance } from 'state/settings/selectors'
 import {
   ContainedPrimaryButton,
   OutlinedSecondaryButton,
@@ -17,13 +17,8 @@ import {
 } from 'components/Inputs'
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
-import { createOffer, createSale } from 'lib/util/web3/purchase'
+import { createOffer } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
-// import { useEagerConnect } from 'hooks/web3Hook'
-import {
-  CREATE_OFFER_NFT_MUTATION,
-  // CREATE_OFFER_BUNDLE_MUTATION,
-} from 'state/marketplace/queries/createOffer'
 import UPDATE_OFFER_NFT_MUTATION from 'state/marketplace/queries/updateOffer'
 import InputFieldWithSuffix from 'pageComponents/common/InputFieldWithSuffix'
 import { HistoryContainer, ModalContainer, TabContainer, TabPanel, modalStyles } from './modalStyle'
@@ -43,60 +38,32 @@ const SetPriceModal = ({
   setPriceErrorMessage,
   user,
 }) => {
+  console.log('token Data', tokenData)
   // hooks
   const classes = modalStyles()
-  // const dispatch = useDispatch()
-  // const [activeTab, setActiveTab] = useState(0)
+  const wallet = useSelector(state => getWallet(state))
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  // const [date, setDate] = useState(null)
   const [price, setPrice] = useState(get(tokenData, 'directOffer.price', ''))
   const [isPriceValid, setIsPriceValid] = useState(true)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [minimumBid, setMinimumBid] = useState('')
-  const [saleInfo, setSaleInfo] = useState(null)
-  const [isAlreadyPosted, setIsAlreadyPosted] = useState(false)
-  const offerId = get(tokenData, 'directOffer.id', -1)
   const activeTab = 0
-  // const wallet = useSelector(state => getWallet(state))
   const { library, account } = useWeb3React()
-  // const handleTabChange = value => {
-  //   setActiveTab(value)
-  // }
-  const { mutationRes: createOfferNftMutation } = usePostRequest(
-    'CREATE_OFFER_NFT_MUTATION',
-    CREATE_OFFER_NFT_MUTATION
-  )
-
+  
   const { mutationRes: updateOfferNftMutation } = usePostRequest(
     'UPDATE_OFFER_NFT_MUTATION',
     UPDATE_OFFER_NFT_MUTATION
   )
 
-  useEffect(() => {
-    const estates = get(tokenData, 'estates', []);
-    if (estates.length > 0) {
-      const lastActiveSale = estates.find(e => e.status === 'active' && e.type === 'sale')
-      if (lastActiveSale) {
-        setSaleInfo(lastActiveSale)
-        setIsAlreadyPosted(true)
-      }
-    }
-  }, [tokenData])
-
-  // const { mutationRes: createOfferBundleMutation } = usePostRequest(
-  //   'CREATE_OFFER_BUNDLE_MUTATION',
-  //   CREATE_OFFER_BUNDLE_MUTATION
-  // )
 
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
     const payload = {
-      data: {
-        status: 1,
-        id: toNumber(saleInfo.id),
-      }
+      status: 1,
+      id: toNumber(tokenData.id),
     }
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
@@ -115,55 +82,38 @@ const SetPriceModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
-    const tokenId = parseInt(tokenData.tokenId)
+    const tokenId = parseInt(tokenData.nft.tokenId)
     try {
-      const result = await createSale(library, price, 1, tokenId, account)
+      const result = await createOffer(library, price, 1, tokenId, account)
 
       const payload = {
         data: {
+          id: parseInt(tokenData.id),
           seller: result.walletAddress,
+          buyer: wallet.address,
           token_address: result.tokenAddress,
           price: result.sellPrice,
-          nft_id: parseInt(tokenData.id),
           expire_at: new Date(result.sellDeadline * 1000),
-          seller_signature: result.sellerSig,
+          buyer_signature: result.sellerSig,
           status: 0,
         },
       }
 
-      if (saleInfo && saleInfo.id) {
-        payload.data.id = parseInt(saleInfo.id)
-        updateOfferNftMutation.mutate(payload, {
-          onSuccess: data => {
-            setPriceSuccessMessage(t('priceUpdateSuccess'))
-            onSubmit(get(data, 'updateEstate', null))
-            setIsSubmitting(false)
-            onClose()
-          },
-          onError: (err, variables) => {
-            // eslint-disable-next-line no-console
-            console.log({ err })
-            setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
-            setIsSubmitting(false)
-          },
-        })
-      } else {
-        payload.data.type = 0
-        createOfferNftMutation.mutate(payload, {
-          onSuccess: data => {
-            setPriceSuccessMessage(t('offerCreateSuccess'))
-            onSubmit(get(data, 'createEstate', null))
-            setIsSubmitting(false)
-            onClose()
-          },
-          onError: (err, variables) => {
-            // eslint-disable-next-line no-console
-            console.log({ err })
-            setPriceErrorMessage(t('somethingWentWrongOfferCreation'))
-            setIsSubmitting(false)
-          },
-        })
-      }
+      updateOfferNftMutation.mutate(payload, {
+        onSuccess: data => {
+          setPriceSuccessMessage(t('priceUpdateSuccess'))
+          setIsSubmitting(false)
+          console.log(data.updateEstate);
+          onSubmit(data.updateEstate)
+          onClose()
+        },
+        onError: (err, variables) => {
+          // eslint-disable-next-line no-console
+          console.log({ err })
+          setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
+          setIsSubmitting(false)
+        },
+      })
     } catch (error) {
       setIsSubmitting(false)
     }
@@ -196,25 +146,26 @@ const SetPriceModal = ({
         ) : null}
         <div className="row">
           <H6 fontWeight={FontWeights.bold} className="label">
-            {t('tokenId')}
+            TokenID
           </H6>
-          <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
+          <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'nft.tokenId', '')}</Body1>
         </div>
-        { isAlreadyPosted &&
-          <div className="row">
-            <H6 fontWeight={FontWeights.bold} className="label">Current Price</H6>
-            <Body1 fontWeight={FontWeights.semiBold}>{saleInfo.price} MARS</Body1>
-          </div>
-        }
+
+        <div className="row">
+          <H6 fontWeight={FontWeights.bold} className="label">
+            Last Offer Price
+          </H6>
+          <Body1 fontWeight={FontWeights.semiBold}>{web3.utils.fromWei(get(tokenData, 'price', 0))} MARS</Body1>
+        </div>
         {activeTab === 0 ? (
           <>
             <div className="row">
               <div className="label">
                 <H6 fontWeight={FontWeights.bold}>
-                  {isAlreadyPosted ? t('updatePrice') : t('setPrice')}
+                  {t('updatePrice')}
                 </H6>
                 <Body2 fontWeight={FontWeights.regular}>
-                  {isAlreadyPosted ? t('updatePriceLabel') : t('setPriceLabel')}
+                  {t('updatePriceLabel')}
                 </Body2>
                 <Body2 fontWeight={FontWeights.regular}>{t('biddersLabel')}</Body2>
               </div>
@@ -280,17 +231,6 @@ const SetPriceModal = ({
         </div>
       </div>
       <div className="footer">
-        {isAlreadyPosted ? (
-          <TextPrimaryButton
-            style={{
-              color: isDeleting || isSubmitting ? theme.colors.lighterRed : theme.colors.errorColor,
-            }}
-            loading={isDeleting}
-            disabled={isDeleting || isSubmitting}
-            onClick={() => setIsDeleteOpen(true)}>
-            {t('removeOffer')}
-          </TextPrimaryButton>
-        ) : null}
         <OutlinedSecondaryButton disabled={isDeleting || isSubmitting} onClick={onClose}>
           {t('cancel')}
         </OutlinedSecondaryButton>
@@ -311,11 +251,8 @@ const SetPriceModal = ({
               </span>
               &nbsp; {t('pleaseWait')}
             </>
-          ) : isAlreadyPosted ? (
-            t('updatePrice')
-          ) : (
-            t('postInMarketplace')
-          )}
+          ) : t('updatePrice')
+          }
         </ContainedPrimaryButton>
       </div>
     </>
@@ -328,7 +265,7 @@ const SetPriceModal = ({
         classes={classes}
         openModal={isOpen}
         onClose={onClose}
-        title={isAlreadyPosted ? t('update') : t('putPrice')}>
+        title={t('update')}>
         <ModalContainer>
           <HistoryContainer>
             <TabContainer>
