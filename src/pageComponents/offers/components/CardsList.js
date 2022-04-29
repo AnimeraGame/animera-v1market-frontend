@@ -242,39 +242,37 @@ const CardsList = ({
                       handleCardClick(item)
                     }}
                     menu={
-                      !isUserLoggedIn || account === get(item, 'seller', '') ? null : (
-                        <ActionMenu
-                          iconDirection="horizontal"
-                          menuItems={[
-                            {
-                              title: t('accept'),
-                              onClick: () => {
-                                router.push(
-                                  `${router.asPath}${
-                                    router?.asPath.length > 13 ? '&' : '?'
-                                  }card=${get(item, 'nft.tokenId', '')}&type=buy`
-                                )
-                                setSelectedCard({
-                                  card: item,
-                                  index,
-                                })
-                                setIsBuyModalOpen(true)
-                              },
+                      <ActionMenu
+                        iconDirection="horizontal"
+                        menuItems={[
+                          {
+                            title: t('accept'),
+                            onClick: () => {
+                              router.push(
+                                `${router.asPath}${
+                                  router?.asPath.length > 13 ? '&' : '?'
+                                }card=${get(item, 'nft.tokenId', '')}&type=buy`
+                              )
+                              setSelectedCard({
+                                card: item,
+                                index,
+                              })
+                              setIsBuyModalOpen(true)
                             },
-                            {
-                              title: t('decline'),
-                              onClick: () => {
-                                setSelectedCard({
-                                  card: item,
-                                  index,
-                                })
-                                setDeclineModalOpen(true)
-                              },
+                          },
+                          {
+                            title: t('decline'),
+                            onClick: () => {
+                              setSelectedCard({
+                                card: item,
+                                index,
+                              })
+                              setDeclineModalOpen(true)
                             },
-                          ]}
-                          portal={false}
-                        />
-                      )
+                          },
+                        ]}
+                        portal={false}
+                      />
                     }
                   />
                 </div>

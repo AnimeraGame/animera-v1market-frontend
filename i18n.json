@@ -17,6 +17,7 @@
     "/marketplace": ["marketplace"],
     "/[orgid]": ["org"],
     "/offers": ["offers"],
+		"/my-offers": ["my-offers"],
     "/": ["org"]
   }
 }

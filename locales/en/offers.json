@@ -23,5 +23,16 @@
   "cancelDescription": "Are you sure to cancel this offer?",
   "wrongNetworkWarning": "Please make sure to use the correct RPC Settings on Metamask.",
   "connectWalletMarketplace": "Please Connect Wallet to view and collect amazing NFTs.",
-  "myOffers": "My Offers"
+  "myOffers": "My Offers",
+	"mars": "MARS",
+	"updatePrice": "Update Price",
+	"updatePriceLabel": "Updating the price will cost Gas Fee.",
+	"biddersLabel": "Buyers must have sufficient MARS.",
+	"fees": "Fees",
+	"toMarsVerse": "To Marsverse (0%)",
+	"toNFTCreator": "To NFT Creator (2%)",
+	"totalFees": "Total Fees (2%)",
+	"buyNow": "Buy Now",
+	"buyNFT": "Buy NFT",
+	"marsLink": "Get MARS here"
 }
