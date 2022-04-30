@@ -8,6 +8,7 @@
     "/creator/[orgid]": ["creator"],
     "/nft/[nid]": ["product"],
     "/profile": ["profile"],
+    "/profile/[wallet]": ["profile"],
     "/admin/settings": ["settings"],
     "/admin/profile": ["profile"],
     "rgx:^/password": ["password"],
