@@ -159,7 +159,7 @@ export const createOffer = async (library, price, kind, tokenId, walletAddress) 
   const nftId = tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [walletAddress, tokenAddress, sellPrice, sellDeadline, nftAddress, nftId]
+  const dataValues = [walletAddress, '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress, nftId]
 
   try {
     const digest = getApprovalDigest(
@@ -184,7 +184,7 @@ export const createOffer = async (library, price, kind, tokenId, walletAddress) 
 
     return {
       chainId,
-      tokenAddress,
+      tokenAddress: '0x0000000000000000000000000000000000000001',
       sellPrice,
       sellDeadline,
       nftAddress,
@@ -207,22 +207,25 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
   const dataValues = [
-    cardInfo.seller.toLowerCase(),
+    cardInfo.buyer,
     '0x0000000000000000000000000000000000000001',
     offerPrice,
     offerDeadline,
-    nftAddress.toLowerCase(),
+    nftAddress,
     nftId,
   ]
 
+  console.log('data values', dataValues);
+
   try {
-    const marketContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
-    const approvedAmount = await marketContract.methods
-      .allowance(walletAddress, purchaseAddress)
+    const nftContract = new web3.eth.Contract(nftABI, nftAddress)
+    const isApproved = await nftContract.methods
+      .isApprovedForAll(walletAddress, purchaseAddress)
       .call()
-    if (parseInt(approvedAmount) < parseInt(offerPrice)) {
-      await marketContract.methods
-        .increaseAllowance(purchaseAddress, web3.utils.toWei('10000000000000000000000000000000'))
+
+    if (!isApproved) {
+      await nftContract.methods
+        .setApprovalForAll(purchaseAddress, true)
         .send({ from: walletAddress })
     }
 
@@ -234,18 +237,39 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
       dataValues
     )
 
-    const buyerSig = await web3.eth.sign(digest, walletAddress)
+    const sellerSig = await web3.eth.sign(digest, walletAddress)
 
     const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
+    const id = web3.utils.padLeft('0x' + parseInt(cardInfo.id).toString(16), 32)
+
+    const estimatedGas = await purchaseContract.methods
+    .executeOffer(
+      [offerPrice, offerDeadline, offerDeadline, cardInfo.nft.tokenId],
+      [
+        cardInfo.buyer,
+        '0x0000000000000000000000000000000000000001',
+        nftAddress,
+      ],
+      [sellerSig, cardInfo.buyer_signature],
+      id
+    )
+    .estimateGas({
+      from: walletAddress
+    })
+
     const tx = await purchaseContract.methods
       .executeOffer(
-        [offerPrice, 0, offerDeadline, cardInfo.nft.tokenId],
-        [cardInfo.seller, purchaseAddress, nftAddress],
-        [cardInfo.sellerSignature, buyerSig],
-        web3.utils.asciiToHex(cardInfo.id)
+        [offerPrice, offerDeadline, offerDeadline, cardInfo.nft.tokenId],
+        [
+          cardInfo.buyer,
+          '0x0000000000000000000000000000000000000001',
+          nftAddress,
+        ],
+        [sellerSig, cardInfo.buyer_signature],
+        id
       )
-      .send({ from: walletAddress })
-
+      .send({ from: walletAddress, gasLimit: estimatedGas });
+    
     return tx
   } catch (e) {
     console.log('error', e)

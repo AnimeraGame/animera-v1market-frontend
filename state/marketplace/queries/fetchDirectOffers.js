@@ -92,6 +92,7 @@ export const FETCH_DIRECT_OFFERS = gql`
         price
         status
         seller
+        buyer
         expireAt
         seller_signature
         buyer_signature

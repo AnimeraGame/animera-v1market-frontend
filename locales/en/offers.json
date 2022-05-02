@@ -11,6 +11,8 @@
   "cancel": "Cancel",
   "tokenId": "Token ID",
   "pleaseKeepScreenOpen": "Please keep this modal open until transaction completes to ensure successful transfer of your NFT.",
+  "pleaseWait": "Please wait...",
+  "marsWarning": "You must have sufficient MARS.",
   "nftDetails": "NFT Details",
   "onTestNet": " on mumbai.polygonscan.com)",
   "view": "View",
