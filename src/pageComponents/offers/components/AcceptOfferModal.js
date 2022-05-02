@@ -230,7 +230,7 @@ const BuyNowModal = ({
               {t('cancel')}
             </OutlinedSecondaryButton>
             <ContainedPrimaryButton
-              disabled={!canBuyNft || !account || isSubmitting}
+              // disabled={!canBuyNft || !account || isSubmitting}
               onClick={() => onSubmit(cardInfo)}>
               {isSubmitting ? (
                 <>

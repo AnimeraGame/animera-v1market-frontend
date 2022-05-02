@@ -7,6 +7,7 @@ import {
   purchaseAddress,
   tokenABI,
   tokenAddress,
+  testnetPurchaseAddress,
 } from './contractConstants'
 import { getApprovalDigest } from './signature'
 import { zeroAddress } from 'node_modules/ethereumjs-util/dist/account'
@@ -25,7 +26,14 @@ export const createSale = async (library, price, kind, tokenId, walletAddress) =
   const nftId = tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [walletAddress.toLowerCase(), '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress.toLowerCase(), nftId]
+  const dataValues = [
+    walletAddress.toLowerCase(),
+    '0x0000000000000000000000000000000000000001',
+    sellPrice,
+    sellDeadline,
+    nftAddress.toLowerCase(),
+    nftId,
+  ]
 
   try {
     const digest = getApprovalDigest(
@@ -72,7 +80,14 @@ export const buySale = async (library, cardInfo, walletAddress) => {
   const nftId = cardInfo.nft.tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress.toLowerCase(), nftId]
+  const dataValues = [
+    cardInfo.seller.toLowerCase(),
+    '0x0000000000000000000000000000000000000001',
+    sellPrice,
+    sellDeadline,
+    nftAddress.toLowerCase(),
+    nftId,
+  ]
 
   try {
     const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress)
@@ -96,23 +111,33 @@ export const buySale = async (library, cardInfo, walletAddress) => {
     const buyerSig = await web3.eth.sign(digest, walletAddress)
 
     const id = web3.utils.padLeft('0x' + parseInt(cardInfo.id).toString(16), 32)
-    
+
     const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
 
-    const estimatedGas = await purchaseContract.methods.executeSell(
-      [sellPrice, sellDeadline, cardInfo.nft.tokenId],
-      [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
-      [cardInfo.seller_signature, buyerSig],
-      id
-    ).estimateGas({
-      from: walletAddress,
-      value: sellPrice
-    });
+    const estimatedGas = await purchaseContract.methods
+      .executeSell(
+        [sellPrice, sellDeadline, cardInfo.nft.tokenId],
+        [
+          cardInfo.seller.toLowerCase(),
+          '0x0000000000000000000000000000000000000001',
+          nftAddress.toLowerCase(),
+        ],
+        [cardInfo.seller_signature, buyerSig],
+        id
+      )
+      .estimateGas({
+        from: walletAddress,
+        value: sellPrice,
+      })
 
     const tx = await purchaseContract.methods
       .executeSell(
         [sellPrice, sellDeadline, cardInfo.nft.tokenId],
-        [cardInfo.seller.toLowerCase(), '0x0000000000000000000000000000000000000001', nftAddress.toLowerCase()],
+        [
+          cardInfo.seller.toLowerCase(),
+          '0x0000000000000000000000000000000000000001',
+          nftAddress.toLowerCase(),
+        ],
         [cardInfo.seller_signature, buyerSig],
         id
       )
@@ -181,15 +206,22 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
   const nftId = cardInfo.nft.tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [cardInfo.seller, tokenAddress, offerPrice, offerDeadline, nftAddress, nftId]
+  const dataValues = [
+    cardInfo.seller.toLowerCase(),
+    '0x0000000000000000000000000000000000000001',
+    offerPrice,
+    offerDeadline,
+    nftAddress.toLowerCase(),
+    nftId,
+  ]
 
   try {
-    const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress)
-    const approvedAmount = await tokenContract.methods
+    const marketContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
+    const approvedAmount = await marketContract.methods
       .allowance(walletAddress, purchaseAddress)
       .call()
     if (parseInt(approvedAmount) < parseInt(offerPrice)) {
-      await tokenContract.methods
+      await marketContract.methods
         .increaseAllowance(purchaseAddress, web3.utils.toWei('10000000000000000000000000000000'))
         .send({ from: walletAddress })
     }
@@ -208,7 +240,7 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
     const tx = await purchaseContract.methods
       .executeOffer(
         [offerPrice, 0, offerDeadline, cardInfo.nft.tokenId],
-        [cardInfo.seller, tokenAddress, nftAddress],
+        [cardInfo.seller, purchaseAddress, nftAddress],
         [cardInfo.sellerSignature, buyerSig],
         web3.utils.asciiToHex(cardInfo.id)
       )
