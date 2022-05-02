@@ -8,7 +8,7 @@ import times from 'lodash/times'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dynamic from 'next/dynamic'
 import { useSelector } from 'react-redux'
-import { useRouter } from 'next/router'
+import { useRouter, Router } from 'next/router'
 import { useWeb3React } from '@web3-react/core'
 
 // local imports
@@ -103,6 +103,8 @@ const CollectionList = ({ t }) => {
 
   const router = useRouter()
   const { wallet } = router.query
+
+  if (wallet === account) router.push('/')
 
   const {
     isLoading,
@@ -216,9 +218,8 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: (get(item, 'estates', []).length > 0)
-                              ? 'Update Offer'
-                              : 'Create offer',
+                            title:
+                              get(item, 'estates', []).length > 0 ? 'Update Offer' : 'Create offer',
                             onClick: () => {
                               setSelectedCard({ card: item, index: index })
                               setIsPriceModalOpen(true)
