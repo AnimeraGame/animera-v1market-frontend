@@ -11,6 +11,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import clsx from 'clsx'
+import usePostRequest from 'hooks/UsePostRequest'
+import { toNumber } from 'lodash'
 
 // local imports
 import AssetCard from 'pageComponents/common/MarketplaceAssetCard'
@@ -24,6 +26,7 @@ import { getAuthState } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
 import useQueryRequest from 'hooks/UseQueryRequest'
 import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import DECLINE_OFFER_MUTATION from 'state/marketplace/queries/declineOffer'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
 import ConfirmationPopup from 'components/Modal/ConfirmationModal'
@@ -79,6 +82,11 @@ const CardsList = ({
       retry: 1,
       refetchOnWindowFocus: false,
     }
+  )
+
+  const { mutationRes: declineOfferNftMutation } = usePostRequest(
+    'DECLINE_OFFER_MUTATION',
+    DECLINE_OFFER_MUTATION
   )
 
   const handleCardClick = item => {
@@ -148,6 +156,34 @@ const CardsList = ({
 
   const declineOffer = async () => {
     setDeclineModalOpen(false)
+
+    const payload = {
+      data: {
+        status: 1,
+        price: selectedCard.card.price,
+        id: toNumber(selectedCard.card.id),
+      },
+    }
+
+    declineOfferNftMutation.mutate(payload, {
+      onSuccess: result => {
+        console.log('data', result)
+        if (data.length > 1) {
+          setData([
+            ...data.slice(0, selectedCard.index),
+            ...data.slice(selectedCard.index + 1, data.length),
+          ])
+        } else {
+          setData([])
+        }
+        setSelectedCard({})
+        setPriceSuccessMessage(t('offerRemoveSuccess'))
+      },
+      onError: (err, variables) => {
+        // eslint-disable-next-line no-console
+        setPriceErrorMessage(t('somethingWentWrongOfferRemoval'))
+      },
+    })
   }
 
   const fetchCardDetails = async (index, card) => {
@@ -202,7 +238,7 @@ const CardsList = ({
         {isError && !isLoading ? (
           <Placeholder message={t('fetchErrorMessage')} type="error" showShadow={false} />
         ) : null}
-        {!isLoading && totalCount === 0 && !isError && data.length ? (
+        {!isLoading && totalCount === 0 && !isError ? (
           <Placeholder showShadow={false} message={t('emptyListMessage')} type="empty" />
         ) : null}
         {!isError ? (

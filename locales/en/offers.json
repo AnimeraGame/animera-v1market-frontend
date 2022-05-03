@@ -36,5 +36,16 @@
 	"totalFees": "Total Fees (2%)",
 	"buyNow": "Buy Now",
 	"buyNFT": "Buy NFT",
-	"marsLink": "Get MARS here"
+	"marsLink": "Get MARS here",
+	"somethingWentWrongPrice": "Something went wrong, we could not save the price. Please try again.",
+	"somethingWentWrongPriceUpdate": "Something went wrong, we could not update the price. Please try again.",
+	"somethingWentWrongOfferRemoval": "Something went wrong, we could not remove the offer. Please try again.",
+	"somethingWentWrongOfferCreation": "Something went wrong, we could not create the offer. Please try again.",
+	"priceSuccess": "The NFT is successfully posted to the marketplace",
+	"priceUpdateSuccess": "The price of the NFT is successfully updated.",
+	"offerCreateSuccess": "The offer is successfully created in the marketplace.",
+	"offerRemoveSuccess": "The offer is successfully removed from the marketplace.",
+	"allowTransactionFromMetaMask": "An error occurred during the transaction. Please try again",
+	"endDateLabel": "Your auction will automatically end at this time and the highest bidder will win & NFT will be transferred to the highest bidder.",
+	"emptyListMessage": "No NFTs found. Please come back later to view & collect amazing NFTs"
 }

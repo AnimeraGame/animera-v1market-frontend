@@ -77,5 +77,6 @@
   "offerCreateSuccess": "The offer is successfully created in the marketplace.",
   "offerRemoveSuccess": "The offer is successfully removed from the marketplace.",
   "allowTransactionFromMetaMask": "An error occurred during the transaction. Please try again",
-  "endDateLabel": "Your auction will automatically end at this time and the highest bidder will win & NFT will be transferred to the highest bidder."
+  "endDateLabel": "Your auction will automatically end at this time and the highest bidder will win & NFT will be transferred to the highest bidder.",
+	"emptyListMessage": "No NFTs found. Please come back later to view & collect amazing NFTs"
 }

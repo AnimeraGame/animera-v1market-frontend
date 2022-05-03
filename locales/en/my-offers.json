@@ -27,5 +27,6 @@
 	"fees": "Fees",
 	"toMarsVerse": "To Marsverse (0%)",
 	"toNFTCreator": "To NFT Creator (2%)",
-	"totalFees": "Total Fees (2%)"
+	"totalFees": "Total Fees (2%)",
+	"emptyListMessage": "No NFTs found. Please come back later to view & collect amazing NFTs"
 }
