@@ -28,7 +28,7 @@ export const createSale = async (library, price, kind, tokenId, walletAddress) =
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
   const dataValues = [
     walletAddress.toLowerCase(),
-    '0x0000000000000000000000000000000000000001',
+    tokenAddress,
     sellPrice,
     sellDeadline,
     nftAddress.toLowerCase(),
@@ -82,7 +82,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
   const dataValues = [
     cardInfo.seller.toLowerCase(),
-    '0x0000000000000000000000000000000000000001',
+    tokenAddress,
     sellPrice,
     sellDeadline,
     nftAddress.toLowerCase(),
@@ -117,11 +117,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
     const estimatedGas = await purchaseContract.methods
       .executeSell(
         [sellPrice, sellDeadline, cardInfo.nft.tokenId],
-        [
-          cardInfo.seller.toLowerCase(),
-          '0x0000000000000000000000000000000000000001',
-          nftAddress.toLowerCase(),
-        ],
+        [cardInfo.seller.toLowerCase(), tokenAddress, nftAddress.toLowerCase()],
         [cardInfo.seller_signature, buyerSig],
         id
       )
@@ -133,11 +129,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
     const tx = await purchaseContract.methods
       .executeSell(
         [sellPrice, sellDeadline, cardInfo.nft.tokenId],
-        [
-          cardInfo.seller.toLowerCase(),
-          '0x0000000000000000000000000000000000000001',
-          nftAddress.toLowerCase(),
-        ],
+        [cardInfo.seller.toLowerCase(), tokenAddress, nftAddress.toLowerCase()],
         [cardInfo.seller_signature, buyerSig],
         id
       )
@@ -159,7 +151,7 @@ export const createOffer = async (library, price, kind, tokenId, walletAddress) 
   const nftId = tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [walletAddress, '0x0000000000000000000000000000000000000001', sellPrice, sellDeadline, nftAddress, nftId]
+  const dataValues = [walletAddress, tokenAddress, sellPrice, sellDeadline, nftAddress, nftId]
 
   try {
     const digest = getApprovalDigest(
@@ -184,7 +176,7 @@ export const createOffer = async (library, price, kind, tokenId, walletAddress) 
 
     return {
       chainId,
-      tokenAddress: '0x0000000000000000000000000000000000000001',
+      tokenAddress: tokenAddress,
       sellPrice,
       sellDeadline,
       nftAddress,
@@ -206,16 +198,9 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
   const nftId = cardInfo.nft.tokenId
 
   const dataTypes = ['address', 'address', 'uint256', 'uint256', 'address', 'uint256']
-  const dataValues = [
-    cardInfo.buyer,
-    '0x0000000000000000000000000000000000000001',
-    offerPrice,
-    offerDeadline,
-    nftAddress,
-    nftId,
-  ]
+  const dataValues = [cardInfo.buyer, tokenAddress, offerPrice, offerDeadline, nftAddress, nftId]
 
-  console.log('data values', dataValues);
+  console.log('data values', dataValues)
 
   try {
     const nftContract = new web3.eth.Contract(nftABI, nftAddress)
@@ -240,36 +225,30 @@ export const buyOffer = async (library, cardInfo, walletAddress) => {
     const sellerSig = await web3.eth.sign(digest, walletAddress)
 
     const purchaseContract = new web3.eth.Contract(purchaseABI, purchaseAddress)
-    const id = web3.utils.padLeft('0x' + parseInt(cardInfo.id).toString(16), 32)
+    console.log('card info offer id ----', cardInfo.id)
+    const id = web3.utils.padLeft('0x' + parseInt(cardInfo.id).toString(16), 64)
+    console.log('card info offer id after parseInt ----', id)
 
     const estimatedGas = await purchaseContract.methods
-    .executeOffer(
-      [offerPrice, offerDeadline, offerDeadline, cardInfo.nft.tokenId],
-      [
-        cardInfo.buyer,
-        '0x0000000000000000000000000000000000000001',
-        nftAddress,
-      ],
-      [sellerSig, cardInfo.buyer_signature],
-      id
-    )
-    .estimateGas({
-      from: walletAddress
-    })
+      .executeOffer(
+        [offerPrice, offerDeadline, offerDeadline, cardInfo.nft.tokenId],
+        [cardInfo.buyer, tokenAddress, nftAddress],
+        [sellerSig, cardInfo.buyer_signature],
+        id
+      )
+      .estimateGas({
+        from: walletAddress,
+      })
 
     const tx = await purchaseContract.methods
       .executeOffer(
         [offerPrice, offerDeadline, offerDeadline, cardInfo.nft.tokenId],
-        [
-          cardInfo.buyer,
-          '0x0000000000000000000000000000000000000001',
-          nftAddress,
-        ],
+        [cardInfo.buyer, tokenAddress, nftAddress],
         [sellerSig, cardInfo.buyer_signature],
         id
       )
-      .send({ from: walletAddress, gasLimit: estimatedGas });
-    
+      .send({ from: walletAddress, gasLimit: estimatedGas })
+
     return tx
   } catch (e) {
     console.log('error', e)
