@@ -74,7 +74,7 @@ const SetPriceModal = ({
   )
 
   useEffect(() => {
-    const estates = get(tokenData, 'estates', []);
+    const estates = get(tokenData, 'estates', [])
     if (estates.length > 0) {
       const lastActiveSale = estates.find(e => e.status === 'active' && e.type === 'sale')
       if (lastActiveSale) {
@@ -96,7 +96,7 @@ const SetPriceModal = ({
       data: {
         status: 1,
         id: toNumber(saleInfo.id),
-      }
+      },
     }
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
@@ -200,12 +200,14 @@ const SetPriceModal = ({
           </H6>
           <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
-        { isAlreadyPosted &&
+        {isAlreadyPosted && (
           <div className="row">
-            <H6 fontWeight={FontWeights.bold} className="label">Current Price</H6>
+            <H6 fontWeight={FontWeights.bold} className="label">
+              Current Price
+            </H6>
             <Body1 fontWeight={FontWeights.semiBold}>{saleInfo.price} MARS</Body1>
           </div>
-        }
+        )}
         {activeTab === 0 ? (
           <>
             <div className="row">

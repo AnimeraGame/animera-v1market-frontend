@@ -70,7 +70,7 @@ const CollectionList = ({ t }) => {
   const [skipItems, setSkipItems] = useState(0)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
-  const [totalCount, setTotalCount] = useState(4)
+  const [totalCount, setTotalCount] = useState(0)
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false)
   const [contentModalType, setContentModalType] = useState(null)
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false)
@@ -215,7 +215,7 @@ const CollectionList = ({ t }) => {
                         iconDirection="horizontal"
                         menuItems={[
                           {
-                            title: (get(item, 'estates', []).length > 0) ? t('update') : t('sell'),
+                            title: get(item, 'estates', []).length > 0 ? t('update') : t('sell'),
                             onClick: () => {
                               setSelectedCard({ card: item, index: index })
                               setIsPriceModalOpen(true)

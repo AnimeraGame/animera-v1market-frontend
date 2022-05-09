@@ -60,7 +60,7 @@ const MyOffersWrapper = ({ t }) => {
   const isInitialReqCompleted = useRef(false)
   // state
   const [data, setData] = useState([])
-  const [totalCount, setTotalCount] = useState(4)
+  const [totalCount, setTotalCount] = useState(0)
   const [afterId, setAfterId] = useState('')
   const [endCursor, setEndCursor] = useState(0)
   const [, setRarityFilterCount] = useState({})

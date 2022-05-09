@@ -48,7 +48,7 @@ const MarketplaceWrapper = ({ t }) => {
   // state
   const [data, setData] = useState([])
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
-  const [totalCount, setTotalCount] = useState(4)
+  const [totalCount, setTotalCount] = useState(0)
   const [afterId, setAfterId] = useState('')
   const [endCursor, setEndCursor] = useState(0)
   const [rarityFilterCounts, setRarityFilterCount] = useState({})

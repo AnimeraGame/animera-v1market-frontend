@@ -63,7 +63,7 @@ const OffersWrapper = ({ t }) => {
   const isInitialReqCompleted = useRef(false)
   // state
   const [data, setData] = useState([])
-  const [totalCount, setTotalCount] = useState(4)
+  const [totalCount, setTotalCount] = useState(0)
   const [afterId, setAfterId] = useState('')
   const [endCursor, setEndCursor] = useState(0)
   const [, setRarityFilterCount] = useState({})
@@ -135,6 +135,7 @@ const OffersWrapper = ({ t }) => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
       const updatedCount = get(dataArray, 'findOffersBy._count', 0)
+      console.log('updatedCount ', updatedCount)
       const resData = get(dataArray, 'findOffersBy.estates', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
@@ -151,6 +152,9 @@ const OffersWrapper = ({ t }) => {
       handleScrollToTop()
     }
   }, [])
+
+  console.log('total count ', totalCount)
+
   return (
     <>
       <Container>
