@@ -141,7 +141,7 @@ const CardsList = ({
         status: 1,
         price: selectedCard.card.price,
         id: toNumber(selectedCard.card.id),
-      }
+      },
     }
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
@@ -211,7 +211,7 @@ const CardsList = ({
         {isError && !isLoading ? (
           <Placeholder message={t('fetchErrorMessage')} type="error" showShadow={false} />
         ) : null}
-        {!isLoading && totalCount === 0 && !isError ? (
+        {!isLoading && totalCount === 0 && !isError && !data.length ? (
           <Placeholder showShadow={false} message={t('emptyListMessage')} type="empty" />
         ) : null}
         {!isError ? (
