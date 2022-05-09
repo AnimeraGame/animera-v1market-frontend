@@ -171,7 +171,7 @@ const CardsList = ({
         {isError && !isLoading ? (
           <Placeholder message={t('fetchErrorMessage')} type="error" showShadow={false} />
         ) : null}
-        {!isLoading && totalCount === 0 && !isError ? (
+        {!isLoading && totalCount === 0 && !isError && !data.length ? (
           <Placeholder showShadow={false} message={t('emptyListMessage')} type="empty" />
         ) : null}
         {!isError ? (
