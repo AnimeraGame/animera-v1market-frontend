@@ -11,6 +11,8 @@ const endpoint =
     ? process.env.NEXT_PUBLIC_LOCAL_API
     : process.env.NEXT_PUBLIC_DEV_API
 
+console.log('API endpoint:', endpoint)
+
 const graphQLClient = new GraphQLClient(endpoint)
 
 export default graphQLClient
