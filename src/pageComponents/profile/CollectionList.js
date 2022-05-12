@@ -125,11 +125,22 @@ const CollectionList = ({ t }) => {
 
   const handleSubmitDataUpdate = temp => {
     const prevItem = data[selectedCard.index]
-    const updatedItem = {
-      ...prevItem,
-      activeDirectOffer: {
-        ...temp,
-      },
+
+    let updatedItem = {}
+    if (!temp) {
+      updatedItem = {
+        ...prevItem,
+        estates: [],
+      }
+    } else {
+      updatedItem = {
+        ...prevItem,
+        activeDirectOffer: [
+          {
+            ...temp,
+          },
+        ],
+      }
     }
 
     setData([

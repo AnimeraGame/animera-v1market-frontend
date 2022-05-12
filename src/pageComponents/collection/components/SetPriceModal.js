@@ -17,6 +17,7 @@ import {
 } from 'components/Inputs'
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
+import Web3 from 'web3'
 import { createOffer, createSale } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
 // import { useEagerConnect } from 'hooks/web3Hook'
@@ -60,6 +61,7 @@ const SetPriceModal = ({
   const activeTab = 0
   // const wallet = useSelector(state => getWallet(state))
   const { library, account } = useWeb3React()
+  const web3 = new Web3(library.provider)
   // const handleTabChange = value => {
   //   setActiveTab(value)
   // }
@@ -93,7 +95,6 @@ const SetPriceModal = ({
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
-    console.log(saleInfo.id)
     const payload = {
       data: {
         status: 1,
@@ -121,8 +122,6 @@ const SetPriceModal = ({
     try {
       const result = await createSale(library, price, 1, tokenId, account)
 
-      console.log('result after message sign', result)
-      console.log('price in result for message sign', result.sellPrice)
       const payload = {
         data: {
           seller: result.walletAddress,
@@ -211,7 +210,9 @@ const SetPriceModal = ({
             <H6 fontWeight={FontWeights.bold} className="label">
               Current Price
             </H6>
-            <Body1 fontWeight={FontWeights.semiBold}>{saleInfo.price} MARS</Body1>
+            <Body1 fontWeight={FontWeights.semiBold}>
+              {web3.utils.fromWei(saleInfo.price)} MARS
+            </Body1>
           </div>
         )}
         {activeTab === 0 ? (

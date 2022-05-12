@@ -21,10 +21,8 @@ export const createSale = async (library, price, kind, tokenId, walletAddress) =
   const web3 = new Web3(library.provider)
 
   const chainId = process.env.NODE_ENV === 'production' ? 137 : 80001
-  console.log({ price })
 
   const sellPrice = web3.utils.toWei(price)
-  console.log({ sellPrice })
 
   const sellDeadline = ~~(new Date().getTime() / 1000 + 1000000)
   const nftId = tokenId

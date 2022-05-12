@@ -20,6 +20,7 @@ import {
 } from 'components/Inputs'
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
+import Web3 from 'web3'
 import { createOffer } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
 // import { useEagerConnect } from 'hooks/web3Hook'
@@ -62,6 +63,7 @@ const SetPriceModal = ({
   const activeTab = 0
   // const wallet = useSelector(state => getWallet(state))
   const { library, account } = useWeb3React()
+  const web3 = new Web3(library.provider)
 
   const router = useRouter()
   const { wallet } = router.query
@@ -83,11 +85,15 @@ const SetPriceModal = ({
   //   CREATE_OFFER_BUNDLE_MUTATION
   // )
 
-
   useEffect(() => {
-    const estates = get(tokenData, 'estates', []);
+    const estates = get(tokenData, 'estates', [])
     if (estates.length > 0) {
-      const myActiveOffer = estates.find(e => e.buyer.toLowerCase() === account.toLowerCase() && e.status === 'active' && e.type === 'offer')
+      const myActiveOffer = estates.find(
+        e =>
+          e.buyer.toLowerCase() === account.toLowerCase() &&
+          e.status === 'active' &&
+          e.type === 'offer'
+      )
       if (myActiveOffer) {
         setOfferInfo(myActiveOffer)
         setIsAlreadyPosted(true)
@@ -133,6 +139,7 @@ const SetPriceModal = ({
           expire_at: new Date(result.sellDeadline * 1000),
           buyer_signature: result.sellerSig,
           status: 0,
+          type: 1,
         },
       }
 
@@ -204,14 +211,16 @@ const SetPriceModal = ({
           <Body1 fontWeight={FontWeights.semiBold}>{get(tokenData, 'tokenId', '')}</Body1>
         </div>
 
-        { isAlreadyPosted &&
+        {isAlreadyPosted && (
           <div className="row">
             <H6 fontWeight={FontWeights.bold} className="label">
               Last Offer Price
             </H6>
-            <Body1 fontWeight={FontWeights.semiBold}>{get(offerInfo, 'price', 0)} MARS</Body1>
+            <Body1 fontWeight={FontWeights.semiBold}>
+              {web3.utils.fromWei(get(offerInfo, 'price', 0))} MARS
+            </Body1>
           </div>
-        }
+        )}
         {activeTab === 0 ? (
           <>
             <div className="row">
