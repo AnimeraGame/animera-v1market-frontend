@@ -77,6 +77,7 @@ const SetPriceModal = ({
     const estates = get(tokenData, 'estates', [])
     if (estates.length > 0) {
       const lastActiveSale = estates.find(e => e.status === 'active' && e.type === 'sale')
+      console.log({ lastActiveSale })
       if (lastActiveSale) {
         setSaleInfo(lastActiveSale)
         setIsAlreadyPosted(true)
@@ -92,6 +93,7 @@ const SetPriceModal = ({
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
+    console.log(saleInfo.id)
     const payload = {
       data: {
         status: 1,
@@ -119,6 +121,8 @@ const SetPriceModal = ({
     try {
       const result = await createSale(library, price, 1, tokenId, account)
 
+      console.log('result after message sign', result)
+      console.log('price in result for message sign', result.sellPrice)
       const payload = {
         data: {
           seller: result.walletAddress,
@@ -128,6 +132,7 @@ const SetPriceModal = ({
           expire_at: new Date(result.sellDeadline * 1000),
           seller_signature: result.sellerSig,
           status: 0,
+          type: 0,
         },
       }
 
@@ -141,7 +146,6 @@ const SetPriceModal = ({
             onClose()
           },
           onError: (err, variables) => {
-            // eslint-disable-next-line no-console
             console.log({ err })
             setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
             setIsSubmitting(false)
@@ -185,6 +189,8 @@ const SetPriceModal = ({
     else setIsPriceValid(true)
     setPrice(e.target.value)
   }
+
+  console.log({ saleInfo })
 
   const getTabContent = () => (
     <>

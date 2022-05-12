@@ -17,6 +17,7 @@ export const CREATE_OFFER_NFT_MUTATION = gql`
       expireAt
       price
       status
+      type
     }
   }
 `

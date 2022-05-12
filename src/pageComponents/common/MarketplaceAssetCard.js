@@ -13,6 +13,7 @@ import { constants } from 'components/Theme/constants'
 import { imageCDNLoader } from 'lib/util/imageLoader'
 import Link from 'node_modules/next/link'
 import { extractFirstLastChars } from 'lib/util/stringUtil'
+import { useWeb3React } from '@web3-react/core'
 
 const ContentCard = styled.div`
   min-width: 200px;
@@ -191,6 +192,7 @@ const AssetCard = ({
   showLastPrice = false,
   from = null,
 }) => {
+  const { library, account } = useWeb3React()
   const vid = useRef(null)
 
   const handleOver = () => {
@@ -278,7 +280,10 @@ const AssetCard = ({
         {seller && !loading && (
           <div className="card_price_details">
             <Body1 className="card_price_label">Seller</Body1>
-            <Link href={`/profile/${seller}`} fontWeight={FontWeights.bold} className="card_price_value">
+            <Link
+              href={account === seller ? '/collections/my-items' : `/profile/${seller}`}
+              fontWeight={FontWeights.bold}
+              className="card_price_value">
               {extractFirstLastChars(seller, 4, 4)}
             </Link>
           </div>

@@ -212,7 +212,7 @@ const CardsList = ({
                       handleCardClick(item)
                     }}
                     menu={
-                      !isUserLoggedIn || account === get(item, 'buyer', '') ? null : (
+                      !isUserLoggedIn || account === get(item, 'seller', '') ? null : (
                         <ActionMenu
                           iconDirection="horizontal"
                           menuItems={[

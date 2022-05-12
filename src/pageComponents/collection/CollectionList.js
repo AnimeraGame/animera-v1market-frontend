@@ -119,11 +119,21 @@ const CollectionList = ({ t }) => {
 
   const handleSubmitDataUpdate = temp => {
     const prevItem = data[selectedCard.index]
-    const updatedItem = {
-      ...prevItem,
-      estates: {
-        ...temp,
-      },
+    let updatedItem = {}
+    if (!temp) {
+      updatedItem = {
+        ...prevItem,
+        estates: [],
+      }
+    } else {
+      updatedItem = {
+        ...prevItem,
+        estates: [
+          {
+            ...temp,
+          },
+        ],
+      }
     }
 
     setData([
@@ -131,6 +141,7 @@ const CollectionList = ({ t }) => {
       { ...updatedItem },
       ...data.slice(selectedCard.index + 1, data.length),
     ])
+
     setSelectedCard({})
   }
 

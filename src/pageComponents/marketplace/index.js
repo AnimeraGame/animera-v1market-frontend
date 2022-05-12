@@ -128,7 +128,7 @@ const MarketplaceWrapper = ({ t }) => {
 
   const handleFilters = newFilters => {
     setData([])
-    setTotalCount(4)
+    setTotalCount(0)
     setFilters({ ...newFilters })
     setAfterId('')
     setEndCursor(0)

@@ -17,6 +17,7 @@ const UPDATE_OFFER_MUTATION = gql`
       expireAt
       price
       status
+      type
     }
   }
 `
