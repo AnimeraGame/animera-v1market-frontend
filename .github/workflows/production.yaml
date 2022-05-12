@@ -31,6 +31,7 @@ jobs:
           IMAGE_TAG: prod-${{ github.run_number }}
         shell: bash
         run: |
+          echo $PROD_NODE_ENV | base64 -d > .env
           docker build -t $ECR_REGISTRY/$GITHUB_REPOSITORY_NAME_PART_SLUG:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$GITHUB_REPOSITORY_NAME_PART_SLUG:$IMAGE_TAG
           echo $ECR_REGISTRY/$GITHUB_REPOSITORY_NAME_PART_SLUG:$IMAGE_TAG > image-name.txt
