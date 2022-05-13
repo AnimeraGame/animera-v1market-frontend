@@ -79,7 +79,6 @@ const SetPriceModal = ({
     const estates = get(tokenData, 'estates', [])
     if (estates.length > 0) {
       const lastActiveSale = estates.find(e => e.status === 'active' && e.type === 'sale')
-      console.log({ lastActiveSale })
       if (lastActiveSale) {
         setSaleInfo(lastActiveSale)
         setIsAlreadyPosted(true)

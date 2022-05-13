@@ -135,7 +135,7 @@ const CollectionList = ({ t }) => {
     } else {
       updatedItem = {
         ...prevItem,
-        activeDirectOffer: [
+        estates: [
           {
             ...temp,
           },
