@@ -18,6 +18,7 @@ const UPDATE_OFFER_MUTATION = gql`
       price
       status
       type
+      buyer
     }
   }
 `

@@ -18,6 +18,7 @@ export const CREATE_OFFER_NFT_MUTATION = gql`
       price
       status
       type
+      buyer
     }
   }
 `

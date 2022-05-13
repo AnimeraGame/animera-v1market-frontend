@@ -87,6 +87,7 @@ const SetPriceModal = ({
 
   useEffect(() => {
     const estates = get(tokenData, 'estates', [])
+
     if (estates.length > 0) {
       const myActiveOffer = estates.find(
         e =>
@@ -104,10 +105,14 @@ const SetPriceModal = ({
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
+
     const payload = {
-      status: 1,
-      id: toNumber(offerInfo.id),
+      data: {
+        status: 1,
+        id: toNumber(offerInfo.id),
+      },
     }
+
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
         setPriceSuccessMessage(t('offerRemoveSuccess'))
@@ -144,15 +149,16 @@ const SetPriceModal = ({
       }
 
       if (offerInfo && offerInfo.id) {
-        payload.data.id = offerId
+        payload.data.id = parseInt(offerInfo.id)
+
         updateOfferNftMutation.mutate(payload, {
           onSuccess: data => {
             setPriceSuccessMessage(t('priceUpdateSuccess'))
+            onSubmit(get(data, 'updateEstate', null))
             setIsSubmitting(false)
             onClose()
           },
           onError: (err, variables) => {
-            // eslint-disable-next-line no-console
             console.log({ err })
             setPriceErrorMessage(t('somethingWentWrongPriceUpdate'))
             setIsSubmitting(false)
@@ -160,14 +166,15 @@ const SetPriceModal = ({
         })
       } else {
         payload.data.type = 1
+
         createOfferNftMutation.mutate(payload, {
           onSuccess: data => {
             setPriceSuccessMessage(t('offerCreateSuccess'))
+            onSubmit(get(data, 'createEstate', null))
             setIsSubmitting(false)
             onClose()
           },
           onError: (err, variables) => {
-            // eslint-disable-next-line no-console
             console.log({ err })
             setPriceErrorMessage(t('somethingWentWrongOfferCreation'))
             setIsSubmitting(false)
