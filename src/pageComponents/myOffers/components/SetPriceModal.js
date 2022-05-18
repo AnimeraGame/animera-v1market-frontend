@@ -51,12 +51,11 @@ const SetPriceModal = ({
   const [minimumBid, setMinimumBid] = useState('')
   const activeTab = 0
   const { library, account } = useWeb3React()
-  
+
   const { mutationRes: updateOfferNftMutation } = usePostRequest(
     'UPDATE_OFFER_NFT_MUTATION',
     UPDATE_OFFER_NFT_MUTATION
   )
-
 
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
@@ -103,7 +102,7 @@ const SetPriceModal = ({
         onSuccess: data => {
           setPriceSuccessMessage(t('priceUpdateSuccess'))
           setIsSubmitting(false)
-          console.log(data.updateEstate);
+          console.log(data.updateEstate)
           onSubmit(data.updateEstate)
           onClose()
         },
@@ -155,18 +154,16 @@ const SetPriceModal = ({
           <H6 fontWeight={FontWeights.bold} className="label">
             Last Offer Price
           </H6>
-          <Body1 fontWeight={FontWeights.semiBold}>{web3.utils.fromWei(get(tokenData, 'price', 0))} MARS</Body1>
+          <Body1 fontWeight={FontWeights.semiBold}>
+            {web3.utils.fromWei(get(tokenData, 'price', 0))} MARS
+          </Body1>
         </div>
         {activeTab === 0 ? (
           <>
             <div className="row">
               <div className="label">
-                <H6 fontWeight={FontWeights.bold}>
-                  {t('updatePrice')}
-                </H6>
-                <Body2 fontWeight={FontWeights.regular}>
-                  {t('updatePriceLabel')}
-                </Body2>
+                <H6 fontWeight={FontWeights.bold}>{t('updatePrice')}</H6>
+                <Body2 fontWeight={FontWeights.regular}>{t('updatePriceLabel')}</Body2>
                 <Body2 fontWeight={FontWeights.regular}>{t('biddersLabel')}</Body2>
               </div>
               <InputFieldWithSuffix
@@ -251,8 +248,9 @@ const SetPriceModal = ({
               </span>
               &nbsp; {t('pleaseWait')}
             </>
-          ) : t('updatePrice')
-          }
+          ) : (
+            t('updatePrice')
+          )}
         </ContainedPrimaryButton>
       </div>
     </>

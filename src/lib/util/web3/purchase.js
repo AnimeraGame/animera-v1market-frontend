@@ -125,7 +125,6 @@ export const buySale = async (library, cardInfo, walletAddress) => {
       )
       .estimateGas({
         from: walletAddress,
-        value: sellPrice,
       })
 
     const tx = await purchaseContract.methods
@@ -135,7 +134,7 @@ export const buySale = async (library, cardInfo, walletAddress) => {
         [cardInfo.seller_signature, buyerSig],
         id
       )
-      .send({ from: walletAddress, gasLimit: estimatedGas, value: sellPrice })
+      .send({ from: walletAddress, gasLimit: estimatedGas })
 
     return tx
   } catch (e) {

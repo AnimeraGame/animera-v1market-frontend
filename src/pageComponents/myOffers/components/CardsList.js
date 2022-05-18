@@ -139,10 +139,10 @@ const CardsList = ({
     const payload = {
       data: {
         status: 1,
-        price: selectedCard.card.price,
         id: toNumber(selectedCard.card.id),
       },
     }
+
     updateOfferNftMutation.mutate(payload, {
       onSuccess: data => {
         setData([
