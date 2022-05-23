@@ -34,5 +34,6 @@
 	"somethingWentWrongPrice": "Something went wrong, we could not save the price. Please try again.",
 	"somethingWentWrongPriceUpdate": "Something went wrong, we could not update the price. Please try again.",
 	"somethingWentWrongOfferRemoval": "Something went wrong, we could not remove the offer. Please try again.",
-	"somethingWentWrongOfferCreation": "Something went wrong, we could not create the offer. Please try again."
+	"somethingWentWrongOfferCreation": "Something went wrong, we could not create the offer. Please try again.",
+	"fetchErrorMessage": "Something went wrong. Please try again later to view & collect amazing Nfts"
 }
