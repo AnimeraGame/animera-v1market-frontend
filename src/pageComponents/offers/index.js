@@ -135,7 +135,6 @@ const OffersWrapper = ({ t }) => {
     if (!isUndefined(dataArray)) {
       if (!isInitialReqCompleted.current) isInitialReqCompleted.current = true
       const updatedCount = get(dataArray, 'findOffersBy._count', 0)
-      console.log('updatedCount ', updatedCount)
       const resData = get(dataArray, 'findOffersBy.estates', [])
       const updatedData = data.length > updatedCount ? resData : [...data, ...resData]
       setData(uniqWith(updatedData, isEqual))
@@ -152,8 +151,6 @@ const OffersWrapper = ({ t }) => {
       handleScrollToTop()
     }
   }, [])
-
-  console.log('total count ', totalCount)
 
   return (
     <>
