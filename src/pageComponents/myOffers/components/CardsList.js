@@ -144,7 +144,7 @@ const CardsList = ({
     }
 
     updateOfferNftMutation.mutate(payload, {
-      onSuccess: data => {
+      onSuccess: result => {
         setData([
           ...data.slice(0, selectedCard.index),
           ...data.slice(selectedCard.index + 1, data.length),
