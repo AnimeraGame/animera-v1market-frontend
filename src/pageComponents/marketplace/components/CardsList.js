@@ -18,8 +18,6 @@ import Placeholder from 'components/Placeholder'
 import BuyNowModal from './BuyNowModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
-// import usePostRequest from 'hooks/UsePostRequest'
-// import { ACCEPT_OFFER_MUTATION } from 'state/marketplace/queries/acceptOffer'
 import { buyOffer, buySale } from 'lib/util/web3/purchase'
 import { getBalance } from 'state/settings/selectors'
 import { getAuthState } from 'state/auth/selectors'
@@ -96,8 +94,14 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    await buySale(library, item, account)
-    setIsSubmitting(false)
+    const result = await buySale(library, item, account)
+    console.log({ result })
+    if (result) {
+      setIsSubmitting(false)
+      setIsBuyModalOpen(false)
+      setSelectedCard({})
+      setPriceSuccessMessage(t('priceSuccess'))
+    }
   }
 
   const removeCardKeysFromUrl = () => {
