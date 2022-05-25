@@ -94,14 +94,11 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    const result = await buySale(library, item, account)
-    console.log({ result })
-    if (result) {
-      setIsSubmitting(false)
-      setIsBuyModalOpen(false)
-      setSelectedCard({})
-      setPriceSuccessMessage(t('priceSuccess'))
-    }
+    await buySale(library, item, account)
+    // setIsSubmitting(false)
+    //   setIsBuyModalOpen(false)
+    //   setSelectedCard({})
+    //   setPriceSuccessMessage(t('priceSuccess'))
   }
 
   const removeCardKeysFromUrl = () => {
