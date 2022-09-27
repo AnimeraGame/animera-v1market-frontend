@@ -1,7 +1,5 @@
 import { GraphQLClient } from 'graphql-request'
 
-const environment = process.env.NEXT_PUBLIC_ENV || process.env.NEXT_PUBLIC_LOCAL || 'local'
-
 const endpoint = 'http://api-marketplace.neocosmos.io/graphql'
 
 // const endpoint =

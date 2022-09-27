@@ -23,7 +23,7 @@ import { getBalance } from 'state/settings/selectors'
 import { getAuthState } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
 import useQueryRequest from 'hooks/UseQueryRequest'
-import FETCH_DIRECT_OFFERS from 'state/marketplace/queries/fetchDirectOffers'
+import { FETCH_DIRECT_OFFERS } from 'state/marketplace/queries/fetchDirectOffers'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
 

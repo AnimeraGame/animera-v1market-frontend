@@ -1,5 +1,4 @@
 import Web3 from 'web3'
-import * as ethers from 'ethers'
 import {
   nftABI,
   nftAddress,
@@ -7,13 +6,8 @@ import {
   purchaseAddress,
   tokenABI,
   tokenAddress,
-  testnetPurchaseAddress,
 } from './contractConstants'
 import { getApprovalDigest } from './signature'
-import { zeroAddress } from 'node_modules/ethereumjs-util/dist/account'
-const {
-  utils: { toUtf8Bytes },
-} = ethers
 
 const NFT_GALLERY_NAME = 'MarsversMarket'
 
