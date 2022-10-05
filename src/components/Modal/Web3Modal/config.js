@@ -3,8 +3,8 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 const POLLING_INTERVAL = 12000
 
-const polygonUrl = `https://polygon-rpc.com/`
-const mumbaiUrl = `https://rpc-mumbai.matic.today`
+const polygonUrl = `https://rpc.ankr.com/polygon`
+const mumbaiUrl = `https://rpc.ankr.com/polygon_mumbai`
 
 const environment = process.env.NEXT_PUBLIC_ENV || 'dev'
 
