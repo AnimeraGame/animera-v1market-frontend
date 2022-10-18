@@ -7,5 +7,5 @@ export const getLibrary = (provider, connector) => {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [56, 97],
+  supportedChainIds: [5, 1],
 })

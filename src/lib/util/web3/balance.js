@@ -10,9 +10,10 @@ export const getMaticBalance = async (library, walletAddress) => {
 
 export const getMarsBalance = async (library, walletAddress) => {
   const web3 = new Web3(library.provider)
-  const marsContract = new web3.eth.Contract(tokenABI, tokenAddress)
+  // const marsContract = new web3.eth.Contract(tokenABI, tokenAddress)
 
-  const balance = await marsContract.methods.balanceOf(walletAddress).call()
+  // const balance = await marsContract.methods.balanceOf(walletAddress).call()
 
-  return web3.utils.fromWei(balance, 'ether')
+  // return web3.utils.fromWei(balance, 'ether')
+  return web3.utils.fromWei('10', 'ether')
 }
