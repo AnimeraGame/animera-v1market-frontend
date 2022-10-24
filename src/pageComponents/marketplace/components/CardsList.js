@@ -18,7 +18,7 @@ import Placeholder from 'components/Placeholder'
 import BuyNowModal from './BuyNowModal'
 import { ActionMenu } from 'components/Menus'
 import PreviewModal from 'pageComponents/common/CardModal'
-import { buyOffer, buySale } from 'lib/util/web3/purchase'
+import { buyOffer, buySale, executeOffer, executeOrder } from 'lib/util/web3/purchase'
 import { getBalance } from 'state/settings/selectors'
 import { getAuthState } from 'state/auth/selectors'
 import Feedback from 'components/FeedbackCards/Feedback'
@@ -94,7 +94,7 @@ const CardsList = ({
 
   const handleBuy = async item => {
     setIsSubmitting(true)
-    const result = await buySale(library, item, account)
+    const result = await executeOrder(library, item, account)
     console.log({ result })
     setIsSubmitting(false)
     setIsBuyModalOpen(false)

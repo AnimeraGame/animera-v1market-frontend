@@ -18,7 +18,7 @@ import {
 import { isNumeric } from 'lib/util/numberUtil'
 import { useWeb3React } from '@web3-react/core'
 import Web3 from 'web3'
-import { createOffer, createSale } from 'lib/util/web3/purchase'
+import { cancelOrder, createOrder, updateOrder } from 'lib/util/web3/purchase'
 import usePostRequest from 'hooks/UsePostRequest'
 // import { useEagerConnect } from 'hooks/web3Hook'
 import {
@@ -94,41 +94,54 @@ const SetPriceModal = ({
   const handleOfferRemove = async () => {
     setIsDeleteOpen(false)
     setIsDeleting(true)
-    const payload = {
-      data: {
-        status: 1,
-        id: toNumber(saleInfo.id),
-      },
+    try {
+      const tokenId = parseInt(tokenData.tokenId)
+      await cancelOrder(library, account, tokenId)
+      const payload = {
+        data: {
+          status: 1,
+          id: toNumber(saleInfo.id),
+        },
+      }
+      updateOfferNftMutation.mutate(payload, {
+        onSuccess: data => {
+          setPriceSuccessMessage(t('offerRemoveSuccess'))
+          onSubmit(null)
+          setIsDeleting(false)
+        },
+        onError: (err, variables) => {
+          // eslint-disable-next-line no-console
+          console.log({ err })
+          setIsDeleting(false)
+          setPriceErrorMessage(t('somethingWentWrongOfferRemoval'))
+        },
+      })
+    } catch (error) {
+      console.log({ error })
+      setIsDeleting(false)
+      setPriceErrorMessage(t('somethingWentWrongOfferRemoval'))
     }
-    updateOfferNftMutation.mutate(payload, {
-      onSuccess: data => {
-        setPriceSuccessMessage(t('offerRemoveSuccess'))
-        onSubmit(null)
-        setIsDeleting(false)
-      },
-      onError: (err, variables) => {
-        // eslint-disable-next-line no-console
-        console.log({ err })
-        setIsDeleting(false)
-        setPriceErrorMessage(t('somethingWentWrongOfferRemoval'))
-      },
-    })
   }
   const handleSubmit = async () => {
     setIsSubmitting(true)
     // TO-DO need to add wallet address on submitting
     const tokenId = parseInt(tokenData.tokenId)
     try {
-      const result = await createSale(library, price, 1, tokenId, account)
+      let result;
+      if (saleInfo && saleInfo.id) {
+        setPriceErrorMessage('Update order feature is not supported yet');
+        return;
+      } else {
+        result = await createOrder(library, price, 1, tokenId, account)
+      }
 
       const payload = {
         data: {
-          seller: result.walletAddress,
+          seller: account,
           token_address: result.tokenAddress,
           price: result.sellPrice,
           nft_id: parseInt(tokenData.id),
           expire_at: new Date(result.sellDeadline * 1000),
-          seller_signature: result.sellerSig,
           status: 0,
           type: 0,
         },
@@ -167,6 +180,7 @@ const SetPriceModal = ({
         })
       }
     } catch (error) {
+      console.log('there is error', error);
       setIsSubmitting(false)
     }
   }
@@ -188,7 +202,13 @@ const SetPriceModal = ({
     setPrice(e.target.value)
   }
 
-  console.log({ saleInfo })
+  console.log(
+    !price.length ||
+    isSubmitting ||
+    !isPriceValid ||
+    toNumber(get(tokenData, 'activeDirectOffer.price', -1)) === toNumber(price) ||
+    !account ||
+    isDeleting);
 
   const getTabContent = () => (
     <>

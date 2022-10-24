@@ -16,15 +16,6 @@ const NavMenu = ({ t, headerLink = false, handleDrawerClose }) => {
     <>
       <MenuItems horizontal={headerLink}>
         <CustomLink
-          active={isLinkActive('/collections', true)}
-          horizontal={headerLink}
-          data-tc="collections">
-          {isLinkActive('/collections', true) ? <div className="bottom-bar"></div> : null}
-          <Link href="/collections/my-items">
-            <SLink onClick={handleDrawerClose}>{t('collection')}</SLink>
-          </Link>
-        </CustomLink>
-        <CustomLink
           active={isLinkActive('/create', true)}
           horizontal={headerLink}
           data-tc="create">
@@ -33,19 +24,13 @@ const NavMenu = ({ t, headerLink = false, handleDrawerClose }) => {
             <SLink onClick={handleDrawerClose}>{t('create')}</SLink>
           </Link>
         </CustomLink>
-        <CustomLink active={isLinkActive('/offers', true)} horizontal={headerLink} data-tc="offers">
-          {isLinkActive('/offers', true) ? <div className="bottom-bar"></div> : null}
-          <Link href="/offers">
-            <SLink onClick={handleDrawerClose}>{t('offers')}</SLink>
-          </Link>
-        </CustomLink>
         <CustomLink
-          active={isLinkActive('/my-offers', true)}
+          active={isLinkActive('/collections', true)}
           horizontal={headerLink}
-          data-tc="my-offers">
-          {isLinkActive('/my-offers', true) ? <div className="bottom-bar"></div> : null}
-          <Link href="/my-offers">
-            <SLink onClick={handleDrawerClose}>{t('myOffers')}</SLink>
+          data-tc="collections">
+          {isLinkActive('/collections', true) ? <div className="bottom-bar"></div> : null}
+          <Link href="/collections/my-items">
+            <SLink onClick={handleDrawerClose}>{t('collection')}</SLink>
           </Link>
         </CustomLink>
         <CustomLink

@@ -3,14 +3,14 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 const POLLING_INTERVAL = 12000
 
-const polygonUrl = `https://rpc.ankr.com/eth`
-const mumbaiUrl = `https://rpc.ankr.com/eth_goerli`
+const polygonUrl = `https://rpc.ankr.com/polygon/0xd387098b3ca4c6d592be0ce0b69e83be86011c50`
+const mumbaiUrl = `https://rpc.ankr.com/polygon_mumbai/0xd387098b3ca4c6d592be0ce0b69e83be86011c50`
 
 const environment = process.env.NEXT_PUBLIC_ENV || 'dev'
 
-export const supportedNetworkIds = environment === 'production' ? [1] : [5]
+export const supportedNetworkIds = environment === 'production' ? [137] : [80001]
 
-export const rpcUrl = environment === 'production' ? { 1: polygonUrl } : { 5: mumbaiUrl }
+export const rpcUrl = environment === 'production' ? { 137: polygonUrl } : { 80001: mumbaiUrl }
 
 export const injected = new InjectedConnector({ supportedChainIds: supportedNetworkIds })
 
