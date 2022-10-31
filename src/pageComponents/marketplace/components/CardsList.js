@@ -26,6 +26,7 @@ import useQueryRequest from 'hooks/UseQueryRequest'
 import usePostRequest from 'hooks/UsePostRequest'
 import { FETCH_DIRECT_OFFERS } from 'state/marketplace/queries/fetchDirectOffers'
 import UPDATE_ESTATE_MUTATION from 'state/marketplace/queries/updateEstate'
+import GET_HISTORIES_MUTATION from 'state/history/queries/getHistories'
 import ProgressLoading from 'components/Loading'
 import { OffersCardsList, OffersCardsLoader } from './cardsListStyles'
 
@@ -54,6 +55,7 @@ const CardsList = ({
 	const [priceSuccessMessage, setPriceSuccessMessage] = useState('')
 	const [priceErrorMessage, setPriceErrorMessage] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [isHistories, setIsHistories] = useState()
 
 	const { account, library } = useWeb3React()
 
@@ -76,12 +78,25 @@ const CardsList = ({
 		}
 	)
 
+	const { refetch: fetchHistories } = useQueryRequest(
+		['GET_HISTORIES_MUTATION'],
+		{
+			tokenId: parseInt(cardIdInUrl),
+		},
+		GET_HISTORIES_MUTATION,
+		{
+			enabled: false,
+			retry: 1,
+			refetchOnWindowFocus: false,
+		}
+	)
+
 	const { mutationRes: updateEstateNftMutation } = usePostRequest(
 		'UPDATE_ESTATE_MUTATION',
 		UPDATE_ESTATE_MUTATION
 	)
 
-	const handleCardClick = item => {
+	const handleCardClick = (item) => {
 		const mediaList = [
 			{
 				type: 'image',
@@ -105,7 +120,10 @@ const CardsList = ({
 			const payload = {
 				data: {
 					id: parseInt(item.id),
+					nft_id: parseInt(item.nft.tokenId),
 					seller: item.seller,
+					buyer: account,
+					price: item.price,
 					status: 1,
 					type: 0,
 				},
@@ -172,6 +190,14 @@ const CardsList = ({
 		} else removeCardKeysFromUrl()
 	}
 
+	const fetchCardHistories = async () => {
+		const historiesData = await fetchHistories()
+		const histories = get(historiesData, 'data.getHistories.histories', {})
+		if (histories && histories.length > 0) {
+			setIsHistories(histories)
+		}
+	}
+
 	useEffect(() => {
 		if (!isPreviewOpen && !isBuyModalOpen && cardIdInUrl && modalType && data.length) {
 			let index = null
@@ -183,6 +209,12 @@ const CardsList = ({
 			fetchCardDetails(index, card)
 		}
 	}, [cardIdInUrl, data, modalType, isSubmitting])
+
+	useEffect(() => {
+		if (cardIdInUrl) {
+			fetchCardHistories()
+		}
+	}, [cardIdInUrl, modalType])
 
 	return (
 		<>
@@ -289,6 +321,7 @@ const CardsList = ({
 						removeCardKeysFromUrl()
 					}}
 					isOpen={isPreviewOpen}
+					histories={isHistories}
 					showHistory
 				/>
 			) : null}

@@ -76,79 +76,102 @@ const Row = styled.div`
   }
 `
 
+const CardTraitType = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+	justify-content: space-between;
+	width: 50%;
+	box-sizing: border-box;
+`
+
+const CardTraitTypeBox = styled.div`
+  display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 2%;
+	background-color: white;
+	border-radius: 12px;
+	margin-top: 8px;
+	color: black;
+	margin-right: 8px;
+`
+
 const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
-  // const router = useRouter()
+	// const router = useRouter()
 
-  const transactionRecord = get(nftData, 'info.transactions[0]', {})
-  const metadata = get(nftData, 'info.nft.nftMetadata.metadata', {})
-  const contractAddress = get(transactionRecord, 'contractAddress', nftAddress)
-  const chain = toUpper(get(transactionRecord, 'chain', 'testnet'))
+	const transactionRecord = get(nftData, 'info.transactions[0]', {})
+	const metadata = get(nftData, 'info.nft.nftMetadata.metadata', {})
+	const contractAddress = get(transactionRecord, 'contractAddress', nftAddress)
+	const chain = toUpper(get(transactionRecord, 'chain', 'testnet'))
+	const nftAttris = get(nftData, 'info.nft.nftMetadata.metadata.attributes', [])
 
-  return (
-    <Container>
-      {isEmpty(nftData) ? (
-        <Wrapper>
-          <H4>{t('noNFTDetailsFound')}</H4>
-        </Wrapper>
-      ) : (
-        <Wrapper>
-          {/* <button onClick={getHistory}>Get History</button> */}
-          <Heading>
-            <H4>{t('nftDetails')}</H4>
-          </Heading>
-          <Row>
-            <Body1>{t('tokenId')}</Body1>
-            <Body1>
-              <span>{get(nftData, 'info.nft.tokenId', '')}</span>
-            </Body1>
-          </Row>
-          <Row>
-            <Body1>{t('contract')}</Body1>
-            <Body1 component="div" className="link-wrapper">
-              {nftError ? (
-                t('contractNotFound')
-              ) : nftDataLoading ? (
-                <CircularProgress size={16} />
-              ) : (
-                <>
-                  {contractAddress.length ? (
-                    <>
-                      <span>{extractFirstLastChars(contractAddress, 4, 4)}</span>
-                      <span className="link">
-                        (
-                        <Link
-                          href={
-                            includes(toLower(chain), 'testnet')
-                              ? `https://mumbai.polygonscan.com/address/${contractAddress}`
-                              : `https://polygonscan.com/address/${contractAddress}`
-                          }
-                          target="_blank"
-                          rel="noopener">
-                          {t('view')}
-                        </Link>
-                        <span>{t('onTestNet')}</span>
-                      </span>
-                    </>
-                  ) : (
-                    'n/a'
-                  )}
-                </>
-              )}
-            </Body1>
-          </Row>
-          <Row>
-            <Body1>{t('ownerAddress')}</Body1>
-            <Body1 component="div" className="link-wrapper">
-              {nftError ? (
-                t('noOwnerAddressFound')
-              ) : nftDataLoading ? (
-                <CircularProgress size={16} />
-              ) : (
-                get(nftData, 'info.seller', 'n/a')
-              )}
-            </Body1>
-          </Row>
-          {/* <Row>
+	return (
+		<Container>
+			{isEmpty(nftData) ? (
+				<Wrapper>
+					<H4>{t('noNFTDetailsFound')}</H4>
+				</Wrapper>
+			) : (
+				<Wrapper>
+					{/* <button onClick={getHistory}>Get History</button> */}
+					<Heading>
+						<H4>{t('nftDetails')}</H4>
+					</Heading>
+					<Row>
+						<Body1>{t('tokenId')}</Body1>
+						<Body1>
+							<span>{get(nftData, 'info.nft.tokenId', '')}</span>
+						</Body1>
+					</Row>
+					<Row>
+						<Body1>{t('contract')}</Body1>
+						<Body1 component="div" className="link-wrapper">
+							{nftError ? (
+								t('contractNotFound')
+							) : nftDataLoading ? (
+								<CircularProgress size={16} />
+							) : (
+								<>
+									{contractAddress.length ? (
+										<>
+											<span>{extractFirstLastChars(contractAddress, 4, 4)}</span>
+											<span className="link">
+												(
+												<Link
+													href={
+														includes(toLower(chain), 'testnet')
+															? `https://mumbai.polygonscan.com/address/${contractAddress}`
+															: `https://polygonscan.com/address/${contractAddress}`
+													}
+													target="_blank"
+													rel="noopener">
+													{t('view')}
+												</Link>
+												<span>{t('onTestNet')}</span>
+											</span>
+										</>
+									) : (
+										'n/a'
+									)}
+								</>
+							)}
+						</Body1>
+					</Row>
+					<Row>
+						<Body1>{t('ownerAddress')}</Body1>
+						<Body1 component="div" className="link-wrapper">
+							{nftError ? (
+								t('noOwnerAddressFound')
+							) : nftDataLoading ? (
+								<CircularProgress size={16} />
+							) : (
+								get(nftData, 'info.seller', 'n/a')
+							)}
+						</Body1>
+					</Row>
+					{/* <Row>
             <Body1>{t('transaction')}</Body1>
             <Body1 component="div" className="link-wrapper">
               {nftError ? (
@@ -186,27 +209,36 @@ const CardDetails = ({ nftData, nftDataLoading, nftError, t }) => {
               )}
             </Body1>
           </Row> */}
-          <Row>
-            <Body1>{t('blockchain')}</Body1>
-            <Body1>{`Polygon (${
-              includes(toLower(chain), 'testnet') ? 'Mumbai Testnet)' : 'Polygon)'
-            }`}</Body1>
-          </Row>
-          <Row>
-            <Body1>{t('description')}</Body1>
-            <Body1>{get(metadata, 'description', '')}</Body1>
-          </Row>
-        </Wrapper>
-      )}
-    </Container>
-  )
+					<Row>
+						<Body1>{t('blockchain')}</Body1>
+						<Body1>{`Polygon (${includes(toLower(chain), 'testnet') ? 'Mumbai Testnet)' : 'Polygon)'
+							}`}</Body1>
+					</Row>
+					<Row>
+						<Body1>{t('description')}</Body1>
+						<Body1>{get(metadata, 'description', '')}</Body1>
+					</Row>
+					<Row>
+						<Body1>Trait Type</Body1>
+						<CardTraitType>
+							{nftAttris.length > 0 && nftAttris.map((item, index) => (
+								<CardTraitTypeBox key={index}><span>{item.trait_type}</span><span>{item.value}</span></CardTraitTypeBox>
+
+							))}
+						</CardTraitType>
+					</Row>
+
+				</Wrapper>
+			)}
+		</Container>
+	)
 }
 
 CardDetails.propTypes = {
-  nftData: PropTypes.object,
-  t: PropTypes.func,
-  nftDataLoading: PropTypes.bool,
-  nftError: PropTypes.bool,
+	nftData: PropTypes.object,
+	t: PropTypes.func,
+	nftDataLoading: PropTypes.bool,
+	nftError: PropTypes.bool,
 }
 
 export default CardDetails

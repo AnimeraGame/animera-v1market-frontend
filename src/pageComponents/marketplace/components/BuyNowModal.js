@@ -108,160 +108,160 @@ const ModalContainer = styled.div`
 `
 
 const getRow = (label = '', value = '') => (
-  <div className="row">
-    <Body1 fontWeight={FontWeights.bold} className="label">
-      {label}
-    </Body1>
-    <Body1 className="value" fontWeight={FontWeights.regular}>
-      {value}
-    </Body1>
-  </div>
+	<div className="row">
+		<Body1 fontWeight={FontWeights.bold} className="label">
+			{label}
+		</Body1>
+		<Body1 className="value" fontWeight={FontWeights.regular}>
+			{value}
+		</Body1>
+	</div>
 )
 
 const BuyNowModal = ({
-  t,
-  isOpen,
-  onClose,
-  onSubmit,
-  cardInfo,
-  cardType = 'SIMPLE',
-  balance = {},
-  isSubmitting,
-  account,
+	t,
+	isOpen,
+	onClose,
+	onSubmit,
+	cardInfo,
+	cardType = 'SIMPLE',
+	balance = {},
+	isSubmitting,
+	account,
 }) => {
-  // hooks
-  const classes = modalStyles()
-  const [updateSuccess, setUpdateSuccess] = useState(false)
-  const [updateError, setUpdateError] = useState(false)
-  const [minimumBid, setMinimumBid] = useState('')
-  const price = get(cardInfo, 'price', 0)
-  const canBuyNft = toNumber(balance.mars) >= toNumber(Web3.utils.fromWei(price))
-  return (
-    <>
-      {updateSuccess ? (
-        <Feedback
-          type="success"
-          message={t('purchaseSuccess')}
-          onClose={() => setUpdateSuccess(false)}
-          open={updateSuccess}
-        />
-      ) : null}
-      {updateError ? (
-        <Feedback
-          type="error"
-          message={t('purchaseError')}
-          onClose={() => setUpdateError(false)}
-          open={updateError}
-        />
-      ) : null}
-      <ModalHoc
-        disableBackdropClick
-        disableEscapeKeyDown
-        classes={classes}
-        openModal={isOpen}
-        onClose={onClose}
-        disableCloseIcon={isSubmitting}
-        title={cardType === 'SIMPLE' ? t('buyNFT') : t('bid')}>
-        <ModalContainer>
-          {cardType === 'SIMPLE' ? (
-            <>
-              {!account ? (
-                <div className="row connect-error">
-                  <Body1 fontWeight={FontWeights.medium}>{t('connectWalletWarningSetPrice')}</Body1>
-                </div>
-              ) : null}
-              {getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
-              <div className="row">
-                <Body1 fontWeight={FontWeights.bold} className="label">
-                  {t('price')}:
-                </Body1>
-                <Body1 fontWeight={FontWeights.semiBold}>{`${Web3.utils.fromWei(price)} MARS`}</Body1>
-              </div>
-              {!canBuyNft ? (
-                <div>
-                  <Body1 fontWeight={FontWeights.regular} component="div" className="label">
-                    <span className="warning-text">{t('marsWarning')}</span>
-                    <Link
-                      href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
-                      target="_blank"
-                      rel="noopener">
-                      {t('marsLink')}
-                    </Link>
-                  </Body1>
-                </div>
-              ) : null}
-            </>
-          ) : (
-            <>
-              {getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
-              {getRow(t('startingPrice'), '100 MARS')}
-              {getRow(t('highestBid'), '150 MARS')}
-              {getRow(t('highestBidder'), '0x403033fcfbb2ba1c384b1e9cc7008e9402616a95')}
-              {getRow(t('myCurrentBid'), '175 MARS')}
-              <div className="row">
-                <div>
-                  <Body1 fontWeight={FontWeights.bold} className="label">
-                    {t('price')}:
-                  </Body1>
-                  <Body1 fontWeight={FontWeights.regular} component="div" className="label">
-                    {t('marsWarning')}
-                    <Link
-                      href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
-                      target="_blank"
-                      rel="noopener">
-                      {t('marsLink')}
-                    </Link>
-                  </Body1>
-                </div>
-                <InputFieldWithSuffix
-                  className="input-box"
-                  value={minimumBid}
-                  onChange={e => setMinimumBid(e.target.value)}
-                  t={t}
-                />
-              </div>
-            </>
-          )}
-          <div className="footer-note">
-            <Body1 fontWeight={FontWeights.regular}>{t('pleaseKeepScreenOpen')}</Body1>
-          </div>
-          <div className="footer">
-            <OutlinedSecondaryButton disabled={isSubmitting} onClick={onClose}>
-              {t('cancel')}
-            </OutlinedSecondaryButton>
-            <ContainedPrimaryButton
-              disabled={(!canBuyNft || !account || isSubmitting) || (cardInfo.seller.toLowerCase() === account.toLowerCase())}
-              onClick={() => onSubmit(cardInfo)}>
-              {isSubmitting ? (
-                <>
-                  <span>
-                    <ProgressLoading size={16} />
-                  </span>{' '}
-                  &nbsp; {t('pleaseWait')}
-                </>
-              ) : cardType === 'SIMPLE' ? (
-                t('buyNow')
-              ) : (
-                t('submitBid')
-              )}
-            </ContainedPrimaryButton>
-          </div>
-        </ModalContainer>
-      </ModalHoc>
-    </>
-  )
+	// hooks
+	const classes = modalStyles()
+	const [updateSuccess, setUpdateSuccess] = useState(false)
+	const [updateError, setUpdateError] = useState(false)
+	const [minimumBid, setMinimumBid] = useState('')
+	const price = get(cardInfo, 'price', 0)
+	const canBuyNft = toNumber(balance.mars) >= toNumber(Web3.utils.fromWei(price))
+	return (
+		<>
+			{updateSuccess ? (
+				<Feedback
+					type="success"
+					message={t('purchaseSuccess')}
+					onClose={() => setUpdateSuccess(false)}
+					open={updateSuccess}
+				/>
+			) : null}
+			{updateError ? (
+				<Feedback
+					type="error"
+					message={t('purchaseError')}
+					onClose={() => setUpdateError(false)}
+					open={updateError}
+				/>
+			) : null}
+			<ModalHoc
+				disableBackdropClick
+				disableEscapeKeyDown
+				classes={classes}
+				openModal={isOpen}
+				onClose={onClose}
+				disableCloseIcon={isSubmitting}
+				title={cardType === 'SIMPLE' ? t('buyNFT') : t('bid')}>
+				<ModalContainer>
+					{cardType === 'SIMPLE' ? (
+						<>
+							{!account ? (
+								<div className="row connect-error">
+									<Body1 fontWeight={FontWeights.medium}>{t('connectWalletWarningSetPrice')}</Body1>
+								</div>
+							) : null}
+							{getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
+							<div className="row">
+								<Body1 fontWeight={FontWeights.bold} className="label">
+									{t('price')}:
+								</Body1>
+								<Body1 fontWeight={FontWeights.semiBold}>{`${Web3.utils.fromWei(price)} MARS`}</Body1>
+							</div>
+							{!canBuyNft ? (
+								<div>
+									<Body1 fontWeight={FontWeights.regular} component="div" className="label">
+										<span className="warning-text">{t('marsWarning')}</span>
+										<Link
+											href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
+											target="_blank"
+											rel="noopener">
+											{t('marsLink')}
+										</Link>
+									</Body1>
+								</div>
+							) : null}
+						</>
+					) : (
+						<>
+							{getRow(t('tokenId'), get(cardInfo, 'nft.tokenId', ''))}
+							{getRow(t('startingPrice'), '100 MARS')}
+							{getRow(t('highestBid'), '150 MARS')}
+							{getRow(t('highestBidder'), '0x403033fcfbb2ba1c384b1e9cc7008e9402616a95')}
+							{getRow(t('myCurrentBid'), '175 MARS')}
+							<div className="row">
+								<div>
+									<Body1 fontWeight={FontWeights.bold} className="label">
+										{t('price')}:
+									</Body1>
+									<Body1 fontWeight={FontWeights.regular} component="div" className="label">
+										{t('marsWarning')}
+										<Link
+											href="https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b"
+											target="_blank"
+											rel="noopener">
+											{t('marsLink')}
+										</Link>
+									</Body1>
+								</div>
+								<InputFieldWithSuffix
+									className="input-box"
+									value={minimumBid}
+									onChange={e => setMinimumBid(e.target.value)}
+									t={t}
+								/>
+							</div>
+						</>
+					)}
+					<div className="footer-note">
+						<Body1 fontWeight={FontWeights.regular}>{t('pleaseKeepScreenOpen')}</Body1>
+					</div>
+					<div className="footer">
+						<OutlinedSecondaryButton disabled={isSubmitting} onClick={onClose}>
+							{t('cancel')}
+						</OutlinedSecondaryButton>
+						<ContainedPrimaryButton
+							disabled={(!canBuyNft || !account || isSubmitting) || (cardInfo.seller.toLowerCase() === account.toLowerCase())}
+							onClick={() => onSubmit(cardInfo)}>
+							{isSubmitting ? (
+								<>
+									<span>
+										<ProgressLoading size={16} />
+									</span>{' '}
+									&nbsp; {t('pleaseWait')}
+								</>
+							) : cardType === 'SIMPLE' ? (
+								t('buyNow')
+							) : (
+								t('submitBid')
+							)}
+						</ContainedPrimaryButton>
+					</div>
+				</ModalContainer>
+			</ModalHoc>
+		</>
+	)
 }
 
 BuyNowModal.propTypes = {
-  t: PropTypes.func,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  onSubmit: PropTypes.func,
-  tokenData: PropTypes.object,
-  account: PropTypes.string,
-  balance: PropTypes.object,
-  cardType: PropTypes.oneOf(['SIMPLE', 'BID']),
-  isSubmitting: PropTypes.bool,
+	t: PropTypes.func,
+	isOpen: PropTypes.bool,
+	onClose: PropTypes.func,
+	onSubmit: PropTypes.func,
+	tokenData: PropTypes.object,
+	account: PropTypes.string,
+	balance: PropTypes.object,
+	cardType: PropTypes.oneOf(['SIMPLE', 'BID']),
+	isSubmitting: PropTypes.bool,
 }
 
 export default BuyNowModal
